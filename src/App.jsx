@@ -4,6 +4,7 @@ import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
 import FAQSection from './components/FAQSection';
 import StatsBanner from './components/StatsBanner';
+import Sectors from './components/Sectors';
 function App() {
   return (
     <div className="text-on-surface bg-background-white font-body-md">
@@ -80,6 +81,9 @@ function App() {
 </div>
 </FadeIn>
 </section>
+
+{/* Sectors Section */}
+<Sectors />
 
 {/* Jak to dziala Section */}
 <HowItWorks />
