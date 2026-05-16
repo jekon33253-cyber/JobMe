@@ -3,7 +3,7 @@ import Hero from './components/Hero';
 import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
 import FAQSection from './components/FAQSection';
-
+import StatsBanner from './components/StatsBanner';
 function App() {
   return (
     <div className="text-on-surface bg-background-white font-body-md">
@@ -25,6 +25,7 @@ function App() {
 </div>
 </nav>
 <Hero />
+<StatsBanner />
 {/* About Section */}
 <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="about">
 <FadeIn>
