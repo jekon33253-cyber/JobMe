@@ -2,15 +2,40 @@ import React, { useState } from 'react';
 import FadeIn from './FadeIn';
 
 export default function ContactForm({ activeTab, onTabChange }) {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // Hide success message after 5 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
+    setIsSubmitting(true);
+    setIsError(false);
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    data.target = activeTab;
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+          e.target.reset();
+        }, 8000);
+      } else {
+        setIsError(true);
+      }
+    } catch (error) {
+      setIsError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -66,61 +91,66 @@ export default function ContactForm({ activeTab, onTabChange }) {
                 </button>
               </div>
 
-              {isSubmitted ? (
+              {isSuccess ? (
                 <div className="bg-[#A1DD22]/10 border border-[#A1DD22]/30 rounded-xl p-8 text-center animate-fade-in-up">
                   <div className="w-16 h-16 bg-[#A1DD22] text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#A1DD22]/20">
                     <span className="material-symbols-outlined text-3xl">check</span>
                   </div>
-                  <h4 className="text-xl font-bold text-zinc-800 mb-2">Dziękujemy!</h4>
-                  <p className="text-zinc-700">Otrzymaliśmy Twoje zgłoszenie. Skontaktujemy się z Tobą najszybciej jak to możliwe.</p>
+                  <h4 className="text-xl font-bold text-zinc-800 mb-2">Dziękujemy za zgłoszenie!</h4>
+                  <p className="text-zinc-700">Twój osobisty koordynator skontaktuje się z Tobą w wybranym komunikatorze w ciągu 15 minut.</p>
                 </div>
               ) : (
                 <form className="space-y-5 animate-fade-in-up" onSubmit={handleSubmit} key={activeTab}>
+                  {isError && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
+                      Wystąpił błąd podczas wysyłania zgłoszenia. Spróbuj ponownie lub skontaktuj się z nami mailowo.
+                    </div>
+                  )}
                   {activeTab === 'kandydat' ? (
                     <>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Imię</label>
-                        <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="Twoje imię" type="text" />
+                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="Twoje imię" type="text" />
                       </div>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Numer telefonu</label>
-                        <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
+                        <input name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
                       </div>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Miasto</label>
-                        <select required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all appearance-none">
+                        <select name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all appearance-none">
                           <option value="">Wybierz miasto</option>
-                          <option value="wroclaw">Wrocław</option>
-                          <option value="warszawa">Warszawa</option>
-                          <option value="krakow">Kraków</option>
-                          <option value="poznan">Poznań</option>
-                          <option value="cala-polska">Cała Polska</option>
+                          <option value="Wrocław">Wrocław</option>
+                          <option value="Warszawa">Warszawa</option>
+                          <option value="Kraków">Kraków</option>
+                          <option value="Poznań">Poznań</option>
+                          <option value="Cała Polska">Cała Polska</option>
                         </select>
                       </div>
-                      <button className="w-full bg-[#A1DD22] text-[#2D2D2D] font-bold text-base py-4 rounded-xl hover:bg-[#8ec71e] transition-all shadow-md shadow-[#A1DD22]/20 hover:-translate-y-0.5" type="submit">
-                        Znajdź pracę
+                      <button disabled={isSubmitting} className={`w-full bg-[#A1DD22] text-[#2D2D2D] font-bold text-base py-4 rounded-xl shadow-md transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed animate-pulse' : 'hover:bg-[#8ec71e] hover:-translate-y-0.5 shadow-[#A1DD22]/20'}`} type="submit">
+                        {isSubmitting ? 'Wysyłanie...' : 'Znajdź pracę'}
                       </button>
                     </>
                   ) : (
                     <>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Imię / Nazwa firmy</label>
-                        <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Nazwa firmy lub Twoje imię" type="text" />
+                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Nazwa firmy lub Twoje imię" type="text" />
                       </div>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Miasto</label>
-                        <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Gdzie szukasz pracowników?" type="text" />
+                        <input name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Gdzie szukasz pracowników?" type="text" />
                       </div>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Numer telefonu</label>
-                        <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
+                        <input name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
                       </div>
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">Adres e-mail</label>
-                        <input required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="kontakt@firma.pl" type="email" />
+                        <input name="email" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="kontakt@firma.pl" type="email" />
                       </div>
-                      <button className="w-full bg-[#00B4B4] text-white font-bold text-base py-4 rounded-xl hover:bg-[#009b9b] transition-all shadow-md shadow-[#00B4B4]/20 hover:-translate-y-0.5" type="submit">
-                        Znajdź pracowników
+                      <button disabled={isSubmitting} className={`w-full bg-[#00B4B4] text-white font-bold text-base py-4 rounded-xl shadow-md transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed animate-pulse' : 'hover:bg-[#009b9b] hover:-translate-y-0.5 shadow-[#00B4B4]/20'}`} type="submit">
+                        {isSubmitting ? 'Wysyłanie...' : 'Znajdź pracowników'}
                       </button>
                     </>
                   )}
