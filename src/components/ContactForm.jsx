@@ -24,6 +24,16 @@ export default function ContactForm({ activeTab, onTabChange }) {
 
       if (response.ok) {
         setIsSuccess(true);
+        
+        // Conversion Tracking
+        if (activeTab === 'kandydat') {
+          if (window.gtag) window.gtag('event', 'lead_candidate');
+          if (window.fbq) window.fbq('track', 'Lead');
+        } else {
+          if (window.gtag) window.gtag('event', 'lead_employer');
+          if (window.fbq) window.fbq('track', 'Contact');
+        }
+
         setTimeout(() => {
           setIsSuccess(false);
           e.target.reset();

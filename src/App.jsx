@@ -34,7 +34,14 @@ function App() {
 <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#team">Zespół</a>
 <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#contact">Kontakt</a>
 </div>
-<button className="bg-primary-container text-on-primary-container font-button text-button px-6 py-3 rounded-xl hover:opacity-80 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
+<button 
+  onClick={() => {
+    if (window.gtag) window.gtag('event', 'click_start_now');
+    if (window.fbq) window.fbq('trackCustom', 'ClickStartNow');
+    handleScrollToContact('kandydat');
+  }}
+  className="bg-primary-container text-on-primary-container font-button text-button px-6 py-3 rounded-xl hover:opacity-80 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+>
                 Zacznij teraz
             </button>
 </div>

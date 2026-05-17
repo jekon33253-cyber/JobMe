@@ -39,13 +39,21 @@ export default function Hero({ onCtaClick }) {
             {/* Акцентные кнопки с плавными анимациями */}
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto pt-2">
               <button 
-                onClick={() => onCtaClick && onCtaClick('kandydat')}
+                onClick={() => {
+                  if (window.gtag) window.gtag('event', 'click_find_job');
+                  if (window.fbq) window.fbq('trackCustom', 'ClickFindJob');
+                  if (onCtaClick) onCtaClick('kandydat');
+                }}
                 className="w-full sm:w-auto px-8 py-4 bg-[#A1DD22] hover:bg-[#8ec71e] text-[#2D2D2D] font-bold text-base rounded-2xl shadow-lg shadow-[#A1DD22]/20 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] text-center"
               >
                 Znajdź pracę
               </button>
               <button 
-                onClick={() => onCtaClick && onCtaClick('pracodawca')}
+                onClick={() => {
+                  if (window.gtag) window.gtag('event', 'click_find_employees');
+                  if (window.fbq) window.fbq('trackCustom', 'ClickFindEmployees');
+                  if (onCtaClick) onCtaClick('pracodawca');
+                }}
                 className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-zinc-50 text-[#00B4B4] font-bold text-base rounded-2xl border-2 border-[#00B4B4]/30 hover:border-[#00B4B4] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-center"
               >
                 Znajdź pracowników
