@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Hero from './components/Hero';
 import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
@@ -6,7 +6,19 @@ import FAQSection from './components/FAQSection';
 import StatsBanner from './components/StatsBanner';
 import Sectors from './components/Sectors';
 import LegalizationTimeline from './components/LegalizationTimeline';
+import ContactForm from './components/ContactForm';
+
 function App() {
+  const [contactTab, setContactTab] = useState('kandydat');
+
+  const handleScrollToContact = (tab) => {
+    setContactTab(tab);
+    const element = document.getElementById('contact');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="text-on-surface bg-background-white font-body-md">
       
@@ -26,7 +38,7 @@ function App() {
             </button>
 </div>
 </nav>
-<Hero />
+<Hero onCtaClick={handleScrollToContact} />
 <StatsBanner />
 {/* About Section */}
 <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="about">
@@ -215,46 +227,8 @@ function App() {
 {/* FAQ Section */}
 <FAQSection />
 
-{/* Contact Section */}
-<section className="bg-background-white py-20 md:py-24 px-gutter" id="contact">
-<FadeIn>
-<div className="max-w-7xl mx-auto">
-<div className="bg-surface-container-high rounded-xxl overflow-hidden shadow-2xl flex flex-col md:flex-row">
-<div className="md:w-1/2 p-12 lg:p-16 space-y-8 bg-[#2D2D2D] text-white">
-<h2 className="text-3xl md:text-4xl font-extrabold text-white">Zmieńmy razem rynek pracy</h2>
-<p className="font-body-lg text-body-lg opacity-90">Czekamy na Ciebie we Wrocławiu. Porozmawiajmy o Twoich celach biznesowych lub zawodowych.</p>
-<div className="space-y-6">
-<div className="flex items-center gap-4">
-<span className="material-symbols-outlined text-[#A1DD22]">location_on</span>
-<span className="font-body-md">Wrocław, Polska</span>
-</div>
-<div className="flex items-center gap-4">
-<span className="material-symbols-outlined text-[#00B4B4]">mail</span>
-<span className="font-body-md">kontakt@jobme.pl</span>
-</div>
-</div>
-</div>
-<div className="md:w-1/2 p-12 lg:p-16 bg-white">
-<h3 className="font-headline-md text-headline-md text-on-surface mb-2">Bezpłatna konsultacja</h3>
-<p className="text-zinc-700 text-base mb-8">Zostaw numer, oddzwonimy i szczerze powiemy o warunkach</p>
-<form className="space-y-6">
-<div>
-<label className="block font-bold text-zinc-800 text-base mb-2">Imię</label>
-<input className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Twoje imię" type="text"/>
-</div>
-<div>
-<label className="block font-bold text-zinc-800 text-base mb-2">Numer telefonu</label>
-<input className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel"/>
-</div>
-<button className="w-full bg-[#8CC63F] text-white font-button text-button py-4 rounded-xl hover:opacity-90 transition-all shadow-md" type="submit">
-                            Wyślij
-                        </button>
-</form>
-</div>
-</div>
-</div>
-</FadeIn>
-</section>
+{/* Contact Form Section */}
+<ContactForm activeTab={contactTab} onTabChange={setContactTab} />
 {/* Footer */}
 <footer className="bg-surface-container-low border-t border-outline-variant/20">
 <div className="flex flex-col md:flex-row justify-between items-center px-gutter py-base gap-4 max-w-7xl mx-auto min-h-[80px]">
