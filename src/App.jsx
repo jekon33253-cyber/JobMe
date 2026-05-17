@@ -6,6 +6,7 @@ import FAQSection from './components/FAQSection';
 import StatsBanner from './components/StatsBanner';
 import Sectors from './components/Sectors';
 import LegalizationTimeline from './components/LegalizationTimeline';
+import Upskilling from './components/Upskilling';
 import ContactForm from './components/ContactForm';
 
 function App() {
@@ -145,6 +146,10 @@ function App() {
 </div>
 </FadeIn>
 </section>
+
+{/* Upskilling Section */}
+<Upskilling />
+
 {/* Team Section */}
 <section className="bg-background-white py-20 md:py-24 px-gutter" id="team">
 <FadeIn>
