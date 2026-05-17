@@ -5,6 +5,7 @@ import HowItWorks from './components/HowItWorks';
 import FAQSection from './components/FAQSection';
 import StatsBanner from './components/StatsBanner';
 import Sectors from './components/Sectors';
+import LegalizationTimeline from './components/LegalizationTimeline';
 function App() {
   return (
     <div className="text-on-surface bg-background-white font-body-md">
@@ -84,6 +85,9 @@ function App() {
 
 {/* Sectors Section */}
 <Sectors />
+
+{/* Legalization Timeline Section */}
+<LegalizationTimeline />
 
 {/* Jak to dziala Section */}
 <HowItWorks />
