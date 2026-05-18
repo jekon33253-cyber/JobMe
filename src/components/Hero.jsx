@@ -1,99 +1,120 @@
 import React from 'react';
 import FadeIn from './FadeIn';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Hero({ onCtaClick }) {
+  const { t } = useLanguage();
+
   return (
-    <section className="relative w-full bg-[#FFFFFF] overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
-      {/* Мягкие премиальные фоновые градиенты для объема */}
-      <div className="absolute top-0 right-0 -z-10 w-[600px] h-[600px] bg-gradient-to-b from-[#A1DD22]/10 to-transparent rounded-full blur-[120px] opacity-70" />
-      <div className="absolute bottom-0 left-0 -z-10 w-[400px] h-[400px] bg-gradient-to-t from-[#00B4B4]/5 to-transparent rounded-full blur-[100px] opacity-50" />
+    <section className="relative overflow-hidden bg-background-white py-16 md:py-24 px-gutter flex items-center min-h-[90vh]">
+      {/* Abstract Background Shapes */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl opacity-60 mix-blend-multiply"></div>
+        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/5 rounded-full blur-3xl opacity-60 mix-blend-multiply"></div>
+      </div>
 
-      <FadeIn>
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* Левая текстовая часть (Контент занимает 7 колонок из 12) */}
-          <div className="lg:col-span-7 flex flex-col items-start space-y-8 z-10">
-            
-            {/* Тэг-описание компании */}
-            <div className="inline-flex items-center space-x-2 bg-[#F9FAFB] border border-zinc-100 px-4 py-2 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-[#A1DD22] animate-pulse" />
-              <span className="text-xs font-semibold text-zinc-600 tracking-wide uppercase">
-                Nowoczesny Ekosystem HR
-              </span>
+      <div className="max-w-7xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        {/* Left Column: Typography & CTAs */}
+        <div className="space-y-8 max-w-2xl text-center lg:text-left mx-auto lg:mx-0">
+          <FadeIn delay={100}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-label-bold text-sm mb-4 border border-primary/20 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              {t('hero.tag')}
             </div>
+          </FadeIn>
 
-            {/* Огромный, дорогой заголовок H1 */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#2D2D2D] tracking-tight leading-[1.1]">
-              Koniec z rekrutacyjnym <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-[#A1DD22] to-[#00B4B4] bg-clip-text text-transparent">
-                chaosem.
+          <FadeIn delay={200}>
+            <h1 className="font-black text-5xl md:text-6xl lg:text-7xl text-[#1a1a1a] leading-[1.05] tracking-tight">
+              {t('hero.title1')}{' '}
+              <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent inline-block pb-2">
+                {t('hero.title2')}
               </span>
             </h1>
+          </FadeIn>
 
-            {/* Сбалансированный подзаголовок */}
-            <p className="text-lg md:text-xl text-zinc-700 font-normal max-w-xl leading-relaxed">
-              Łączymy ludzi с uczciwym biznesem poprzez przejrzyste zasady i nowoczesną technologię. Bez ukrytych kosztów.
+          <FadeIn delay={300}>
+            <p className="text-lg md:text-xl font-semibold text-zinc-700 leading-relaxed">
+              {t('hero.subtitle')}
             </p>
+          </FadeIn>
 
-            {/* Акцентные кнопки с плавными анимациями */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto pt-2">
+          <FadeIn delay={400}>
+            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center lg:justify-start">
               <button 
                 onClick={() => {
                   if (window.gtag) window.gtag('event', 'click_find_job');
                   if (window.fbq) window.fbq('trackCustom', 'ClickFindJob');
-                  if (onCtaClick) onCtaClick('kandydat');
+                  onCtaClick('kandydat');
                 }}
-                className="w-full sm:w-auto px-8 py-4 bg-[#A1DD22] hover:bg-[#8ec71e] text-[#2D2D2D] font-bold text-base rounded-2xl shadow-lg shadow-[#A1DD22]/20 transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] text-center"
+                className="bg-primary hover:bg-[#8ec71e] text-[#2D2D2D] font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group w-full sm:w-auto"
               >
-                Znajdź pracę
+                {t('hero.btnKandydat')}
+                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </button>
               <button 
                 onClick={() => {
                   if (window.gtag) window.gtag('event', 'click_find_employees');
                   if (window.fbq) window.fbq('trackCustom', 'ClickFindEmployees');
-                  if (onCtaClick) onCtaClick('pracodawca');
+                  onCtaClick('pracodawca');
                 }}
-                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-zinc-50 text-[#00B4B4] font-bold text-base rounded-2xl border-2 border-[#00B4B4]/30 hover:border-[#00B4B4] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] text-center"
+                className="bg-secondary hover:bg-[#009b9b] text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-secondary/20 hover:shadow-secondary/30 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group w-full sm:w-auto"
               >
-                Znajdź pracowników
+                {t('hero.btnPracodawca')}
+                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">business</span>
               </button>
             </div>
-          </div>
+          </FadeIn>
 
-          {/* Правая часть с визуалом (Занимает 5 колонок из 12) */}
-          <div className="lg:col-span-5 relative w-full flex justify-center lg:justify-end">
-            
-            {/* Декоративный элемент за фото, имитирующий интерфейс платформы */}
-            <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-br from-[#00B4B4]/20 to-transparent rounded-full blur-xl" />
-            
-            <div className="relative p-2 bg-white border border-zinc-100 rounded-[2.5rem] shadow-2xl shadow-zinc-200/80 overflow-hidden transform lg:rotate-2 hover:rotate-0 transition-transform duration-500 max-w-[460px] w-full">
-              {/* Сама картинка */}
+          {/* Social Proof Mini */}
+          <FadeIn delay={500}>
+            <div className="pt-8 flex items-center gap-4 justify-center lg:justify-start">
+              <div className="flex -space-x-3">
+                <img src="https://i.pravatar.cc/100?img=33" alt="User" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <img src="https://i.pravatar.cc/100?img=47" alt="User" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+                <img src="https://i.pravatar.cc/100?img=12" alt="User" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
+              </div>
+
+            </div>
+          </FadeIn>
+        </div>
+
+        {/* Right Column: Premium Visual */}
+        <div className="relative hidden lg:block h-full min-h-[500px]">
+          <FadeIn delay={300}>
+            <div className="relative w-full h-full flex justify-end">
+              {/* Main Image */}
               <img 
-                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=600" 
-                alt="JobMe Ecosystem" 
-                className="w-full h-auto object-cover rounded-[2.2rem]"
+                src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=1000" 
+                alt="Modern HR Professionals" 
+                className="w-4/5 h-[600px] object-cover rounded-3xl shadow-2xl border-8 border-white z-10"
               />
               
-              {/* Премиальная плашка поверх фото (Эффект Glassmorphism) */}
-              <div className="absolute bottom-6 left-6 right-6 backdrop-blur-md bg-white/80 border border-white/40 p-4 rounded-2xl shadow-lg flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-medium text-zinc-600">Aktywne oferty</p>
-                  <p className="text-lg font-bold text-[#2D2D2D]">+1,240 we Wrocławiu</p>
+              {/* Floating Card 1 */}
+              <div className="absolute top-12 left-0 bg-white p-4 rounded-2xl shadow-xl border border-zinc-100 z-20 flex items-center gap-4 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
+                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="material-symbols-outlined text-primary">verified</span>
                 </div>
-                <div className="w-10 h-10 rounded-xl bg-[#A1DD22]/20 flex items-center justify-between px-3 py-2">
-                  <div className="w-1.5 h-4 bg-[#A1DD22] rounded-full" />
-                  <div className="w-1.5 h-6 bg-[#A1DD22] rounded-full" />
-                  <div className="w-1.5 h-3 bg-[#A1DD22] rounded-full" />
+                <div>
+                  <p className="text-xs text-zinc-500 font-bold uppercase">{t('hero.btnKandydat')}</p>
+                  <p className="text-sm font-bold text-zinc-800">100% {t('stats.stat2')}</p>
+                </div>
+              </div>
+
+              {/* Floating Card 2 */}
+              <div className="absolute bottom-24 -left-12 bg-white p-4 rounded-2xl shadow-xl border border-zinc-100 z-20 flex items-center gap-4 animate-fade-in-up" style={{animationDelay: '1.1s'}}>
+                <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <span className="material-symbols-outlined text-secondary">trending_up</span>
+                </div>
+                <div>
+                  <p className="text-xs text-zinc-500 font-bold uppercase">{t('stats.stat1')}</p>
+                  <p className="text-sm font-bold text-zinc-800">+150 Freecruiterów</p>
                 </div>
               </div>
             </div>
-
-          </div>
-
+          </FadeIn>
         </div>
+
       </div>
-      </FadeIn>
     </section>
   );
 }

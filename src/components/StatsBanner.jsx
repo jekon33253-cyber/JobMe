@@ -1,30 +1,33 @@
 import React from 'react';
 import FadeIn from './FadeIn';
-
-const stats = [
-  {
-    number: "+150",
-    label: "Freecruiterów w sieci",
-    subLabel: "Niezależni rekruterzy zamykający wakaty w rekordowym czasie."
-  },
-  {
-    number: "100%",
-    label: "Legalności i Compliance",
-    subLabel: "Pełna ochrona przed kontrolami PIP i brak umów śmieciowych."
-  },
-  {
-    number: "0 PLN",
-    label: "Ukrytych opłat",
-    subLabel: "Darmowe usługi dla kandydatów. Transparentność co do grosza."
-  },
-  {
-    number: "Wrocław",
-    label: "i Dolny Śląsk",
-    subLabel: "Centrum naszych operacji i wsparcie koordynatorów na miejscu."
-  }
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function StatsBanner() {
+  const { t } = useLanguage();
+
+  const stats = [
+    {
+      number: "+150",
+      label: t('stats.stat1'),
+      subLabel: t('stats.subStat1')
+    },
+    {
+      number: "100%",
+      label: t('stats.stat2'),
+      subLabel: t('stats.subStat2')
+    },
+    {
+      number: "0 PLN",
+      label: t('stats.stat3'),
+      subLabel: t('stats.subStat3')
+    },
+    {
+      number: t('contact.cities.wroclaw'),
+      label: t('stats.stat4'),
+      subLabel: t('stats.subStat4')
+    }
+  ];
+
   return (
     <section className="bg-zinc-50 border-y border-zinc-100 py-12 md:py-16">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
