@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import FadeIn from './FadeIn';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ContactForm({ activeTab, onTabChange }) {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -56,15 +58,15 @@ export default function ContactForm({ activeTab, onTabChange }) {
             {/* Left Info Panel */}
             <div className="md:w-1/2 p-12 lg:p-16 space-y-8 bg-[#2D2D2D] text-white">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white">
-                Zmieńmy razem rynek pracy
+                {t('contact.title')}
               </h2>
               <p className="font-body-lg text-body-lg opacity-90">
-                Czekamy na Ciebie we Wrocławiu. Porozmawiajmy o Twoich celach biznesowych lub zawodowych.
+                {t('contact.desc')}
               </p>
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
                   <span className="material-symbols-outlined text-[#A1DD22]">location_on</span>
-                  <span className="font-body-md">Wrocław, Polska</span>
+                  <span className="font-body-md">{t('contact.location')}</span>
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="material-symbols-outlined text-[#00B4B4]">mail</span>
@@ -76,7 +78,7 @@ export default function ContactForm({ activeTab, onTabChange }) {
             {/* Right Form Panel */}
             <div className="md:w-1/2 p-8 lg:p-16 bg-white relative">
               <h3 className="font-headline-md text-headline-md text-on-surface mb-6">
-                Bezpłatna konsultacja
+                {t('contact.freeConsultation')}
               </h3>
 
               {/* Internal Tabs */}
@@ -88,7 +90,7 @@ export default function ContactForm({ activeTab, onTabChange }) {
                     activeTab === 'kandydat' ? 'text-white bg-[#A1DD22] shadow-md' : 'text-zinc-600 hover:text-zinc-900'
                   }`}
                 >
-                  Dla Kandydata
+                  {t('contact.tabKandydat')}
                 </button>
                 <button
                   type="button"
@@ -97,7 +99,7 @@ export default function ContactForm({ activeTab, onTabChange }) {
                     activeTab === 'pracodawca' ? 'text-white bg-[#00B4B4] shadow-md' : 'text-zinc-600 hover:text-zinc-900'
                   }`}
                 >
-                  Dla Pracodawcy
+                  {t('contact.tabPracodawca')}
                 </button>
               </div>
 
@@ -106,61 +108,61 @@ export default function ContactForm({ activeTab, onTabChange }) {
                   <div className="w-16 h-16 bg-[#A1DD22] text-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#A1DD22]/20">
                     <span className="material-symbols-outlined text-3xl">check</span>
                   </div>
-                  <h4 className="text-xl font-bold text-zinc-800 mb-2">Dziękujemy za zgłoszenie!</h4>
-                  <p className="text-zinc-700">Twój osobisty koordynator skontaktuje się z Tobą w wybranym komunikatorze w ciągu 15 minut.</p>
+                  <h4 className="text-xl font-bold text-zinc-800 mb-2">{t('contact.successTitle')}</h4>
+                  <p className="text-zinc-700">{t('contact.successDesc')}</p>
                 </div>
               ) : (
                 <form className="space-y-5 animate-fade-in-up" onSubmit={handleSubmit} key={activeTab}>
                   {isError && (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-                      Wystąpił błąd podczas wysyłania zgłoszenia. Spróbuj ponownie lub skontaktuj się z nami mailowo.
+                      {t('contact.errorMsg')}
                     </div>
                   )}
                   {activeTab === 'kandydat' ? (
                     <>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Imię</label>
-                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="Twoje imię" type="text" />
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameLabel')}</label>
+                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder={t('contact.namePlaceholder')} type="text" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Numer telefonu</label>
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
                         <input name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Miasto</label>
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.cityLabel')}</label>
                         <select name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all appearance-none">
-                          <option value="">Wybierz miasto</option>
-                          <option value="Wrocław">Wrocław</option>
-                          <option value="Warszawa">Warszawa</option>
-                          <option value="Kraków">Kraków</option>
-                          <option value="Poznań">Poznań</option>
-                          <option value="Cała Polska">Cała Polska</option>
+                          <option value="">{t('contact.cityPlaceholder')}</option>
+                          <option value="Wrocław">{t('contact.cities.wroclaw')}</option>
+                          <option value="Warszawa">{t('contact.cities.warszawa')}</option>
+                          <option value="Kraków">{t('contact.cities.krakow')}</option>
+                          <option value="Poznań">{t('contact.cities.poznan')}</option>
+                          <option value="Cała Polska">{t('contact.cities.all')}</option>
                         </select>
                       </div>
                       <button disabled={isSubmitting} className={`w-full bg-[#A1DD22] text-[#2D2D2D] font-bold text-base py-4 rounded-xl shadow-md transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed animate-pulse' : 'hover:bg-[#8ec71e] hover:-translate-y-0.5 shadow-[#A1DD22]/20'}`} type="submit">
-                        {isSubmitting ? 'Wysyłanie...' : 'Znajdź pracę'}
+                        {isSubmitting ? t('contact.btnSending') : t('contact.btnKandydat')}
                       </button>
                     </>
                   ) : (
                     <>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Imię / Nazwa firmy</label>
-                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Nazwa firmy lub Twoje imię" type="text" />
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameCompanyLabel')}</label>
+                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.nameCompanyPlaceholder')} type="text" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Miasto</label>
-                        <input name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="Gdzie szukasz pracowników?" type="text" />
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.cityLabel')}</label>
+                        <input name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.cityPlaceholderB2B')} type="text" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Numer telefonu</label>
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
                         <input name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">Adres e-mail</label>
-                        <input name="email" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="kontakt@firma.pl" type="email" />
+                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.emailLabel')}</label>
+                        <input name="email" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.emailPlaceholder')} type="email" />
                       </div>
                       <button disabled={isSubmitting} className={`w-full bg-[#00B4B4] text-white font-bold text-base py-4 rounded-xl shadow-md transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed animate-pulse' : 'hover:bg-[#009b9b] hover:-translate-y-0.5 shadow-[#00B4B4]/20'}`} type="submit">
-                        {isSubmitting ? 'Wysyłanie...' : 'Znajdź pracowników'}
+                        {isSubmitting ? t('contact.btnSending') : t('contact.btnPracodawca')}
                       </button>
                     </>
                   )}

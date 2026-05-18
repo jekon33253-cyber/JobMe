@@ -1,25 +1,28 @@
 import React from 'react';
 import FadeIn from './FadeIn';
-
-const progressionStages = [
-  {
-    stage: "Etap 01",
-    title: "Start i adaptacja",
-    description: "Rozpoczynasz pracę na bezpiecznym stanowisku podstawowym, poznając standardy i środowisko produkcyjne lub logistyczne."
-  },
-  {
-    stage: "Etap 02",
-    title: "Edukacja zawodowa",
-    description: "Finansujemy i organizujemy dla Ciebie specjalistyczne kursy oraz certyfikaty ściśle dopasowane do potrzeb nowoczesnego rynku."
-  },
-  {
-    stage: "Etap 03",
-    title: "Awans i wyższe zarobki",
-    description: "Przechodzisz na stanowisko specjalistyczne w naszej sieci. Twoja wartość rynkowa rośnie, a firma zyskuje lojalnego, przeszkolonego eksperta."
-  }
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Upskilling() {
+  const { t } = useLanguage();
+
+  const progressionStages = [
+    {
+      stage: t('upskilling.stage1'),
+      title: t('upskilling.s1Title'),
+      description: t('upskilling.s1Desc'),
+    },
+    {
+      stage: t('upskilling.stage2'),
+      title: t('upskilling.s2Title'),
+      description: t('upskilling.s2Desc'),
+    },
+    {
+      stage: t('upskilling.stage3'),
+      title: t('upskilling.s3Title'),
+      description: t('upskilling.s3Desc'),
+    }
+  ];
+
   return (
     <section className="bg-white py-20 md:py-24 px-6 md:px-12" id="upskilling">
       <div className="max-w-7xl mx-auto">
@@ -30,13 +33,13 @@ export default function Upskilling() {
             <div className="space-y-10">
               <div className="space-y-6">
                 <span className="text-[#00A99D] font-label-bold uppercase tracking-wider mb-2 block">
-                  Wartość Dodana (UVP)
+                  {t('upskilling.tag')}
                 </span>
                 <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-800 leading-tight">
-                  Upskilling: Inwestujemy w Twoją wartość zawodową
+                  {t('upskilling.title')}
                 </h2>
                 <p className="text-base md:text-lg text-zinc-600 leading-relaxed">
-                  Nie szukamy ludzi tylko „na chwilę”. W JobMe łączymy rekrutację z realnym rozwojem, pomagając pracownikom zarabiać więcej, a biznesowi budować stabilne zespoły.
+                  {t('upskilling.desc')}
                 </p>
               </div>
 
@@ -47,10 +50,10 @@ export default function Upskilling() {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-zinc-800 mb-2">
-                      Dla Kandydata: Bezpłatne kursy i uprawnienia
+                      {t('upskilling.kandydatTitle')}
                     </h3>
                     <p className="text-zinc-600 leading-relaxed">
-                      Gwarantujemy dostęp do szkoleń zawodowych (UDT, SEP, kursy językowe), które realnie podnoszą Twoją stawkę godzinową.
+                      {t('upskilling.kandydatDesc')}
                     </p>
                   </div>
                 </div>
@@ -61,10 +64,10 @@ export default function Upskilling() {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-zinc-800 mb-2">
-                      Dla Biznesu: Spadek rotacji o 60%
+                      {t('upskilling.biznesTitle')}
                     </h3>
                     <p className="text-zinc-600 leading-relaxed">
-                      Pracownicy, którzy widzą przejrzystą perspektywę rozwoju i awansu, zostają w strukturach firmy na lata, drastycznie obniżając koszty ciągłych onboardingów.
+                      {t('upskilling.biznesDesc')}
                     </p>
                   </div>
                 </div>

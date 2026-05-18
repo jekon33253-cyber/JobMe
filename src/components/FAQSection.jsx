@@ -1,23 +1,16 @@
 import React, { useState } from 'react';
 import FadeIn from './FadeIn';
-
-const faqs = [
-  {
-    question: "Czy są jakieś ukryte opłaty lub kary umowne?",
-    answer: "Nie. Gwarantujemy pełną transparentność. Wszystkie koszty (kwatery, dojazd, badania) są jasno rozpisane w umowie. Żadnych niespodzianek na koniec miesiąca."
-  },
-  {
-    question: "Jakie rodzaje umów podpisujecie?",
-    answer: "Stawiamy na pełną legalność. W zależności od projektu oferujemy stabilne umowy zlecenia lub umowy o pracę tymczasową, w pełni skoordynowane z polskim prawem pracy."
-  },
-  {
-    question: "Co jeśli nie poradzę sobie z językiem lub tempem pracy?",
-    answer: "Twój osobisty koordynator pomoże Ci przejść przez proces wdrożenia. Jeśli stanowisko okaże się zbyt wymagające, nie zwalniamy Cię – szukamy alternatywnego projektu w naszej bazie."
-  }
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function FAQSection() {
+  const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState(null);
+
+  const faqs = [
+    { question: t('faq.q1'), answer: t('faq.a1') },
+    { question: t('faq.q2'), answer: t('faq.a2') },
+    { question: t('faq.q3'), answer: t('faq.a3') },
+  ];
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
@@ -28,8 +21,8 @@ export default function FAQSection() {
       <div className="max-w-4xl mx-auto">
         <FadeIn>
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-4">Często zadawane pytania</h2>
-            <p className="text-zinc-700 text-base md:text-lg">Odpowiadamy wprost. Zero korporacyjnej nowomowy.</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-4">{t('faq.title')}</h2>
+            <p className="text-zinc-700 text-base md:text-lg">{t('faq.desc')}</p>
           </div>
         </FadeIn>
 

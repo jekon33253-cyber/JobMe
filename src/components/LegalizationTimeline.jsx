@@ -1,38 +1,41 @@
 import React from 'react';
 import FadeIn from './FadeIn';
-
-const steps = [
-  {
-    number: "01",
-    title: "Audyt i weryfikacja",
-    description: "W ciągu 24 godzin analizujemy status prawny kandydata oraz aktualne dokumenty. Eliminujemy jakiekolwiek ryzyko prawne jeszcze przed podpisaniem umowy."
-  },
-  {
-    number: "02",
-    title: "Błyskawiczne procesowanie",
-    description: "Składamy oświadczenia i wnioski o zezwolenia na pracę (Zezwolenia typu A) drogą elektroniczną bezpośrednio do urzędów (PUP / Urząd Wojewódzki). Bez kolejek i opóźnień."
-  },
-  {
-    number: "03",
-    title: "Ciągłość i pełny Compliance",
-    description: "Monitorujemy terminy ważności wiz i Kart Pobytu. Automatycznie przygotowujemy przedłużenia, gwarantując firmom 100% ochrony przed kontrolami PIP, a pracownikom bezpieczną przyszłość."
-  }
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function LegalizationTimeline() {
+  const { t } = useLanguage();
+
+  const steps = [
+    {
+      number: "01",
+      title: t('legalization.s1Title'),
+      description: t('legalization.s1Desc'),
+    },
+    {
+      number: "02",
+      title: t('legalization.s2Title'),
+      description: t('legalization.s2Desc'),
+    },
+    {
+      number: "03",
+      title: t('legalization.s3Title'),
+      description: t('legalization.s3Desc'),
+    }
+  ];
+
   return (
     <section className="bg-zinc-50 py-20 md:py-24 px-6 md:px-12 border-y border-zinc-100" id="legalization">
       <div className="max-w-7xl mx-auto">
         <FadeIn>
           <div className="text-center max-w-3xl mx-auto mb-16 md:mb-24">
             <span className="text-[#8CC63F] font-label-bold uppercase tracking-wider mb-2 block">
-              Proces Legalizacji
+              {t('legalization.tag')}
             </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-800 mb-6">
-              Legalizacja bez tajemnic i barier
+              {t('legalization.title')}
             </h2>
             <p className="text-base md:text-lg text-zinc-600 leading-relaxed">
-              Przejmujemy 100% formalności związanych z zatrudnieniem obcokrajowców. Pełne bezpieczeństwo dla biznesu, absolutna stabilność dla pracowników.
+              {t('legalization.desc')}
             </p>
           </div>
 

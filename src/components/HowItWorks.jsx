@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import FadeIn from './FadeIn';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function HowItWorks() {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('kandydat'); // 'kandydat' | 'pracodawca'
 
   return (
@@ -9,7 +11,7 @@ export default function HowItWorks() {
       <div className="max-w-7xl mx-auto">
         <FadeIn>
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-8">Jak to działa</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-8">{t('howItWorks.title')}</h2>
             
             {/* Tabs Toggle */}
             <div className="inline-flex bg-white p-1.5 rounded-full border border-zinc-200 shadow-sm relative">
@@ -19,7 +21,7 @@ export default function HowItWorks() {
                   activeTab === 'kandydat' ? 'text-white' : 'text-zinc-600 hover:text-zinc-900'
                 }`}
               >
-                Dla Kandydata
+                {t('howItWorks.tabKandydat')}
               </button>
               <button
                 onClick={() => setActiveTab('pracodawca')}
@@ -27,7 +29,7 @@ export default function HowItWorks() {
                   activeTab === 'pracodawca' ? 'text-white' : 'text-zinc-600 hover:text-zinc-900'
                 }`}
               >
-                Dla Pracodawcy
+                {t('howItWorks.tabPracodawca')}
               </button>
               
               {/* Sliding Background */}
@@ -50,27 +52,27 @@ export default function HowItWorks() {
               <FadeIn delay={100}>
                 <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                   <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-extrabold text-xl mb-6">1</div>
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">Szybki kontakt i wybór oferty</h3>
+                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">{t('howItWorks.k1Title')}</h3>
                   <p className="text-zinc-700 text-base leading-relaxed">
-                    Wybierasz wygodny dla Ciebie kanał (WhatsApp, Telegram, telefon). Bez zbędnych formularzy. Od razu przechodzimy do konkretów i dopasowujemy projekt.
+                    {t('howItWorks.k1Desc')}
                   </p>
                 </div>
               </FadeIn>
               <FadeIn delay={200}>
                 <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                   <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-extrabold text-xl mb-6">2</div>
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">Transparentna umowa</h3>
+                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">{t('howItWorks.k2Title')}</h3>
                   <p className="text-zinc-700 text-base leading-relaxed">
-                    Dostajesz jasną umowę w swoim ojczystym języku jeszcze przed pierwszym dniem pracy. Z góry wiesz, ile zarobisz i jakie masz obowiązki.
+                    {t('howItWorks.k2Desc')}
                   </p>
                 </div>
               </FadeIn>
               <FadeIn delay={300}>
                 <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                   <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-extrabold text-xl mb-6">3</div>
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">Wsparcie i Upskilling</h3>
+                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">{t('howItWorks.k3Title')}</h3>
                   <p className="text-zinc-700 text-base leading-relaxed">
-                    Zyskujesz opiekę koordynatora i dostęp do darmowych szkoleń zawodowych, które pomogą Ci szybko awansować na lepiej płatne stanowisko.
+                    {t('howItWorks.k3Desc')}
                   </p>
                 </div>
               </FadeIn>
@@ -80,27 +82,27 @@ export default function HowItWorks() {
               <FadeIn delay={100}>
                 <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                   <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-full flex items-center justify-center font-extrabold text-xl mb-6">1</div>
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">Analiza potrzeb</h3>
+                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">{t('howItWorks.p1Title')}</h3>
                   <p className="text-zinc-700 text-base leading-relaxed">
-                    Szybki audyt Twoich wakatów i rotacji. Opracowujemy wspólnie profil idealnego kandydata oraz ustalamy przejrzyste stawki B2B.
+                    {t('howItWorks.p1Desc')}
                   </p>
                 </div>
               </FadeIn>
               <FadeIn delay={200}>
                 <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                   <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-full flex items-center justify-center font-extrabold text-xl mb-6">2</div>
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">Uruchomienie sieci Freecruiterów</h3>
+                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">{t('howItWorks.p2Title')}</h3>
                   <p className="text-zinc-700 text-base leading-relaxed">
-                    Zlecenie natychmiast trafia do naszej platformy zrzeszającej niezależnych rekruterów. Pozwala to na masowe i błyskawiczne skalowanie zatrudnienia.
+                    {t('howItWorks.p2Desc')}
                   </p>
                 </div>
               </FadeIn>
               <FadeIn delay={300}>
                 <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 flex flex-col h-full hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                   <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-full flex items-center justify-center font-extrabold text-xl mb-6">3</div>
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">Legalizacja i Compliance</h3>
+                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">{t('howItWorks.p3Title')}</h3>
                   <p className="text-zinc-700 text-base leading-relaxed">
-                    Bierzemy na siebie 100% formalności związanych z dokumentacją pracowników lokalnych i zagranicznych. Gwarantujemy pełną zgodność z prawem.
+                    {t('howItWorks.p3Desc')}
                   </p>
                 </div>
               </FadeIn>
