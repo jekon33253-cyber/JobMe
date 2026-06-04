@@ -3,13 +3,22 @@ import FadeIn from './FadeIn';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function FAQSection() {
-  const { t } = useLanguage();
   const [openIndex, setOpenIndex] = useState(null);
+  const { t } = useLanguage();
 
   const faqs = [
-    { question: t('faq.q1'), answer: t('faq.a1') },
-    { question: t('faq.q2'), answer: t('faq.a2') },
-    { question: t('faq.q3'), answer: t('faq.a3') },
+    {
+      question: t('faq.q1'),
+      answer: t('faq.a1')
+    },
+    {
+      question: t('faq.q2'),
+      answer: t('faq.a2')
+    },
+    {
+      question: t('faq.q3'),
+      answer: t('faq.a3')
+    }
   ];
 
   const toggleFAQ = (index) => {
@@ -50,7 +59,7 @@ export default function FAQSection() {
                     className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
                   >
                     <div className="overflow-hidden">
-                      <div className="px-6 pb-6 pt-0 text-zinc-700 text-base leading-relaxed border-t border-zinc-100 mt-2">
+                      <div className="px-6 pb-6 pt-0 text-zinc-700 text-base leading-relaxed border-t border-zinc-100 mt-2 break-words">
                         {faq.answer}
                       </div>
                     </div>

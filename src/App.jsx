@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
@@ -13,6 +13,12 @@ import { useLanguage } from './context/LanguageContext';
 function App() {
   const [contactTab, setContactTab] = useState('kandydat');
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
+
+  useEffect(() => {
+    if (currentLanguage === 'ua') {
+      setContactTab('kandydat');
+    }
+  }, [currentLanguage]);
 
   const handleScrollToContact = (tab) => {
     setContactTab(tab);

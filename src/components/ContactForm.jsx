@@ -3,10 +3,10 @@ import FadeIn from './FadeIn';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function ContactForm({ activeTab, onTabChange }) {
-  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

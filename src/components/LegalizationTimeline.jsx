@@ -9,17 +9,17 @@ export default function LegalizationTimeline() {
     {
       number: "01",
       title: t('legalization.s1Title'),
-      description: t('legalization.s1Desc'),
+      description: t('legalization.s1Desc')
     },
     {
       number: "02",
       title: t('legalization.s2Title'),
-      description: t('legalization.s2Desc'),
+      description: t('legalization.s2Desc')
     },
     {
       number: "03",
       title: t('legalization.s3Title'),
-      description: t('legalization.s3Desc'),
+      description: t('legalization.s3Desc')
     }
   ];
 
@@ -60,7 +60,7 @@ export default function LegalizationTimeline() {
                   <h3 className="text-xl font-bold text-zinc-800 mb-4">
                     {step.title}
                   </h3>
-                  <p className="text-zinc-700 text-base leading-relaxed">
+                  <p className="text-zinc-700 text-base leading-relaxed break-words">
                     {step.description}
                   </p>
                 </div>

@@ -9,17 +9,17 @@ export default function Upskilling() {
     {
       stage: t('upskilling.stage1'),
       title: t('upskilling.s1Title'),
-      description: t('upskilling.s1Desc'),
+      description: t('upskilling.s1Desc')
     },
     {
       stage: t('upskilling.stage2'),
       title: t('upskilling.s2Title'),
-      description: t('upskilling.s2Desc'),
+      description: t('upskilling.s2Desc')
     },
     {
       stage: t('upskilling.stage3'),
       title: t('upskilling.s3Title'),
-      description: t('upskilling.s3Desc'),
+      description: t('upskilling.s3Desc')
     }
   ];
 
@@ -90,7 +90,7 @@ export default function Upskilling() {
                   <h4 className="text-xl font-bold text-zinc-800 mb-3">
                     {item.title}
                   </h4>
-                  <p className="text-zinc-600 leading-relaxed text-sm md:text-base">
+                  <p className="text-zinc-600 leading-relaxed text-sm md:text-base break-words">
                     {item.description}
                   </p>
                 </div>
