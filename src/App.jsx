@@ -8,10 +8,12 @@ import Sectors from './components/Sectors';
 import LegalizationTimeline from './components/LegalizationTimeline';
 import Upskilling from './components/Upskilling';
 import ContactForm from './components/ContactForm';
+import JobsWidget from './components/JobsWidget';
 import { useLanguage } from './context/LanguageContext';
 
 function App() {
   const [contactTab, setContactTab] = useState('kandydat');
+  const [prefillMessage, setPrefillMessage] = useState('');
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
 
   useEffect(() => {
@@ -89,6 +91,8 @@ function App() {
         <Hero onCtaClick={handleScrollToContact} />
         <StatsBanner />
       </div>
+
+      <JobsWidget onApply={(msg) => handleScrollToContact('kandydat', msg)} />
 
       {/* About Section */}
       <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="about">
@@ -279,7 +283,7 @@ function App() {
       <FAQSection />
 
       {/* Contact Form Section */}
-      <ContactForm activeTab={contactTab} onTabChange={setContactTab} />
+      <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
       
       {/* Footer */}
       <footer className="bg-surface-container-low border-t border-outline-variant/20">

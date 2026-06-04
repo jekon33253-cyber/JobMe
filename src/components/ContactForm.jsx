@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FadeIn from './FadeIn';
 import { useLanguage } from '../context/LanguageContext';
 
-export default function ContactForm({ activeTab, onTabChange }) {
+export default function ContactForm({ activeTab, onTabChange, prefillMessage }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -120,6 +120,7 @@ export default function ContactForm({ activeTab, onTabChange }) {
                   )}
                   {activeTab === 'kandydat' ? (
                     <>
+                      {prefillMessage && <input type="hidden" name="interested_in" value={prefillMessage} />}
                       <div>
                         <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameLabel')}</label>
                         <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder={t('contact.namePlaceholder')} type="text" />
