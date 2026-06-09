@@ -642,26 +642,46 @@ export const translations = {
       rights: "JobMe.pl. All rights reserved."
     },
     jobsWidget: {
-      title: "Current Job Opening",
-      subtitle: "Join a stable team in Nowa Ruda and Kłodzko. We offer free training, accommodation, and a clear growth path.",
-      jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
+      title: "Current Job Openings",
+      subtitle: "Join a stable team. We offer free training, accommodation, and a clear growth path.",
       salaryLabel: "Salary & Contract",
-      salary: "PLN 31.40 / hour gross",
-      salarySub: "(net for students). For people over 26 years old: PLN 25.50 / hour net.",
-      contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal employment.",
       locationLabel: "Schedule & Location",
-      location: "Nowa Ruda / Kłodzko (Lower Silesia)",
-      shifts: "2-shift system (6:00-14:00, 14:00-22:00), Monday to Friday.",
-      housing: "Free high-standard accommodation in 2-4 person rooms near the workplace.",
       tasksLabel: "Responsibilities",
-      tasks: [
-        "Assembly of structural elements of parcel lockers",
-        "Operation of simple production tools",
-        "Quality control of the finished product"
-      ],
       perksLabel: "What we offer",
-      perks: "We provide transport to work, work clothing, unlimited coffee and tea, and access to free UDT / SEP courses after 3 months.",
-      btnApply: "Apply Now"
+      btnApply: "Apply Now",
+      jobs: [
+        {
+          jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
+          salary: "PLN 31.40 / hour gross",
+          salarySub: "(net for students). For people over 26 years old: PLN 25.50 / hour net.",
+          contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal employment.",
+          location: "Nowa Ruda / Kłodzko (Lower Silesia)",
+          shifts: "2-shift system (6:00-14:00, 14:00-22:00), Monday to Friday.",
+          housing: "Free high-standard accommodation in 2-4 person rooms near the workplace.",
+          tasks: [
+            "Assembly of structural elements of parcel lockers",
+            "Operation of simple production tools",
+            "Quality control of the finished product"
+          ],
+          perks: "We provide transport to work, work clothing, unlimited coffee and tea, and access to free UDT / SEP courses after 3 months."
+        },
+        {
+          jobTitle: "Gas Cylinder Production Worker (Sosnowiec)",
+          salary: "PLN 25.50 / hour net",
+          salarySub: "(for students: PLN 31.40 / hour net). Advance payments available.",
+          contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Full document support, residence card application possibility.",
+          location: "Sosnowiec (Silesia)",
+          shifts: "8-12 hours in 3 shifts (6:00-14:00, 14:00-22:00, 22:00-06:00), weekdays (Saturdays if required).",
+          housing: "Accommodation provided (2-3 people per room).",
+          tasks: [
+            "Inserting components into the machine (bending process)",
+            "Stacking finished components onto pallets",
+            "Using simple measuring instruments",
+            "Maintaining cleanliness in the workspace"
+          ],
+          perks: "Free work clothing, medical checkups at the employer's expense, timely bank account payouts by the 15th of each month, assistance with temporary residence permit documents."
+        }
+      ]
     }
   }
 };
