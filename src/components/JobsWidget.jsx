@@ -90,7 +90,7 @@ export default function JobsWidget({ onApply }) {
                       {t('jobsWidget.tasksLabel')}
                     </h4>
                     <ul className="space-y-3">
-                      {t('jobsWidget.tasks', { returnObjects: true })?.map((task, idx) => (
+                      {Array.isArray(t('jobsWidget.tasks')) && t('jobsWidget.tasks').map((task, idx) => (
                         <li key={idx} className="flex items-start gap-3">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#00B4B4] mt-2 shrink-0"></span>
                           <span className="text-sm text-zinc-700 leading-relaxed">{task}</span>

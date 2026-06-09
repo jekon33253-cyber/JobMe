@@ -5,16 +5,24 @@ const LanguageContext = createContext();
 
 export function LanguageProvider({ children }) {
   const [currentLanguage, setCurrentLanguage] = useState(() => {
-    // Check localStorage first
-    const savedLang = localStorage.getItem('jobme_language');
-    if (savedLang && ['pl', 'ua', 'en'].includes(savedLang)) {
-      return savedLang;
+    try {
+      // Check localStorage first
+      const savedLang = localStorage.getItem('jobme_language');
+      if (savedLang && ['pl', 'ua', 'en'].includes(savedLang)) {
+        return savedLang;
+      }
+    } catch (e) {
+      console.warn('localStorage is not available:', e);
     }
     return 'pl';
   });
 
   useEffect(() => {
-    localStorage.setItem('jobme_language', currentLanguage);
+    try {
+      localStorage.setItem('jobme_language', currentLanguage);
+    } catch (e) {
+      console.warn('Failed to save language to localStorage:', e);
+    }
     document.documentElement.lang = currentLanguage;
   }, [currentLanguage]);
 

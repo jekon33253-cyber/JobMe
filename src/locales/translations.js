@@ -189,6 +189,27 @@ export const translations = {
       kontakt: "Kontakt",
       polityka: "Polityka Prywatności",
       rights: "JobMe.pl. Wszelkie prawa zastrzeżone."
+    },
+    jobsWidget: {
+      title: "Aktualna Oferta Pracy",
+      subtitle: "Dołącz do stabilnego zespołu w Nowej Rudzie. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
+      jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda)",
+      salaryLabel: "Wynagrodzenie i Umowa",
+      salary: "28,10 - 32,50 zł / godz. brutto",
+      contract: "Umowa zlecenie ze składkami ZUS. Praca w pełni legalna.",
+      locationLabel: "Grafik i Lokalizacja",
+      location: "Nowa Ruda (Dolny Śląsk)",
+      shifts: "Praca w systemie 2-zmianowym (6:00-14:00, 14:00-22:00), od poniedziałku do piątku.",
+      housing: "Darmowe zakwaterowanie o wysokim standardzie w pokojach 2-4 osobowych blisko zakładu pracy.",
+      tasksLabel: "Obowiązki",
+      tasks: [
+        "Montaż elementów konstrukcyjnych paczkomatów",
+        "Obsługa prostych narzędzi produkcyjnych",
+        "Kontrola jakości gotowego produktu"
+      ],
+      perksLabel: "Co oferujemy",
+      perks: "Darmowy dojazd do pracy autobusem zakładowym, odzież robocza, kawa i herbata bez limitu oraz dostęp do darmowych kursów UDT / SEP po 3 miesiącach.",
+      btnApply: "Aplikuj teraz"
     }
   },
 
@@ -382,6 +403,27 @@ export const translations = {
       kontakt: "Контакти",
       polityka: "Політика конфіденційності",
       rights: "JobMe.pl. Всі права захищені."
+    },
+    jobsWidget: {
+      title: "Актуальна вакансія",
+      subtitle: "Приєднуйтесь до стабільної команди в Новій Руді. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
+      jobTitle: "Працівник виробництва поштоматів (Нова Руда)",
+      salaryLabel: "Оплата та договір",
+      salary: "28,10 - 32,50 зл / год брутто",
+      contract: "Договір злеценя зі внесками ZUS. Повністю легальна робота.",
+      locationLabel: "Графік та локація",
+      location: "Нова Руда (Нижня Сілезія)",
+      shifts: "Робота в 2-змінній системі (6:00-14:00, 14:00-22:00), з понеділка по п'ятницю.",
+      housing: "Безкоштовне проживання високого стандарту в кімнатах на 2-4 особи поблизу місця роботи.",
+      tasksLabel: "Обов'язки",
+      tasks: [
+        "Монтаж конструктивних елементів поштоматів",
+        "Робота з простими виробничими інструментами",
+        "Контроль якості готової продукції"
+      ],
+      perksLabel: "Що ми пропонуємо",
+      perks: "Безкоштовний доїзд до роботи фірмовим автобусом, робочий одяг, безлімітна кава та чай, а також доступ до безкоштовних курсів UDT / SEP через 3 місяці.",
+      btnApply: "Подати заявку"
     }
   },
 
@@ -575,6 +617,27 @@ export const translations = {
       kontakt: "Contact",
       polityka: "Privacy Policy",
       rights: "JobMe.pl. All rights reserved."
+    },
+    jobsWidget: {
+      title: "Current Job Opening",
+      subtitle: "Join a stable team in Nowa Ruda. We offer free training, accommodation, and a clear growth path.",
+      jobTitle: "Parcel Locker Production Worker (Nowa Ruda)",
+      salaryLabel: "Salary & Contract",
+      salary: "PLN 28.10 - 32.50 / hour gross",
+      contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal employment.",
+      locationLabel: "Schedule & Location",
+      location: "Nowa Ruda (Lower Silesia)",
+      shifts: "2-shift system (6:00-14:00, 14:00-22:00), Monday to Friday.",
+      housing: "Free high-standard accommodation in 2-4 person rooms near the workplace.",
+      tasksLabel: "Responsibilities",
+      tasks: [
+        "Assembly of structural elements of parcel lockers",
+        "Operation of simple production tools",
+        "Quality control of the finished product"
+      ],
+      perksLabel: "What we offer",
+      perks: "Free transport to work by company bus, work clothing, unlimited coffee and tea, and access to free UDT / SEP courses after 3 months.",
+      btnApply: "Apply Now"
     }
   }
 };
