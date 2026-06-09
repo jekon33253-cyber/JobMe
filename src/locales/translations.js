@@ -30,7 +30,14 @@ export const translations = {
     about: {
       tag: "O nas",
       title: "Więcej niż agencja",
-      desc: "Jesteśmy HR-ekosystemem z Wrocławia. Odrzucamy stare schematy traktowania ludzi jako \"zasobów\". W JobMe stawiamy na pełną przejrzystość – u nas nie znajdziesz małego druku ani ukrytych kar umownych. Budujemy mosty między ambitnymi talentami a odpowiedzialnym biznesem."
+      subtitle: "Tworzymy standardy pracy nowej generacji",
+      desc: "Jesteśmy HR-ekosystemem z Wrocławia. Odrzucamy stare schematy traktowania ludzi jako \"zasobów\". W JobMe stawiamy na pełną przejrzystość – u nas nie znajdziesz małego druku ani ukrytych kar umownych. Budujemy mosty między ambitnymi talentami a odpowiedzialnym biznesem.",
+      value1Title: "100% Transparentność",
+      value1Desc: "Żadnych ukrytych kosztów, lojalek i kar umownych. Wszystko jasno i uczciwie na piśmie.",
+      value2Title: "Ludzie na 1. Miejscu",
+      value2Desc: "Finansujemy szkolenia zawodowe (UDT, SEP) i dajemy pełne wsparcie osobistego koordynatora.",
+      value3Title: "Technologiczne Dopasowanie",
+      value3Desc: "Autorska platforma pozwala na błyskawiczne łączenie najlepszych kandydatów z odpowiednimi projektami."
     },
     services: {
       title: "Nasze Usługi",
@@ -244,7 +251,14 @@ export const translations = {
     about: {
       tag: "Про нас",
       title: "Більше ніж агенція",
-      desc: "Ми — HR-екосистема з Вроцлава. Ми відкидаємо старі схеми ставлення до людей як до «ресурсів». В JobMe ми робимо ставку на повну прозорість — у нас ви не знайдете дрібного шрифту чи прихованих штрафів. Ми будуємо мости між амбітними талантами та відповідальним бізнесом."
+      subtitle: "Створюємо стандарти праці нового покоління",
+      desc: "Ми — HR-екосистема з Вроцлава. Ми відкидаємо старі схеми ставлення до людей як до «ресурсів». В JobMe ми робимо ставку на повну прозорість — у нас ви не знайдете дрібного шрифту чи прихованих штрафів. Ми будуємо мости між амбітними талантами та відповідальним бізнесом.",
+      value1Title: "100% Прозорість",
+      value1Desc: "Жодних прихованих витрат та штрафів у договорі. Все чітко та чесно на папері.",
+      value2Title: "Люди на 1-му місці",
+      value2Desc: "Фінансуємо професійне навчання (UDT, SEP) та надаємо повну підтримку особистого координатора.",
+      value3Title: "Технологічний підбір",
+      value3Desc: "Власна платформа дозволяє миттєво поєднувати найкращих кандидатів із відповідними проєктами."
     },
     services: {
       title: "Наші послуги",
@@ -458,7 +472,14 @@ export const translations = {
     about: {
       tag: "About us",
       title: "More than an agency",
-      desc: "We are an HR ecosystem from Wrocław. We reject old patterns of treating people as 'resources'. At JobMe, we focus on full transparency - you won't find small print or hidden contractual penalties with us. We build bridges between ambitious talents and responsible business."
+      subtitle: "We create next-generation work standards",
+      desc: "We are an HR ecosystem from Wrocław. We reject old patterns of treating people as 'resources'. At JobMe, we focus on full transparency - you won't find small print or hidden contractual penalties with us. We build bridges between ambitious talents and responsible business.",
+      value1Title: "100% Transparency",
+      value1Desc: "No hidden costs, loyalty bonds or contractual penalties. Everything clear and fair in writing.",
+      value2Title: "People First",
+      value2Desc: "We finance professional training (UDT, SEP) and provide full support from a personal coordinator.",
+      value3Title: "Tech-Driven Matching",
+      value3Desc: "Our proprietary platform allows for instant connection between the best candidates and the right projects."
     },
     services: {
       title: "Our Services",

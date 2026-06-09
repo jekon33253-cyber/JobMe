@@ -95,14 +95,79 @@ function App() {
       <JobsWidget onApply={(msg) => handleScrollToContact('kandydat', msg)} />
 
       {/* About Section */}
-      <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="about">
+      <section className="bg-surface-contrast py-20 md:py-28 px-gutter" id="about">
         <FadeIn>
-          <div className="max-w-4xl mx-auto text-center space-y-6">
-            <span className="text-primary font-label-bold text-label-bold uppercase tracking-wider">{t('about.tag')}</span>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D]">{t('about.title')}</h2>
-            <p className="font-body-lg text-body-lg text-zinc-700 text-base md:text-lg leading-relaxed">
-              {t('about.desc')}
-            </p>
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              
+              {/* Left Column: Title & Mission */}
+              <div className="lg:col-span-5 space-y-6 text-left">
+                <span className="text-primary font-label-bold text-label-bold uppercase tracking-wider">{t('about.tag')}</span>
+                <h2 className="text-3xl md:text-5xl font-extrabold text-[#2D2D2D] leading-tight">
+                  {t('about.title')}
+                </h2>
+                <h3 className="text-lg md:text-xl font-bold text-zinc-500">
+                  {t('about.subtitle')}
+                </h3>
+                <p className="font-body-lg text-body-lg text-zinc-700 leading-relaxed text-base md:text-lg">
+                  {t('about.desc')}
+                </p>
+                <div className="pt-4">
+                  <button 
+                    onClick={() => handleScrollToContact('kandydat')}
+                    className="inline-flex items-center gap-2 bg-[#2D2D2D] text-white hover:bg-zinc-800 font-bold px-6 py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                  >
+                    {t('nav.cta')}
+                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: 3 Pillars Grid */}
+              <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-6">
+                
+                {/* Pillar 1 */}
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
+                  <div className="bg-primary/10 p-4 rounded-xl text-primary shrink-0">
+                    <span className="material-symbols-outlined text-3xl">shield</span>
+                  </div>
+                  <div className="space-y-2 text-left">
+                    <h4 className="text-xl font-bold text-[#2D2D2D]">{t('about.value1Title')}</h4>
+                    <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
+                      {t('about.value1Desc')}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Pillar 2 */}
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
+                  <div className="bg-[#00B4B4]/10 p-4 rounded-xl text-[#00B4B4] shrink-0">
+                    <span className="material-symbols-outlined text-3xl">volunteer_activism</span>
+                  </div>
+                  <div className="space-y-2 text-left">
+                    <h4 className="text-xl font-bold text-[#2D2D2D]">{t('about.value2Title')}</h4>
+                    <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
+                      {t('about.value2Desc')}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Pillar 3 */}
+                <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
+                  <div className="bg-secondary-container p-4 rounded-xl text-on-secondary-container shrink-0">
+                    <span className="material-symbols-outlined text-3xl">hub</span>
+                  </div>
+                  <div className="space-y-2 text-left">
+                    <h4 className="text-xl font-bold text-[#2D2D2D]">{t('about.value3Title')}</h4>
+                    <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
+                      {t('about.value3Desc')}
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
           </div>
         </FadeIn>
       </section>
