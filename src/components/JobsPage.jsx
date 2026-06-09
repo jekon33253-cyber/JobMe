@@ -95,10 +95,23 @@ function QuickContactButtons({ jobTitle, labels }) {
   );
 }
 
+// ─── Thematic images per job index ────────────────────────────
+const JOB_IMAGES = [
+  // Job 0: parcel locker / electronics assembly
+  'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?auto=format&fit=crop&w=1200&q=80',
+  // Job 1: industrial / metalwork / gas cylinders
+  'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80',
+  // Job 2: warehouse / logistics (fallback)
+  'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
+  // Job 3: engineering (fallback)
+  'https://images.unsplash.com/photo-1565372195458-9de0b320ef04?auto=format&fit=crop&w=1200&q=80',
+];
+
 // ─── Single job card (expanded) ─────────────────────────────────
 function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighted }) {
   const icons = ['precision_manufacturing', 'gas_meter', 'warehouse', 'engineering'];
   const iconName = icons[index % icons.length];
+  const bgImage = JOB_IMAGES[index % JOB_IMAGES.length];
 
   return (
     <div
@@ -109,17 +122,29 @@ function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighte
       {/* top accent */}
       <div className="h-1.5 bg-gradient-to-r from-primary to-[#00B4B4]" />
 
-      {/* header */}
-      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#3a3a3a] p-7 md:p-10 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-52 h-52 bg-primary/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+      {/* header with background image */}
+      <div
+        className="relative p-7 md:p-10 text-white overflow-hidden"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: '160px',
+        }}
+      >
+        {/* dark gradient overlay — keeps text readable */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/65 to-[#1a3a1a]/70 pointer-events-none" />
+        {/* subtle green tint strip at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-primary/20 to-transparent pointer-events-none" />
+
         <div className="relative z-10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center shrink-0 border border-white/20">
               <Icon name={iconName} className="text-primary text-xl" />
             </div>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full
-                             bg-primary/20 text-[#A1DD22] text-xs font-bold uppercase tracking-wide
-                             border border-[#A1DD22]/30">
+                             bg-primary/25 text-[#A1DD22] text-xs font-bold uppercase tracking-wide
+                             border border-[#A1DD22]/40 backdrop-blur-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-[#A1DD22] animate-pulse" />
               Aktywna oferta
             </span>
