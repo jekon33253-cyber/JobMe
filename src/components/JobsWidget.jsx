@@ -47,8 +47,11 @@ export default function JobsWidget({ onApply }) {
                       </div>
                       <h4 className="font-bold text-zinc-800 text-lg">{t('jobsWidget.salaryLabel')}</h4>
                     </div>
-                    <p className="text-2xl md:text-3xl font-black text-[#8CC63F] mb-3 leading-tight">
+                    <p className="text-2xl md:text-3xl font-black text-[#8CC63F] mb-1 leading-tight">
                       {t('jobsWidget.salary')}
+                    </p>
+                    <p className="text-sm text-zinc-500 font-medium mb-3 leading-relaxed">
+                      {t('jobsWidget.salarySub')}
                     </p>
                     <p className="text-sm text-zinc-700 leading-relaxed font-medium">
                       {t('jobsWidget.contract')}
