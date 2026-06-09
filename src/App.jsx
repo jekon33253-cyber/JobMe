@@ -9,11 +9,71 @@ import LegalizationTimeline from './components/LegalizationTimeline';
 import Upskilling from './components/Upskilling';
 import ContactForm from './components/ContactForm';
 import JobsWidget from './components/JobsWidget';
+import JobsPage from './components/JobsPage';
 import { useLanguage } from './context/LanguageContext';
+
+// ── config ────────────────────────────────────────────────────
+const WHATSAPP_NUMBER = '48000000000'; // замени на реальный номер
+const TELEGRAM_USERNAME = 'jobme_hr';  // замени на реальный username
+
+// ── floating chat buttons ─────────────────────────────────────
+function FloatingContactButtons({ t }) {
+  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hej! Chciałbym dowiedzieć się więcej o ofertach pracy.')}`;
+  const tgUrl = `https://t.me/${TELEGRAM_USERNAME}`;
+
+  return (
+    <div className="fixed bottom-6 right-5 z-[900] flex flex-col gap-3 items-end">
+      {/* Telegram */}
+      <a
+        href={tgUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-center gap-2 bg-[#0088cc] hover:bg-[#0077b3] text-white
+                   rounded-full shadow-xl hover:shadow-2xl transition-all duration-300
+                   hover:-translate-y-0.5 overflow-hidden"
+        aria-label="Telegram"
+      >
+        <div className="w-12 h-12 flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.28 13.605l-2.95-.924c-.642-.204-.657-.642.136-.953l11.526-4.445c.536-.194 1.006.131.57.965z"/>
+          </svg>
+        </div>
+        <span className="pr-4 text-sm font-bold whitespace-nowrap max-w-0 overflow-hidden
+                         group-hover:max-w-xs transition-all duration-300 ease-in-out">
+          Telegram
+        </span>
+      </a>
+
+      {/* WhatsApp */}
+      <a
+        href={waUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white
+                   rounded-full shadow-xl hover:shadow-2xl transition-all duration-300
+                   hover:-translate-y-0.5 overflow-hidden"
+        aria-label="WhatsApp"
+      >
+        <div className="w-12 h-12 flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.111.546 4.09 1.5 5.816L0 24l6.34-1.488A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.027-1.387l-.36-.213-3.761.883.898-3.669-.234-.374A9.794 9.794 0 012.182 12C2.182 6.575 6.575 2.182 12 2.182S21.818 6.575 21.818 12 17.425 21.818 12 21.818z"/>
+          </svg>
+        </div>
+        <span className="pr-4 text-sm font-bold whitespace-nowrap max-w-0 overflow-hidden
+                         group-hover:max-w-xs transition-all duration-300 ease-in-out">
+          WhatsApp
+        </span>
+      </a>
+    </div>
+  );
+}
 
 function App() {
   const [contactTab, setContactTab] = useState('kandydat');
   const [prefillMessage, setPrefillMessage] = useState('');
+  const [page, setPage] = useState('home');          // 'home' | 'jobs'
+  const [highlightJobIdx, setHighlightJobIdx] = useState(null);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
 
   useEffect(() => {
@@ -23,19 +83,34 @@ function App() {
   }, [currentLanguage]);
 
   const handleScrollToContact = (tab) => {
+    setPage('home');
     setContactTab(tab);
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+    setTimeout(() => {
+      const element = document.getElementById('contact');
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  };
+
+  const handleNavigateToJobs = (jobIdx) => {
+    setHighlightJobIdx(jobIdx);
+    setPage('jobs');
+    window.scrollTo({ top: 0 });
+  };
+
+  const handleBackToHome = () => {
+    setPage('home');
+    setTimeout(() => {
+      const el = document.getElementById('oferty');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
   };
 
   const LangButton = ({ lang }) => (
     <button
       onClick={() => setCurrentLanguage(lang)}
       className={`px-2 py-1 text-sm font-bold uppercase transition-all duration-300 rounded-md ${
-        currentLanguage === lang 
-          ? 'text-primary bg-primary/10' 
+        currentLanguage === lang
+          ? 'text-primary bg-primary/10'
           : 'text-zinc-400 hover:text-zinc-700'
       }`}
     >
@@ -45,24 +120,44 @@ function App() {
 
   return (
     <div className="text-on-surface bg-background-white font-body-md">
-      
-      {/* TopNavBar */}
+
+      {/* ── TopNavBar (always visible) ────────────────────────── */}
       <nav className="bg-background-white/90 backdrop-blur-md fixed top-0 w-full z-50 shadow-sm">
         <div className="flex justify-between items-center px-gutter py-4 max-w-7xl mx-auto">
           <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             aria-label="На главную"
             className="cursor-pointer shrink-0"
           >
             <img src="/logo.webp" alt="JobMe Logo" className="h-8 md:h-10 w-auto object-contain" />
           </button>
-          
+
           <div className="hidden md:flex gap-8 items-center">
-            <a className="font-button text-button text-primary border-b-2 border-primary pb-1" href="#about">{t('nav.about')}</a>
-            <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#services">{t('nav.services')}</a>
-            <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#advantages">{t('nav.advantages')}</a>
-            <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#team">{t('nav.team')}</a>
-            <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#contact">{t('nav.contact')}</a>
+            {page === 'home' ? (
+              <>
+                <a className="font-button text-button text-primary border-b-2 border-primary pb-1" href="#about">{t('nav.about')}</a>
+                <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#services">{t('nav.services')}</a>
+                <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#advantages">{t('nav.advantages')}</a>
+                <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#team">{t('nav.team')}</a>
+                <a className="font-button text-button text-on-surface-variant hover:text-primary transition-colors" href="#contact">{t('nav.contact')}</a>
+              </>
+            ) : (
+              <button
+                onClick={handleBackToHome}
+                className="font-button text-button text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+              >
+                ← {t('nav.about')}
+              </button>
+            )}
+            <button
+              onClick={() => handleNavigateToJobs(null)}
+              className={`font-button text-button font-bold transition-colors cursor-pointer px-3 py-1.5 rounded-lg
+                ${page === 'jobs'
+                  ? 'text-primary bg-primary/10'
+                  : 'text-primary hover:bg-primary/10'}`}
+            >
+              {t('nav.jobs')}
+            </button>
           </div>
 
           <div className="flex items-center gap-4">
@@ -73,7 +168,7 @@ function App() {
               <LangButton lang="en" />
             </div>
 
-            <button 
+            <button
               onClick={() => {
                 if (window.gtag) window.gtag('event', 'click_start_now');
                 if (window.fbq) window.fbq('trackCustom', 'ClickStartNow');
@@ -85,6 +180,7 @@ function App() {
             </button>
           </div>
         </div>
+
         {/* Mobile Language Switcher */}
         <div className="sm:hidden flex justify-center gap-2 pb-2 bg-background-white border-b border-zinc-100">
           <LangButton lang="pl" />
@@ -93,280 +189,213 @@ function App() {
         </div>
       </nav>
 
-      <div className="pt-[100px] sm:pt-[80px]"> {/* Offset for fixed navbar + mobile lang switcher */}
-        <Hero onCtaClick={handleScrollToContact} />
-        <StatsBanner />
-      </div>
+      {/* ── JOBS PAGE ─────────────────────────────────────────── */}
+      {page === 'jobs' && (
+        <JobsPage
+          onBack={handleBackToHome}
+          onApply={(msg) => handleScrollToContact('kandydat')}
+          highlightIdx={highlightJobIdx}
+        />
+      )}
 
-      <JobsWidget onApply={(msg) => handleScrollToContact('kandydat', msg)} />
+      {/* ── HOME PAGE ─────────────────────────────────────────── */}
+      {page === 'home' && (
+        <>
+          <div className="pt-[100px] sm:pt-[80px]">
+            <Hero onCtaClick={handleScrollToContact} />
+            <StatsBanner />
+          </div>
 
-      {/* About Section */}
-      <section className="bg-surface-contrast py-20 md:py-28 px-gutter" id="about">
-        <FadeIn>
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-              
-              {/* Left Column: Title & Mission */}
-              <div className="lg:col-span-5 space-y-6 text-left">
-                <span className="text-primary font-label-bold text-label-bold uppercase tracking-wider">{t('about.tag')}</span>
-                <h2 className="text-3xl md:text-5xl font-extrabold text-[#2D2D2D] leading-tight">
-                  {t('about.title')}
-                </h2>
-                <h3 className="text-lg md:text-xl font-bold text-zinc-500">
-                  {t('about.subtitle')}
-                </h3>
-                <p className="font-body-lg text-body-lg text-zinc-700 leading-relaxed text-base md:text-lg">
-                  {t('about.desc')}
-                </p>
-                <div className="pt-4">
-                  <button 
-                    onClick={() => handleScrollToContact('kandydat')}
-                    className="inline-flex items-center gap-2 bg-[#2D2D2D] text-white hover:bg-zinc-800 font-bold px-6 py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-                  >
-                    {t('nav.cta')}
-                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
-                  </button>
-                </div>
-              </div>
+          <JobsWidget
+            onApply={(msg) => handleScrollToContact('kandydat', msg)}
+            onNavigateToJobs={handleNavigateToJobs}
+          />
 
-              {/* Right Column: 3 Pillars Grid */}
-              <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-6">
-                
-                {/* Pillar 1 */}
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
-                  <div className="bg-primary/10 p-4 rounded-xl text-primary shrink-0">
-                    <span className="material-symbols-outlined text-3xl">shield</span>
-                  </div>
-                  <div className="space-y-2 text-left">
-                    <h4 className="text-xl font-bold text-[#2D2D2D]">{t('about.value1Title')}</h4>
-                    <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
-                      {t('about.value1Desc')}
+          {/* About Section */}
+          <section className="bg-surface-contrast py-20 md:py-28 px-gutter" id="about">
+            <FadeIn>
+              <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                  {/* Left Column: Title & Mission */}
+                  <div className="lg:col-span-5 space-y-6 text-left">
+                    <span className="text-primary font-label-bold text-label-bold uppercase tracking-wider">{t('about.tag')}</span>
+                    <h2 className="text-3xl md:text-5xl font-extrabold text-[#2D2D2D] leading-tight">
+                      {t('about.title')}
+                    </h2>
+                    <h3 className="text-lg md:text-xl font-bold text-zinc-500">
+                      {t('about.subtitle')}
+                    </h3>
+                    <p className="font-body-lg text-body-lg text-zinc-700 leading-relaxed text-base md:text-lg">
+                      {t('about.desc')}
                     </p>
+                    <div className="pt-4">
+                      <button
+                        onClick={() => handleScrollToContact('kandydat')}
+                        className="inline-flex items-center gap-2 bg-[#2D2D2D] text-white hover:bg-zinc-800 font-bold px-6 py-3.5 rounded-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                      >
+                        {t('nav.cta')}
+                        <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                {/* Pillar 2 */}
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
-                  <div className="bg-[#00B4B4]/10 p-4 rounded-xl text-[#00B4B4] shrink-0">
-                    <span className="material-symbols-outlined text-3xl">volunteer_activism</span>
-                  </div>
-                  <div className="space-y-2 text-left">
-                    <h4 className="text-xl font-bold text-[#2D2D2D]">{t('about.value2Title')}</h4>
-                    <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
-                      {t('about.value2Desc')}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Pillar 3 */}
-                <div className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
-                  <div className="bg-secondary-container p-4 rounded-xl text-on-secondary-container shrink-0">
-                    <span className="material-symbols-outlined text-3xl">hub</span>
-                  </div>
-                  <div className="space-y-2 text-left">
-                    <h4 className="text-xl font-bold text-[#2D2D2D]">{t('about.value3Title')}</h4>
-                    <p className="text-zinc-600 text-sm md:text-base leading-relaxed">
-                      {t('about.value3Desc')}
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* Services Section */}
-      <section className="bg-background-white py-20 md:py-24 px-gutter" id="services">
-        <FadeIn>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] text-center mb-16">{t('services.title')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Service 1 */}
-              <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
-                <div className="bg-secondary-container p-4 rounded-xl mb-6">
-                  <span className="material-symbols-outlined text-on-secondary-container scale-150">business_center</span>
-                </div>
-                <h3 className="font-headline-md text-headline-md mb-4">{t('services.s1Title')}</h3>
-                <p className="text-zinc-700 text-base leading-relaxed">
-                  {t('services.s1Desc')}
-                </p>
-              </div>
-              {/* Service 2 */}
-              <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
-                <div className="bg-primary-fixed p-4 rounded-xl mb-6">
-                  <span className="material-symbols-outlined text-on-primary-fixed scale-150">school</span>
-                </div>
-                <h3 className="font-headline-md text-headline-md mb-4">{t('services.s2Title')}</h3>
-                <p className="text-zinc-700 text-base leading-relaxed">
-                  {t('services.s2Desc')}
-                </p>
-              </div>
-              {/* Service 3 */}
-              <div className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
-                <div className="bg-tertiary-fixed p-4 rounded-xl mb-6">
-                  <span className="material-symbols-outlined text-on-tertiary-fixed scale-150">groups</span>
-                </div>
-                <h3 className="font-headline-md text-headline-md mb-4">{t('services.s3Title')}</h3>
-                <p className="text-zinc-700 text-base leading-relaxed">
-                  {t('services.s3Desc')}
-                </p>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* Sectors Section */}
-      <Sectors />
-
-      {/* Legalization Timeline Section */}
-      <LegalizationTimeline />
-
-      {/* Jak to dziala Section */}
-      <HowItWorks />
-
-      {/* Advantages Section */}
-      <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="advantages">
-        <FadeIn>
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-12">{t('advantages.title')}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Adv 1 */}
-                  <div className="space-y-3">
-                    <span className="material-symbols-outlined text-primary text-3xl">verified_user</span>
-                    <h3 className="font-label-bold text-label-bold text-on-surface">{t('advantages.a1Title')}</h3>
-                    <p className="text-zinc-700 text-base leading-relaxed">{t('advantages.a1Desc')}</p>
-                  </div>
-                  {/* Adv 2 */}
-                  <div className="space-y-3">
-                    <span className="material-symbols-outlined text-primary text-3xl">support_agent</span>
-                    <h3 className="font-label-bold text-label-bold text-on-surface">{t('advantages.a2Title')}</h3>
-                    <p className="text-zinc-700 text-base leading-relaxed">{t('advantages.a2Desc')}</p>
-                  </div>
-                  {/* Adv 3 */}
-                  <div className="space-y-3">
-                    <span className="material-symbols-outlined text-primary text-3xl">description</span>
-                    <h3 className="font-label-bold text-label-bold text-on-surface">{t('advantages.a3Title')}</h3>
-                    <p className="text-zinc-700 text-base leading-relaxed">{t('advantages.a3Desc')}</p>
-                  </div>
-                  {/* Adv 4 */}
-                  <div className="space-y-3">
-                    <span className="material-symbols-outlined text-primary text-3xl">devices</span>
-                    <h3 className="font-label-bold text-label-bold text-on-surface">{t('advantages.a4Title')}</h3>
-                    <p className="text-zinc-700 text-base leading-relaxed">{t('advantages.a4Desc')}</p>
+                  {/* Right Column: 3 Pillars Grid */}
+                  <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-1 gap-6">
+                    {[
+                      { icon: 'shield', color: 'bg-primary/10 text-primary', titleKey: 'about.value1Title', descKey: 'about.value1Desc' },
+                      { icon: 'volunteer_activism', color: 'bg-[#00B4B4]/10 text-[#00B4B4]', titleKey: 'about.value2Title', descKey: 'about.value2Desc' },
+                      { icon: 'hub', color: 'bg-secondary-container text-on-secondary-container', titleKey: 'about.value3Title', descKey: 'about.value3Desc' },
+                    ].map(({ icon, color, titleKey, descKey }) => (
+                      <div key={titleKey} className="bg-white p-6 md:p-8 rounded-2xl border border-zinc-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start">
+                        <div className={`${color} p-4 rounded-xl shrink-0`}>
+                          <span className="material-symbols-outlined text-3xl">{icon}</span>
+                        </div>
+                        <div className="space-y-2 text-left">
+                          <h4 className="text-xl font-bold text-[#2D2D2D]">{t(titleKey)}</h4>
+                          <p className="text-zinc-600 text-sm md:text-base leading-relaxed">{t(descKey)}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className="relative">
-                <img alt="Zaufanie i profesjonalizm" className="rounded-xxl shadow-xl border-8 border-white object-cover aspect-[4/3] w-full" src="https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&q=80&w=800" />
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-      </section>
+            </FadeIn>
+          </section>
 
-      {/* Upskilling Section */}
-      <Upskilling />
+          {/* Services Section */}
+          <section className="bg-background-white py-20 md:py-24 px-gutter" id="services">
+            <FadeIn>
+              <div className="max-w-7xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] text-center mb-16">{t('services.title')}</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                    { icon: 'business_center', bg: 'bg-secondary-container', text: 'text-on-secondary-container', titleKey: 'services.s1Title', descKey: 'services.s1Desc' },
+                    { icon: 'school', bg: 'bg-primary-fixed', text: 'text-on-primary-fixed', titleKey: 'services.s2Title', descKey: 'services.s2Desc' },
+                    { icon: 'groups', bg: 'bg-tertiary-fixed', text: 'text-on-tertiary-fixed', titleKey: 'services.s3Title', descKey: 'services.s3Desc' },
+                  ].map(({ icon, bg, text, titleKey, descKey }) => (
+                    <div key={titleKey} className="bg-white p-8 rounded-xxl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center">
+                      <div className={`${bg} p-4 rounded-xl mb-6`}>
+                        <span className={`material-symbols-outlined ${text} scale-150`}>{icon}</span>
+                      </div>
+                      <h3 className="font-headline-md text-headline-md mb-4">{t(titleKey)}</h3>
+                      <p className="text-zinc-700 text-base leading-relaxed">{t(descKey)}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </FadeIn>
+          </section>
 
-      {/* Team Section */}
-      <section className="bg-background-white py-20 md:py-24 px-gutter" id="team">
-        <FadeIn>
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-4">{t('team.title')}</h2>
-            <p className="text-zinc-700 text-base md:text-lg mb-16 max-w-2xl mx-auto">{t('team.desc')}</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Team 1 */}
-              <div className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-                <div className="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-[2rem] border-4 border-white shadow-md">
-                  <img alt="Michał" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2e4MoBV6ODja8n4DkU_m9XpJXfYE8P9F05ZKP5Uqoef5qPjyy3J8YOWCR5BygPHwbqy7gYxW2zaI5wBHnWP4dJGQCO_cP149Qxtwf-wKeKb5KcsawMOp0DYST7G-hvWbD8B8AaVBajlhkck3n9KBiyheB4O4qBctGiRqM-xSyAb14VegfS3S_1ujy7SXSKlcz2HEl741kIS8j8ikP0SvuQ--ktXA_w3NgJ2Zh3AszTCWTTUR0hl4tNKhLdcWUtapykorhAlopxig"/>
+          <Sectors />
+          <LegalizationTimeline />
+          <HowItWorks />
+
+          {/* Advantages Section */}
+          <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="advantages">
+            <FadeIn>
+              <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div>
+                    <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-12">{t('advantages.title')}</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {[
+                        { icon: 'verified_user', titleKey: 'advantages.a1Title', descKey: 'advantages.a1Desc' },
+                        { icon: 'support_agent', titleKey: 'advantages.a2Title', descKey: 'advantages.a2Desc' },
+                        { icon: 'description', titleKey: 'advantages.a3Title', descKey: 'advantages.a3Desc' },
+                        { icon: 'devices', titleKey: 'advantages.a4Title', descKey: 'advantages.a4Desc' },
+                      ].map(({ icon, titleKey, descKey }) => (
+                        <div key={titleKey} className="space-y-3">
+                          <span className="material-symbols-outlined text-primary text-3xl">{icon}</span>
+                          <h3 className="font-label-bold text-label-bold text-on-surface">{t(titleKey)}</h3>
+                          <p className="text-zinc-700 text-base leading-relaxed">{t(descKey)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <img alt="Zaufanie i profesjonalizm" className="rounded-xxl shadow-xl border-8 border-white object-cover aspect-[4/3] w-full" src="https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&q=80&w=800" />
+                  </div>
                 </div>
-                <h3 className="font-headline-md text-headline-md">Michał</h3>
-                <p className="text-primary font-label-bold mb-4">{t('team.t1Role')}</p>
-                <p className="text-zinc-700 text-base italic leading-relaxed">{t('team.t1Desc')}</p>
               </div>
-              {/* Team 2 */}
-              <div className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-                <div className="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-[2rem] border-4 border-white shadow-md">
-                  <img alt="Anna" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATy_o5csBvnV1AQdi6k6zH_lXPDJqOnluCjKaGQ_3KKCn1PHQCDnfSDciVnpqN-2yPsoNMKpIguPqQrZIrcF906rETOWnr7rzWBfSf3cZOTpi0XKmYHtkJ0-XaelNLA-1f30DYAqzqzkQgSNX6JhZ1gjTVrkEP_s5FOyl8pa_NCXbnjui-ib8aqreM-N1KEdhhNSNN_4b_jMew63xJPMG3chAyBhabFJMK3vIGdQ25yFT4Y1WHmQ82bcB73t17Avr-y2KTs3Y6FDc"/>
+            </FadeIn>
+          </section>
+
+          <Upskilling />
+
+          {/* Team Section */}
+          <section className="bg-background-white py-20 md:py-24 px-gutter" id="team">
+            <FadeIn>
+              <div className="max-w-7xl mx-auto text-center">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-4">{t('team.title')}</h2>
+                <p className="text-zinc-700 text-base md:text-lg mb-16 max-w-2xl mx-auto">{t('team.desc')}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                    { name: 'Michał', roleKey: 'team.t1Role', descKey: 'team.t1Desc', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA2e4MoBV6ODja8n4DkU_m9XpJXfYE8P9F05ZKP5Uqoef5qPjyy3J8YOWCR5BygPHwbqy7gYxW2zaI5wBHnWP4dJGQCO_cP149Qxtwf-wKeKb5KcsawMOp0DYST7G-hvWbD8B8AaVBajlhkck3n9KBiyheB4O4qBctGiRqM-xSyAb14VegfS3S_1ujy7SXSKlcz2HEl741kIS8j8ikP0SvuQ--ktXA_w3NgJ2Zh3AszTCWTTUR0hl4tNKhLdcWUtapykorhAlopxig' },
+                    { name: 'Anna', roleKey: 'team.t2Role', descKey: 'team.t2Desc', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuATy_o5csBvnV1AQdi6k6zH_lXPDJqOnluCjKaGQ_3KKCn1PHQCDnfSDciVnpqN-2yPsoNMKpIguPqQrZIrcF906rETOWnr7rzWBfSf3cZOTpi0XKmYHtkJ0-XaelNLA-1f30DYAqzqzkQgSNX6JhZ1gjTVrkEP_s5FOyl8pa_NCXbnjui-ib8aqreM-N1KEdhhNSNN_4b_jMew63xJPMG3chAyBhabFJMK3vIGdQ25yFT4Y1WHmQ82bcB73t17Avr-y2KTs3Y6FDc' },
+                    { name: 'Tomasz', roleKey: 'team.t3Role', descKey: 'team.t3Desc', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3oe4bYrI5JrB8a-YWPMLiq93padLNrqsL31IokEcr_dim2VxkBULhMv9eXAXa3Q2oLDntmZ9ahQTnRhYanI5_NkEVLcabZPadS3_Cx31ChnRQJj5CIpJeMcvQPv1uT3OFbKCPPJMgFN6nxPtS-FOmokJnVPNAsXA-1L-SsqAr7ikTvYlocVCUe8OQIByweBB7FbK9q9GKzA5_VStfOwRUuer1pD1idTJZenFbdi9bGgGYsNwa59jVrgpeW6eXlxRs908ietv4aJg' },
+                  ].map(({ name, roleKey, descKey, src }) => (
+                    <div key={name} className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+                      <div className="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-[2rem] border-4 border-white shadow-md">
+                        <img alt={name} className="w-full h-full object-cover" src={src} />
+                      </div>
+                      <h3 className="font-headline-md text-headline-md">{name}</h3>
+                      <p className="text-primary font-label-bold mb-4">{t(roleKey)}</p>
+                      <p className="text-zinc-700 text-base italic leading-relaxed">{t(descKey)}</p>
+                    </div>
+                  ))}
                 </div>
-                <h3 className="font-headline-md text-headline-md">Anna</h3>
-                <p className="text-primary font-label-bold mb-4">{t('team.t2Role')}</p>
-                <p className="text-zinc-700 text-base italic leading-relaxed">{t('team.t2Desc')}</p>
               </div>
-              {/* Team 3 */}
-              <div className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
-                <div className="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-[2rem] border-4 border-white shadow-md">
-                  <img alt="Tomasz" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3oe4bYrI5JrB8a-YWPMLiq93padLNrqsL31IokEcr_dim2VxkBULhMv9eXAXa3Q2oLDntmZ9ahQTnRhYanI5_NkEVLcabZPadS3_Cx31ChnRQJj5CIpJeMcvQPv1uT3OFbKCPPJMgFN6nxPtS-FOmokJnVPNAsXA-1L-SsqAr7ikTvYlocVCUe8OQIByweBB7FbK9q9GKzA5_VStfOwRUuer1pD1idTJZenFbdi9bGgGYsNwa59jVrgpeW6eXlxRs908ietv4aJg"/>
+            </FadeIn>
+          </section>
+
+          {/* Testimonials Section */}
+          <section className="bg-surface-contrast py-20 md:py-24 px-gutter">
+            <FadeIn>
+              <div className="max-w-7xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] text-center mb-16">{t('testimonials.title')}</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                    { stars: 5, textKey: 'testimonials.r1Text', nameKey: 'testimonials.r1Name', roleKey: 'testimonials.r1Role' },
+                    { stars: 4, textKey: 'testimonials.r2Text', nameKey: 'testimonials.r2Name', roleKey: 'testimonials.r2Role' },
+                    { stars: 5, textKey: 'testimonials.r3Text', nameKey: 'testimonials.r3Name', roleKey: 'testimonials.r3Role' },
+                  ].map(({ stars, textKey, nameKey, roleKey }, i) => (
+                    <div key={i} className="bg-white p-8 rounded-xl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative z-0 overflow-hidden">
+                      <span className="material-symbols-outlined absolute -top-4 -left-2 text-9xl text-zinc-100/50 -z-10">format_quote</span>
+                      <div className="flex gap-1 mb-4">
+                        {[...Array(stars)].map((_, si) => (
+                          <span key={si} className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                        ))}
+                        {stars < 5 && <span className="material-symbols-outlined text-zinc-300" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>}
+                      </div>
+                      <p className="font-body-md text-body-md text-on-surface mb-6">"{t(textKey)}"</p>
+                      <p className="font-label-bold text-label-bold">— {t(nameKey)} {roleKey ? `(${t(roleKey)})` : ''}</p>
+                    </div>
+                  ))}
                 </div>
-                <h3 className="font-headline-md text-headline-md">Tomasz</h3>
-                <p className="text-primary font-label-bold mb-4">{t('team.t3Role')}</p>
-                <p className="text-zinc-700 text-base italic leading-relaxed">{t('team.t3Desc')}</p>
+              </div>
+            </FadeIn>
+          </section>
+
+          <FAQSection />
+          <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
+
+          {/* Footer */}
+          <footer className="bg-surface-container-low border-t border-outline-variant/20">
+            <div className="flex flex-col md:flex-row justify-between items-center px-gutter py-base gap-4 max-w-7xl mx-auto min-h-[80px]">
+              <img src="/logo.webp" alt="JobMe Logo" className="h-6 md:h-8 w-auto object-contain opacity-90" />
+              <p className="text-zinc-700 text-base leading-relaxed">© 2026 {t('footer.rights')}</p>
+              <div className="flex gap-6">
+                <a className="text-zinc-600 text-base hover:text-secondary transition-colors" href="#">{t('footer.polityka')}</a>
+                <a className="text-zinc-600 text-base hover:text-secondary transition-colors" href="#contact">{t('footer.kontakt')}</a>
               </div>
             </div>
-          </div>
-        </FadeIn>
-      </section>
-      
-      {/* Testimonials Section */}
-      <section className="bg-surface-contrast py-20 md:py-24 px-gutter">
-        <FadeIn>
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] text-center mb-16">{t('testimonials.title')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Review 1 */}
-              <div className="bg-white p-8 rounded-xl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative z-0 overflow-hidden">
-                <span className="material-symbols-outlined absolute -top-4 -left-2 text-9xl text-zinc-100/50 -z-10">format_quote</span>
-                <div className="flex gap-1 mb-4">
-                  <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface mb-6">"{t('testimonials.r1Text')}"</p>
-                <p className="font-label-bold text-label-bold">— {t('testimonials.r1Name')}</p>
-              </div>
-              {/* Review 2 */}
-              <div className="bg-white p-8 rounded-xl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative z-0 overflow-hidden">
-                <span className="material-symbols-outlined absolute -top-4 -left-2 text-9xl text-zinc-100/50 -z-10">format_quote</span>
-                <div className="flex gap-1 mb-4">
-                  <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-zinc-300" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface mb-6">"{t('testimonials.r2Text')}"</p>
-                <p className="font-label-bold text-label-bold">— {t('testimonials.r2Name')} ({t('testimonials.r2Role')})</p>
-              </div>
-              {/* Review 3 */}
-              <div className="bg-white p-8 rounded-xl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative z-0 overflow-hidden">
-                <span className="material-symbols-outlined absolute -top-4 -left-2 text-9xl text-zinc-100/50 -z-10">format_quote</span>
-                <div className="flex gap-1 mb-4">
-                  <span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span><span className="material-symbols-outlined text-amber-400" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface mb-6">"{t('testimonials.r3Text')}"</p>
-                <p className="font-label-bold text-label-bold">— {t('testimonials.r3Name')}</p>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-      </section>
+          </footer>
+        </>
+      )}
 
-      {/* FAQ Section */}
-      <FAQSection />
-
-      {/* Contact Form Section */}
-      <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
-      
-      {/* Footer */}
-      <footer className="bg-surface-container-low border-t border-outline-variant/20">
-        <div className="flex flex-col md:flex-row justify-between items-center px-gutter py-base gap-4 max-w-7xl mx-auto min-h-[80px]">
-          <img src="/logo.webp" alt="JobMe Logo" className="h-6 md:h-8 w-auto object-contain opacity-90" />
-          <p className="text-zinc-700 text-base leading-relaxed">© 2026 {t('footer.rights')}</p>
-          <div className="flex gap-6">
-            <a className="text-zinc-600 text-base hover:text-secondary transition-colors" href="#">{t('footer.polityka')}</a>
-            <a className="text-zinc-600 text-base hover:text-secondary transition-colors" href="#contact">{t('footer.kontakt')}</a>
-          </div>
-        </div>
-      </footer>
+      {/* ── Floating WhatsApp / Telegram buttons (always visible) ── */}
+      <FloatingContactButtons t={t} />
 
     </div>
   );

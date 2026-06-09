@@ -6,6 +6,7 @@ export const translations = {
       advantages: "Zalety",
       team: "Zespół",
       contact: "Kontakt",
+      jobs: "Oferty Pracy",
       cta: "Zacznij teraz"
     },
     hero: {
@@ -197,6 +198,25 @@ export const translations = {
       polityka: "Polityka Prywatności",
       rights: "JobMe.pl. Wszelkie prawa zastrzeżone."
     },
+    jobsPage: {
+      title: "Wszystkie Oferty Pracy",
+      subtitle: "Aktualne oferty dla kandydatów. Dołącz do stabilnego zespołu z pełnym pakietem benefitów.",
+      backBtn: "← Wróć na stronę główną",
+      faqTitle: "Często zadawane pytania",
+      faq: [
+        { q: "Czy muszę znać język polski?", a: "Nie jest to wymagane na stanowiskach produkcyjnych. Podstawowe zwroty wyjaśni Ci koordynator w Twoim języku. Oferujemy też darmowe kursy językowe po 3 miesiącach pracy." },
+        { q: "Jak szybko mogę zacząć pracę?", a: "Zazwyczaj w ciągu 3–7 dni od pierwszego kontaktu. Przeprowadzamy szybki onboarding i pomagamy z dokumentami." },
+        { q: "Czy zakwaterowanie jest naprawdę bezpłatne?", a: "Tak. Zapewniamy zakwaterowanie w pokojach 2–4 osobowych w pobliżu miejsca pracy. Nie ma żadnych ukrytych potrąceń." },
+        { q: "Jakie dokumenty są potrzebne?", a: "Paszport lub dowód tożsamości, opcjonalnie wiza lub karta pobytu. Nasz zespół pomoże Ci z formalnościami legalizacyjnymi." },
+        { q: "Czy mogę przyjechać z rodziną?", a: "Tak, pomagamy w zakwaterowaniu dla rodzin. Skontaktuj się z nami, aby omówić szczegóły." }
+      ]
+    },
+    quickContact: {
+      label: "Szybki kontakt",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      applyVia: "Aplikuj przez"
+    },
     jobsWidget: {
       title: "Aktualne Oferty Pracy",
       subtitle: "Dołącz do stabilnego zespołu. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
@@ -206,6 +226,7 @@ export const translations = {
       perksLabel: "Co oferujemy",
       btnApply: "Aplikuj teraz",
       btnDetails: "Szczegóły",
+      btnViewAll: "Zobacz wszystkie oferty",
       jobs: [
         {
           jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)",
@@ -249,6 +270,7 @@ export const translations = {
       advantages: "Переваги",
       team: "Команда",
       contact: "Контакти",
+      jobs: "Вакансії",
       cta: "Почати зараз"
     },
     hero: {
@@ -440,6 +462,25 @@ export const translations = {
       polityka: "Політика конфіденційності",
       rights: "JobMe.pl. Всі права захищені."
     },
+    jobsPage: {
+      title: "Усі вакансії",
+      subtitle: "Актуальні вакансії для кандидатів. Приєднуйтесь до стабільної команди з повним пакетом пільг та бенефітів.",
+      backBtn: "← Повернутись на головну",
+      faqTitle: "Поширені запитання",
+      faq: [
+        { q: "Чи потрібно знати польську мову?", a: "На виробничих посадах польська мова не обов’язкова. Координатор пояснить все вашою мовою. Після 3 місяців пропонуємо безкоштовні мовні курси." },
+        { q: "Наскільки швидко можна розпочати роботу?", a: "Зазвичай у течія 3–7 днів з першого контакту. Ми проводимо швидкий онбординг та допомагаємо з документами." },
+        { q: "Чи дійсно безкоштовне проживання?", a: "Так. Ми забезпечуємо проживання в кімнатах на 2–4 особи поблизу місця роботи. Жодних прихованих утримань немає." },
+        { q: "Які документи потрібні?", a: "Паспорт або посвідчення особи, опціонально віза або картка побиту. Наш команда допоможе з легалізаційними формальностями." },
+        { q: "Чи можна приїхати з сім’єю?", a: "Так, ми допомагаємо з розміщенням для сімей. Зв'яжіться з нами, щоб обговорити деталі." }
+      ]
+    },
+    quickContact: {
+      label: "Швидкий контакт",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      applyVia: "Подати через"
+    },
     jobsWidget: {
       title: "Актуальні вакансії",
       subtitle: "Приєднуйтесь до стабільної команди. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
@@ -449,6 +490,7 @@ export const translations = {
       perksLabel: "Що ми пропонуємо",
       btnApply: "Подати заявку",
       btnDetails: "Детальніше",
+      btnViewAll: "Дивитись всі вакансії",
       jobs: [
         {
           jobTitle: "Працівник виробництва поштоматів (Нова Руда / Клодзко)",
@@ -492,6 +534,7 @@ export const translations = {
       advantages: "Advantages",
       team: "Team",
       contact: "Contact",
+      jobs: "Job Offers",
       cta: "Start Now"
     },
     hero: {
@@ -683,6 +726,25 @@ export const translations = {
       polityka: "Privacy Policy",
       rights: "JobMe.pl. All rights reserved."
     },
+    jobsPage: {
+      title: "All Job Openings",
+      subtitle: "Current vacancies for candidates. Join a stable team with a full benefits package.",
+      backBtn: "← Back to Home",
+      faqTitle: "Frequently Asked Questions",
+      faq: [
+        { q: "Do I need to speak Polish?", a: "It is not required for production positions. The coordinator will explain everything in your language. We also offer free language courses after 3 months." },
+        { q: "How quickly can I start?", a: "Usually within 3–7 days of first contact. We run a fast onboarding process and help with documents." },
+        { q: "Is accommodation really free?", a: "Yes. We provide accommodation in 2–4 person rooms near the workplace. No hidden deductions." },
+        { q: "What documents are needed?", a: "Passport or ID, optionally visa or residence card. Our team will help you with the legalization formalities." },
+        { q: "Can I bring my family?", a: "Yes, we help with accommodation for families. Contact us to discuss the details." }
+      ]
+    },
+    quickContact: {
+      label: "Quick Contact",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      applyVia: "Apply via"
+    },
     jobsWidget: {
       title: "Current Job Openings",
       subtitle: "Join a stable team. We offer free training, accommodation, and a clear growth path.",
@@ -692,6 +754,7 @@ export const translations = {
       perksLabel: "What we offer",
       btnApply: "Apply Now",
       btnDetails: "Details",
+      btnViewAll: "View all openings",
       jobs: [
         {
           jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
