@@ -97,15 +97,16 @@ function QuickContactButtons({ jobTitle, labels }) {
 
 // ─── Thematic images per job index ────────────────────────────
 const JOB_IMAGES = [
-  // Job 0: parcel locker / electronics assembly
-  'https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?auto=format&fit=crop&w=1200&q=80',
-  // Job 1: industrial / metalwork / gas cylinders
-  'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1200&q=80',
+  // Job 0: parcel locker / paczkomaty assembly
+  '/job-paczkomaty.jpg',
+  // Job 1: gas cylinders / industrial metalwork
+  '/job-gas-cylinders.jpg',
   // Job 2: warehouse / logistics (fallback)
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
   // Job 3: engineering (fallback)
   'https://images.unsplash.com/photo-1565372195458-9de0b320ef04?auto=format&fit=crop&w=1200&q=80',
 ];
+
 
 // ─── Single job card (expanded) ─────────────────────────────────
 function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighted }) {
