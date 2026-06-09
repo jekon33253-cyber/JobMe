@@ -49,7 +49,13 @@ function App() {
       {/* TopNavBar */}
       <nav className="bg-background-white/90 backdrop-blur-md fixed top-0 w-full z-50 shadow-sm">
         <div className="flex justify-between items-center px-gutter py-4 max-w-7xl mx-auto">
-          <img src="/logo.webp" alt="JobMe Logo" className="h-8 md:h-10 w-auto object-contain" />
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="На главную"
+            className="cursor-pointer shrink-0"
+          >
+            <img src="/logo.webp" alt="JobMe Logo" className="h-8 md:h-10 w-auto object-contain" />
+          </button>
           
           <div className="hidden md:flex gap-8 items-center">
             <a className="font-button text-button text-primary border-b-2 border-primary pb-1" href="#about">{t('nav.about')}</a>
