@@ -120,7 +120,7 @@ export default function JobsWidget({ onApply }) {
                     if (window.gtag) window.gtag('event', 'click_find_job');
                     if (window.fbq) window.fbq('trackCustom', 'ClickFindJob');
                     // Pre-fill form with the Polish title as reference for HR
-                    onApply("Pracownik produkcji paczkomatów (Nowa Ruda)");
+                    onApply("Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)");
                   }}
                   className="bg-primary hover:bg-[#8ec71e] text-[#2D2D2D] font-bold text-lg px-12 py-5 rounded-2xl shadow-xl shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-3 w-full sm:w-auto"
                 >

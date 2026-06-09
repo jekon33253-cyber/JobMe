@@ -199,13 +199,13 @@ export const translations = {
     },
     jobsWidget: {
       title: "Aktualna Oferta Pracy",
-      subtitle: "Dołącz do stabilnego zespołu w Nowej Rudzie. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
-      jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda)",
+      subtitle: "Dołącz do stabilnego zespołu w Nowej Rudzie i Kłodzku. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
+      jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)",
       salaryLabel: "Wynagrodzenie i Umowa",
-      salary: "28,10 - 32,50 zł / godz. brutto",
+      salary: "31,40 zł / godz. brutto (dla studentów netto). Dla osób powyżej 26 roku życia: 25,50 zł / godz. netto.",
       contract: "Umowa zlecenie ze składkami ZUS. Praca w pełni legalna.",
       locationLabel: "Grafik i Lokalizacja",
-      location: "Nowa Ruda (Dolny Śląsk)",
+      location: "Nowa Ruda / Kłodzko (Dolny Śląsk)",
       shifts: "Praca w systemie 2-zmianowym (6:00-14:00, 14:00-22:00), od poniedziałku do piątku.",
       housing: "Darmowe zakwaterowanie o wysokim standardzie w pokojach 2-4 osobowych blisko zakładu pracy.",
       tasksLabel: "Obowiązki",
@@ -215,7 +215,7 @@ export const translations = {
         "Kontrola jakości gotowego produktu"
       ],
       perksLabel: "Co oferujemy",
-      perks: "Darmowy dojazd do pracy autobusem zakładowym, odzież robocza, kawa i herbata bez limitu oraz dostęp do darmowych kursów UDT / SEP po 3 miesiącach.",
+      perks: "Zapewniamy dojazd do pracy, odzież roboczą, kawę i herbatę bez limitu oraz dostęp do darmowych kursów UDT / SEP po 3 miesiącach.",
       btnApply: "Aplikuj teraz"
     }
   },
@@ -420,13 +420,13 @@ export const translations = {
     },
     jobsWidget: {
       title: "Актуальна вакансія",
-      subtitle: "Приєднуйтесь до стабільної команди в Новій Руді. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
-      jobTitle: "Працівник виробництва поштоматів (Нова Руда)",
+      subtitle: "Приєднуйтесь до стабільної команди в Новій Руді та Клодзко. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
+      jobTitle: "Працівник виробництва поштоматів (Нова Руда / Клодзко)",
       salaryLabel: "Оплата та договір",
-      salary: "28,10 - 32,50 зл / год брутто",
+      salary: "31,40 зл / год брутто (для студентів нетто). Для осіб старше 26 років: 25,50 зл / год нетто.",
       contract: "Договір злеценя зі внесками ZUS. Повністю легальна робота.",
       locationLabel: "Графік та локація",
-      location: "Нова Руда (Нижня Сілезія)",
+      location: "Нова Руда / Клодзко (Нижня Сілезія)",
       shifts: "Робота в 2-змінній системі (6:00-14:00, 14:00-22:00), з понеділка по п'ятницю.",
       housing: "Безкоштовне проживання високого стандарту в кімнатах на 2-4 особи поблизу місця роботи.",
       tasksLabel: "Обов'язки",
@@ -436,7 +436,7 @@ export const translations = {
         "Контроль якості готової продукції"
       ],
       perksLabel: "Що ми пропонуємо",
-      perks: "Безкоштовний доїзд до роботи фірмовим автобусом, робочий одяг, безлімітна кава та чай, а також доступ до безкоштовних курсів UDT / SEP через 3 місяці.",
+      perks: "Забезпечуємо доїзд до роботи, надаємо робочий одяг, безлімітну каву та чай, а також доступ до безкоштовних курсів UDT / SEP через 3 місяці.",
       btnApply: "Подати заявку"
     }
   },
@@ -641,13 +641,13 @@ export const translations = {
     },
     jobsWidget: {
       title: "Current Job Opening",
-      subtitle: "Join a stable team in Nowa Ruda. We offer free training, accommodation, and a clear growth path.",
-      jobTitle: "Parcel Locker Production Worker (Nowa Ruda)",
+      subtitle: "Join a stable team in Nowa Ruda and Kłodzko. We offer free training, accommodation, and a clear growth path.",
+      jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
       salaryLabel: "Salary & Contract",
-      salary: "PLN 28.10 - 32.50 / hour gross",
+      salary: "PLN 31.40 / hour gross (net for students). For people over 26 years old: PLN 25.50 / hour net.",
       contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal employment.",
       locationLabel: "Schedule & Location",
-      location: "Nowa Ruda (Lower Silesia)",
+      location: "Nowa Ruda / Kłodzko (Lower Silesia)",
       shifts: "2-shift system (6:00-14:00, 14:00-22:00), Monday to Friday.",
       housing: "Free high-standard accommodation in 2-4 person rooms near the workplace.",
       tasksLabel: "Responsibilities",
@@ -657,7 +657,7 @@ export const translations = {
         "Quality control of the finished product"
       ],
       perksLabel: "What we offer",
-      perks: "Free transport to work by company bus, work clothing, unlimited coffee and tea, and access to free UDT / SEP courses after 3 months.",
+      perks: "We provide transport to work, work clothing, unlimited coffee and tea, and access to free UDT / SEP courses after 3 months.",
       btnApply: "Apply Now"
     }
   }
