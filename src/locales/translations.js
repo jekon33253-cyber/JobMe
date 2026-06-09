@@ -198,26 +198,47 @@ export const translations = {
       rights: "JobMe.pl. Wszelkie prawa zastrzeżone."
     },
     jobsWidget: {
-      title: "Aktualna Oferta Pracy",
-      subtitle: "Dołącz do stabilnego zespołu w Nowej Rudzie i Kłodzku. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
-      jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)",
+      title: "Aktualne Oferty Pracy",
+      subtitle: "Dołącz do stabilnego zespołu. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
       salaryLabel: "Wynagrodzenie i Umowa",
-      salary: "31,40 zł / godz. brutto",
-      salarySub: "(dla studentów netto). Dla osób powyżej 26 roku życia: 25,50 zł / godz. netto.",
-      contract: "Umowa zlecenie ze składkami ZUS. Praca w pełni legalna.",
       locationLabel: "Grafik i Lokalizacja",
-      location: "Nowa Ruda / Kłodzko (Dolny Śląsk)",
-      shifts: "Praca w systemie 2-zmianowym (6:00-14:00, 14:00-22:00), od poniedziałku do piątku.",
-      housing: "Darmowe zakwaterowanie o wysokim standardzie w pokojach 2-4 osobowych blisko zakładu pracy.",
       tasksLabel: "Obowiązki",
-      tasks: [
-        "Montaż elementów konstrukcyjnych paczkomatów",
-        "Obsługa prostych narzędzi produkcyjnych",
-        "Kontrola jakości gotowego produktu"
-      ],
       perksLabel: "Co oferujemy",
-      perks: "Zapewniamy dojazd do pracy, odzież roboczą, kawę i herbatę bez limitu oraz dostęp do darmowych kursów UDT / SEP po 3 miesiącach.",
-      btnApply: "Aplikuj teraz"
+      btnApply: "Aplikuj teraz",
+      btnDetails: "Szczegóły",
+      jobs: [
+        {
+          jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)",
+          salary: "31,40 zł / godz. brutto",
+          salarySub: "(dla studentów netto). Dla osób powyżej 26 roku życia: 25,50 zł / godz. netto.",
+          contract: "Umowa zlecenie ze składkami ZUS. Praca w pełni legalna.",
+          location: "Nowa Ruda / Kłodzko (Dolny Śląsk)",
+          shifts: "Praca w systemie 2-zmianowym (6:00-14:00, 14:00-22:00), od poniedziałku do piątku.",
+          housing: "Darmowe zakwaterowanie o wysokim standardzie w pokojach 2-4 osobowych blisko zakładu pracy.",
+          tasks: [
+            "Montaż elementów konstrukcyjnych paczkomatów",
+            "Obsługa prostych narzędzi produkcyjnych",
+            "Kontrola jakości gotowego produktu"
+          ],
+          perks: "Zapewniamy dojazd do pracy, odzież roboczą, kawę i herbatę bez limitu oraz dostęp do darmowych kursów UDT / SEP po 3 miesiącach."
+        },
+        {
+          jobTitle: "Pracownik produkcji butli gazowych (Sosnowiec)",
+          salary: "25,50 zł / godz. netto",
+          salarySub: "(dla studentów: 31,40 zł / godz. netto). Możliwość zaliczek.",
+          contract: "Umowa zlecenie ze składkami ZUS. Pełne wsparcie dokumentacyjne, możliwość złożenia wniosku o kartę pobytu.",
+          location: "Sosnowiec (Śląsk)",
+          shifts: "8-12 godz. w systemie 3-zmianowym (6:00-14:00, 14:00-22:00, 22:00-06:00), dni powszednie (soboty w razie potrzeby).",
+          housing: "Zapewnione zakwaterowanie (pokoje 2-3 osobowe).",
+          tasks: [
+            "Wkładanie elementów do maszyny (proces gięcia)",
+            "Układanie gotowych elementów na paletach",
+            "Używanie prostych przyrządów pomiarowych",
+            "Utrzymanie czystości miejsca pracy"
+          ],
+          perks: "Darmowa odzież robocza, badania lekarskie na koszt pracodawcy, terminowe wypłaty na konto bankowe do 15. dnia miesiąca, pomoc w dokumentacji zezwolenia na pobyt czasowy."
+        }
+      ]
     }
   },
 
@@ -420,26 +441,47 @@ export const translations = {
       rights: "JobMe.pl. Всі права захищені."
     },
     jobsWidget: {
-      title: "Актуальна вакансія",
-      subtitle: "Приєднуйтесь до стабільної команди в Новій Руді та Клодзко. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
-      jobTitle: "Працівник виробництва поштоматів (Нова Руда / Клодзко)",
+      title: "Актуальні вакансії",
+      subtitle: "Приєднуйтесь до стабільної команди. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
       salaryLabel: "Оплата та договір",
-      salary: "31,40 зл / год брутто",
-      salarySub: "(для студентів нетто). Для осіб старше 26 років: 25,50 зл / год нетто.",
-      contract: "Договір злеценя зі внесками ZUS. Повністю легальна робота.",
       locationLabel: "Графік та локація",
-      location: "Нова Руда / Клодзко (Нижня Сілезія)",
-      shifts: "Робота в 2-змінній системі (6:00-14:00, 14:00-22:00), з понеділка по п'ятницю.",
-      housing: "Безкоштовне проживання високого стандарту в кімнатах на 2-4 особи поблизу місця роботи.",
       tasksLabel: "Обов'язки",
-      tasks: [
-        "Монтаж конструктивних елементів поштоматів",
-        "Робота з простими виробничими інструментами",
-        "Контроль якості готової продукції"
-      ],
       perksLabel: "Що ми пропонуємо",
-      perks: "Забезпечуємо доїзд до роботи, надаємо робочий одяг, безлімітну каву та чай, а також доступ до безкоштовних курсів UDT / SEP через 3 місяці.",
-      btnApply: "Подати заявку"
+      btnApply: "Подати заявку",
+      btnDetails: "Детальніше",
+      jobs: [
+        {
+          jobTitle: "Працівник виробництва поштоматів (Нова Руда / Клодзко)",
+          salary: "31,40 зл / год брутто",
+          salarySub: "(для студентів нетто). Для осіб старше 26 років: 25,50 зл / год нетто.",
+          contract: "Договір злеценя зі внесками ZUS. Повністю легальна робота.",
+          location: "Нова Руда / Клодзко (Нижня Сілезія)",
+          shifts: "Робота в 2-змінній системі (6:00-14:00, 14:00-22:00), з понеділка по п'ятницю.",
+          housing: "Безкоштовне проживання високого стандарту в кімнатах на 2-4 особи поблизу місця роботи.",
+          tasks: [
+            "Монтаж конструктивних елементів поштоматів",
+            "Робота з простими виробничими інструментами",
+            "Контроль якості готової продукції"
+          ],
+          perks: "Забезпечуємо доїзд до роботи, надаємо робочий одяг, безлімітну каву та чай, а також доступ до безкоштовних курсів UDT / SEP через 3 місяці."
+        },
+        {
+          jobTitle: "Працівник виробництва газових балонів (Сосновець)",
+          salary: "25,50 зл / год нетто",
+          salarySub: "(для студентів: 31,40 зл / год нетто). Можливість авансів.",
+          contract: "Договір злеценя зі внесками ZUS. Повна документальна підтримка, можливість подачі заявки на картку побиту.",
+          location: "Сосновець (Сілезія)",
+          shifts: "8-12 год у 3-змінній системі (6:00-14:00, 14:00-22:00, 22:00-06:00), будні (суботи за потребою).",
+          housing: "Забезпечене проживання (кімнати на 2-3 особи).",
+          tasks: [
+            "Вкладання елементів у машину (процес згинання)",
+            "Укладання готових елементів на палети",
+            "Використання простих вимірювальних приладів",
+            "Підтримання чистоти на робочому місці"
+          ],
+          perks: "Безкоштовний робочий одяг, медогляд за рахунок роботодавця, своєчасні виплати на банківський рахунок до 15-го числа місяця, допомога з документами на тимчасовий дозвіл на проживання."
+        }
+      ]
     }
   },
 
@@ -649,6 +691,7 @@ export const translations = {
       tasksLabel: "Responsibilities",
       perksLabel: "What we offer",
       btnApply: "Apply Now",
+      btnDetails: "Details",
       jobs: [
         {
           jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
