@@ -11,15 +11,12 @@ import ContactForm from './components/ContactForm';
 import JobsWidget from './components/JobsWidget';
 import JobsPage from './components/JobsPage';
 import { useLanguage } from './context/LanguageContext';
-
-// ── config ────────────────────────────────────────────────────
-const WHATSAPP_NUMBER = '48000000000'; // замени на реальный номер
-const TELEGRAM_USERNAME = 'jobme_hr';  // замени на реальный username
+import config from './config';
 
 // ── floating chat buttons ─────────────────────────────────────
 function FloatingContactButtons({ t }) {
-  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hej! Chciałbym dowiedzieć się więcej o ofertach pracy.')}`;
-  const tgUrl = `https://t.me/${TELEGRAM_USERNAME}`;
+  const waUrl = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent('Hej! Chciałbym dowiedzieć się więcej o ofertach pracy.')}`;
+  const tgUrl = `https://t.me/${config.telegramUsername}`;
 
   return (
     <div className="fixed bottom-6 right-5 z-[900] flex flex-col gap-3 items-end">
@@ -74,6 +71,7 @@ function App() {
   const [prefillMessage, setPrefillMessage] = useState('');
   const [page, setPage] = useState('home');          // 'home' | 'jobs'
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
 
   useEffect(() => {
@@ -126,12 +124,13 @@ function App() {
         <div className="flex justify-between items-center px-gutter py-4 max-w-7xl mx-auto">
           <button
             onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            aria-label="На главную"
+            aria-label="Strona główna"
             className="cursor-pointer shrink-0"
           >
             <img src="/logo.webp" alt="JobMe Logo" className="h-8 md:h-10 w-auto object-contain" />
           </button>
 
+          {/* Desktop navigation */}
           <div className="hidden md:flex gap-8 items-center">
             {page === 'home' ? (
               <>
@@ -161,31 +160,111 @@ function App() {
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Language Switcher */}
-            <div className="hidden sm:flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-lg p-1 mr-2">
+            {/* Language Switcher (desktop) */}
+            <div className="hidden md:flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-lg p-1 mr-2">
               <LangButton lang="pl" />
               <LangButton lang="ua" />
               <LangButton lang="en" />
             </div>
 
+            {/* CTA button (desktop) */}
             <button
               onClick={() => {
                 if (window.gtag) window.gtag('event', 'click_start_now');
                 if (window.fbq) window.fbq('trackCustom', 'ClickStartNow');
                 handleScrollToContact('kandydat');
               }}
-              className="bg-primary-container text-on-primary-container font-button text-button px-6 py-3 rounded-xl hover:opacity-80 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+              className="hidden md:flex bg-primary-container text-on-primary-container font-button text-button px-6 py-3 rounded-xl hover:opacity-80 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
             >
               {t('nav.cta')}
+            </button>
+
+            {/* Hamburger button (mobile) */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? 'Zamknij menu' : 'Otwórz menu'}
+              aria-expanded={mobileMenuOpen}
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-lg text-zinc-700 hover:bg-zinc-100 transition-colors cursor-pointer"
+            >
+              {mobileMenuOpen ? (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Language Switcher */}
-        <div className="sm:hidden flex justify-center gap-2 pb-2 bg-background-white border-b border-zinc-100">
-          <LangButton lang="pl" />
-          <LangButton lang="ua" />
-          <LangButton lang="en" />
+        {/* Mobile Menu (drawer) */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="px-gutter pb-6 space-y-4 bg-white border-t border-zinc-100">
+            {/* Language Switcher (mobile) */}
+            <div className="flex items-center gap-1 bg-zinc-50 border border-zinc-200 rounded-lg p-1 w-fit pt-4">
+              <LangButton lang="pl" />
+              <LangButton lang="ua" />
+              <LangButton lang="en" />
+            </div>
+
+            {page === 'home' ? (
+              <div className="flex flex-col gap-2">
+                {[
+                  { href: '#about', label: t('nav.about') },
+                  { href: '#services', label: t('nav.services') },
+                  { href: '#advantages', label: t('nav.advantages') },
+                  { href: '#team', label: t('nav.team') },
+                  { href: '#contact', label: t('nav.contact') },
+                ].map(({ href, label }) => (
+                  <a
+                    key={href}
+                    href={href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block py-2.5 px-4 rounded-xl font-button text-button text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors"
+                  >
+                    {label}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <button
+                onClick={() => { handleBackToHome(); setMobileMenuOpen(false); }}
+                className="block py-2.5 px-4 rounded-xl font-button text-button text-on-surface-variant hover:text-primary transition-colors cursor-pointer text-left w-full"
+              >
+                ← {t('nav.about')}
+              </button>
+            )}
+
+            <button
+              onClick={() => { handleNavigateToJobs(null); setMobileMenuOpen(false); }}
+              className={`block w-full text-left py-2.5 px-4 rounded-xl font-button text-button font-bold transition-colors cursor-pointer
+                ${page === 'jobs' ? 'text-primary bg-primary/10' : 'text-primary hover:bg-primary/10'}`}
+            >
+              {t('nav.jobs')}
+            </button>
+
+            {/* Mobile CTA */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (window.gtag) window.gtag('event', 'click_start_now');
+                if (window.fbq) window.fbq('trackCustom', 'ClickStartNow');
+                handleScrollToContact('kandydat');
+              }}
+              className="w-full bg-primary-container text-on-primary-container font-button text-button px-6 py-3 rounded-xl hover:opacity-80 transition-all duration-300 cursor-pointer"
+            >
+              {t('nav.cta')}
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -314,7 +393,7 @@ function App() {
                     </div>
                   </div>
                   <div className="relative">
-                    <img alt="Zaufanie i profesjonalizm" className="rounded-xxl shadow-xl border-8 border-white object-cover aspect-[4/3] w-full" src="https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&q=80&w=800" />
+                    <img alt="Zaufanie i profesjonalizm" loading="lazy" className="rounded-xxl shadow-xl border-8 border-white object-cover aspect-[4/3] w-full" src="https://images.unsplash.com/photo-1560264280-88b68371db39?auto=format&fit=crop&q=80&w=800" />
                   </div>
                 </div>
               </div>
@@ -337,7 +416,7 @@ function App() {
                   ].map(({ name, roleKey, descKey, src }) => (
                     <div key={name} className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                       <div className="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-[2rem] border-4 border-white shadow-md">
-                        <img alt={name} className="w-full h-full object-cover" src={src} />
+                        <img alt={name} loading="lazy" className="w-full h-full object-cover" src={src} />
                       </div>
                       <h3 className="font-headline-md text-headline-md">{name}</h3>
                       <p className="text-primary font-label-bold mb-4">{t(roleKey)}</p>
@@ -381,13 +460,55 @@ function App() {
           <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
 
           {/* Footer */}
-          <footer className="bg-surface-container-low border-t border-outline-variant/20">
-            <div className="flex flex-col md:flex-row justify-between items-center px-gutter py-base gap-4 max-w-7xl mx-auto min-h-[80px]">
-              <img src="/logo.webp" alt="JobMe Logo" className="h-6 md:h-8 w-auto object-contain opacity-90" />
-              <p className="text-zinc-700 text-base leading-relaxed">© 2026 {t('footer.rights')}</p>
-              <div className="flex gap-6">
-                <a className="text-zinc-600 text-base hover:text-secondary transition-colors" href="#">{t('footer.polityka')}</a>
-                <a className="text-zinc-600 text-base hover:text-secondary transition-colors" href="#contact">{t('footer.kontakt')}</a>
+          <footer className="bg-[#1a1a1a] text-zinc-300">
+            <div className="max-w-7xl mx-auto px-gutter py-16">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                {/* Brand column */}
+                <div className="space-y-4">
+                  <img src="/logo.webp" alt="JobMe Logo" className="h-7 md:h-8 w-auto object-contain brightness-0 invert opacity-90" />
+                  <p className="text-zinc-400 text-sm leading-relaxed">{t('footer.desc')}</p>
+                </div>
+
+                {/* Column 1: For Candidates */}
+                <div>
+                  <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">{t('footer.kandydat')}</h4>
+                  <ul className="space-y-3">
+                    <li><a href="#oferty" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.oferty')}</a></li>
+                    <li><a href="#legalization" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.legalizacja')}</a></li>
+                    <li><a href="#upskilling" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.upskilling')}</a></li>
+                  </ul>
+                </div>
+
+                {/* Column 2: For Employers */}
+                <div>
+                  <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">{t('footer.pracodawca')}</h4>
+                  <ul className="space-y-3">
+                    <li><a href="#services" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.leasing')}</a></li>
+                    <li><a href="#services" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.rekrutacja')}</a></li>
+                    <li><a href="#contact" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.cennik')}</a></li>
+                  </ul>
+                </div>
+
+                {/* Column 3: Company */}
+                <div>
+                  <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-4">{t('footer.firma')}</h4>
+                  <ul className="space-y-3">
+                    <li><a href="#about" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.oNas')}</a></li>
+                    <li><a href="#contact" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.kontakt')}</a></li>
+                    <li><a href="#" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.polityka')}</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom bar */}
+            <div className="border-t border-zinc-800">
+              <div className="flex flex-col sm:flex-row justify-between items-center px-gutter py-5 gap-3 max-w-7xl mx-auto">
+                <p className="text-zinc-500 text-sm">© 2026 {t('footer.rights')}</p>
+                <p className="text-zinc-500 text-sm flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-sm">location_on</span>
+                  {config.location}
+                </p>
               </div>
             </div>
           </footer>

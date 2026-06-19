@@ -203,6 +203,8 @@ export const translations = {
       subtitle: "Aktualne oferty dla kandydatów. Dołącz do stabilnego zespołu z pełnym pakietem benefitów.",
       backBtn: "← Wróć na stronę główną",
       faqTitle: "Często zadawane pytania",
+      offerSingular: "oferta",
+      offerPlural: "oferty",
       faq: [
         { q: "Czy muszę znać język polski?", a: "Nie jest to wymagane na stanowiskach produkcyjnych. Podstawowe zwroty wyjaśni Ci koordynator w Twoim języku. Oferujemy też darmowe kursy językowe po 3 miesiącach pracy." },
         { q: "Jak szybko mogę zacząć pracę?", a: "Zazwyczaj w ciągu 3–7 dni od pierwszego kontaktu. Przeprowadzamy szybki onboarding i pomagamy z dokumentami." },
@@ -218,6 +220,8 @@ export const translations = {
       applyVia: "Aplikuj przez"
     },
     jobsWidget: {
+      badgeActive: "Aktywna oferta",
+      badgeActiveShort: "Aktywna",
       title: "Aktualne Oferty Pracy",
       subtitle: "Dołącz do stabilnego zespołu. Oferujemy darmowe szkolenia, zakwaterowanie i jasną ścieżkę rozwoju.",
       salaryLabel: "Wynagrodzenie i Umowa",
@@ -467,6 +471,8 @@ export const translations = {
       subtitle: "Актуальні вакансії для кандидатів. Приєднуйтесь до стабільної команди з повним пакетом пільг та бенефітів.",
       backBtn: "← Повернутись на головну",
       faqTitle: "Поширені запитання",
+      offerSingular: "вакансія",
+      offerPlural: "вакансії",
       faq: [
         { q: "Чи потрібно знати польську мову?", a: "На виробничих посадах польська мова не обов’язкова. Координатор пояснить все вашою мовою. Після 3 місяців пропонуємо безкоштовні мовні курси." },
         { q: "Наскільки швидко можна розпочати роботу?", a: "Зазвичай у течія 3–7 днів з першого контакту. Ми проводимо швидкий онбординг та допомагаємо з документами." },
@@ -482,6 +488,8 @@ export const translations = {
       applyVia: "Подати через"
     },
     jobsWidget: {
+      badgeActive: "Активна вакансія",
+      badgeActiveShort: "Активна",
       title: "Актуальні вакансії",
       subtitle: "Приєднуйтесь до стабільної команди. Пропонуємо безкоштовне навчання, проживання та чіткий шлях розвитку.",
       salaryLabel: "Оплата та договір",
@@ -731,6 +739,8 @@ export const translations = {
       subtitle: "Current vacancies for candidates. Join a stable team with a full benefits package.",
       backBtn: "← Back to Home",
       faqTitle: "Frequently Asked Questions",
+      offerSingular: "opening",
+      offerPlural: "openings",
       faq: [
         { q: "Do I need to speak Polish?", a: "It is not required for production positions. The coordinator will explain everything in your language. We also offer free language courses after 3 months." },
         { q: "How quickly can I start?", a: "Usually within 3–7 days of first contact. We run a fast onboarding process and help with documents." },
@@ -746,6 +756,8 @@ export const translations = {
       applyVia: "Apply via"
     },
     jobsWidget: {
+      badgeActive: "Active offer",
+      badgeActiveShort: "Active",
       title: "Current Job Openings",
       subtitle: "Join a stable team. We offer free training, accommodation, and a clear growth path.",
       salaryLabel: "Salary & Contract",

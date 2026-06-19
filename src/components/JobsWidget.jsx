@@ -12,6 +12,7 @@ function Icon({ name, className = '' }) {
 
 // ── compact card shown on home page ────────────────────────────
 function JobCard({ job, index, onNavigate, labels }) {
+  const { t } = useLanguage();
   const icons = ['precision_manufacturing', 'gas_meter', 'warehouse', 'engineering'];
   const iconName = icons[index % icons.length];
 
@@ -37,7 +38,7 @@ function JobCard({ job, index, onNavigate, labels }) {
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50
                            text-green-700 text-xs font-bold border border-green-200">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Aktywna
+            {t('jobsWidget.badgeActiveShort')}
           </span>
         </div>
 

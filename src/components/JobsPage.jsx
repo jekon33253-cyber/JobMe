@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import FadeIn from './FadeIn';
 
-// ─── config ────────────────────────────────────────────────────
-const WHATSAPP_NUMBER = '48000000000'; // замени на реальный номер
-const TELEGRAM_USERNAME = 'jobme_hr';  // замени на реальный username
+import config from '../config';
 
 // ─── helpers ───────────────────────────────────────────────────
 function Icon({ name, className = '' }) {
@@ -63,7 +61,7 @@ function QuickContactButtons({ jobTitle, labels }) {
     <div className="flex flex-wrap gap-3 mt-4">
       <span className="text-sm font-semibold text-zinc-500 self-center">{labels.applyVia}:</span>
       <a
-        href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`}
+        href={`https://wa.me/${config.whatsappNumber}?text=${waText}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm
@@ -78,7 +76,7 @@ function QuickContactButtons({ jobTitle, labels }) {
         {labels.whatsapp}
       </a>
       <a
-        href={`https://t.me/${TELEGRAM_USERNAME}?start=${tgText}`}
+        href={`https://t.me/${config.telegramUsername}?start=${tgText}`}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm
@@ -101,15 +99,16 @@ const JOB_IMAGES = [
   '/job-paczkomaty.jpg',
   // Job 1: gas cylinders / industrial metalwork
   '/job-gas-cylinders.jpg',
-  // Job 2: warehouse / logistics (fallback)
+  // Job 2: warehouse / logistics (fallback) — replace with local image before production
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
-  // Job 3: engineering (fallback)
+  // Job 3: engineering (fallback) — replace with local image before production
   'https://images.unsplash.com/photo-1565372195458-9de0b320ef04?auto=format&fit=crop&w=1200&q=80',
 ];
 
 
 // ─── Single job card (expanded) ─────────────────────────────────
 function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighted }) {
+  const { t } = useLanguage();
   const icons = ['precision_manufacturing', 'gas_meter', 'warehouse', 'engineering'];
   const iconName = icons[index % icons.length];
   const bgImage = JOB_IMAGES[index % JOB_IMAGES.length];
@@ -147,7 +146,7 @@ function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighte
                              bg-primary/25 text-[#A1DD22] text-xs font-bold uppercase tracking-wide
                              border border-[#A1DD22]/40 backdrop-blur-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-[#A1DD22] animate-pulse" />
-              Aktywna oferta
+              {t('jobsWidget.badgeActive')}
             </span>
           </div>
           <h2 className="text-xl md:text-2xl font-black leading-tight">{job.jobTitle}</h2>
@@ -305,7 +304,7 @@ export default function JobsPage({ onBack, onApply, highlightIdx = null }) {
             {t('jobsPage.backBtn')}
           </button>
           <span className="inline-block px-3 py-1 bg-primary/20 text-[#A1DD22] rounded-full text-xs font-bold uppercase tracking-wide mb-4 border border-[#A1DD22]/30">
-            {jobs.length} {jobs.length === 1 ? 'oferta' : 'oferty'}
+            {jobs.length} {jobs.length === 1 ? t('jobsPage.offerSingular') : t('jobsPage.offerPlural')}
           </span>
           <h1 className="text-3xl md:text-5xl font-black leading-tight mb-4">
             {t('jobsPage.title')}

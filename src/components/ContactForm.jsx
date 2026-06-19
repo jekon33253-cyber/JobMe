@@ -122,22 +122,32 @@ export default function ContactForm({ activeTab, onTabChange, prefillMessage }) 
                     <>
                       {prefillMessage && <input type="hidden" name="interested_in" value={prefillMessage} />}
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameLabel')}</label>
-                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder={t('contact.namePlaceholder')} type="text" />
+                        <label htmlFor="cand-name" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameLabel')}</label>
+                        <input id="cand-name" name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder={t('contact.namePlaceholder')} type="text" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
-                        <input name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
+                        <label htmlFor="cand-phone" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
+                        <input id="cand-phone" name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.cityLabel')}</label>
-                        <select name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all appearance-none">
+                        <label htmlFor="cand-city" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.cityLabel')}</label>
+                        <select id="cand-city" name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all appearance-none">
                           <option value="">{t('contact.cityPlaceholder')}</option>
                           <option value="Wrocław">{t('contact.cities.wroclaw')}</option>
                           <option value="Warszawa">{t('contact.cities.warszawa')}</option>
                           <option value="Kraków">{t('contact.cities.krakow')}</option>
                           <option value="Poznań">{t('contact.cities.poznan')}</option>
                           <option value="Cała Polska">{t('contact.cities.all')}</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label htmlFor="cand-messenger" className="block font-bold text-zinc-800 text-sm mb-2">{t('quickContact.label')}</label>
+                        <select id="cand-messenger" name="messenger" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10 focus:outline-none transition-all appearance-none">
+                          <option value="">Wybierz komunikator</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="telegram">Telegram</option>
+                          <option value="viber">Viber</option>
+                          <option value="phone">Telefon</option>
                         </select>
                       </div>
                       <button disabled={isSubmitting} className={`w-full bg-[#A1DD22] text-[#2D2D2D] font-bold text-base py-4 rounded-xl shadow-md transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed animate-pulse' : 'hover:bg-[#8ec71e] hover:-translate-y-0.5 shadow-[#A1DD22]/20'}`} type="submit">
@@ -147,20 +157,30 @@ export default function ContactForm({ activeTab, onTabChange, prefillMessage }) 
                   ) : (
                     <>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameCompanyLabel')}</label>
-                        <input name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.nameCompanyPlaceholder')} type="text" />
+                        <label htmlFor="biz-name" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.nameCompanyLabel')}</label>
+                        <input id="biz-name" name="name" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.nameCompanyPlaceholder')} type="text" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.cityLabel')}</label>
-                        <input name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.cityPlaceholderB2B')} type="text" />
+                        <label htmlFor="biz-city" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.cityLabel')}</label>
+                        <input id="biz-city" name="city" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.cityPlaceholderB2B')} type="text" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
-                        <input name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
+                        <label htmlFor="biz-phone" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
+                        <input id="biz-phone" name="phone" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder="+48 ___ ___ ___" type="tel" />
                       </div>
                       <div>
-                        <label className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.emailLabel')}</label>
-                        <input name="email" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.emailPlaceholder')} type="email" />
+                        <label htmlFor="biz-email" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.emailLabel')}</label>
+                        <input id="biz-email" name="email" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all" placeholder={t('contact.emailPlaceholder')} type="email" />
+                      </div>
+                      <div>
+                        <label htmlFor="biz-messenger" className="block font-bold text-zinc-800 text-sm mb-2">{t('quickContact.label')}</label>
+                        <select id="biz-messenger" name="messenger" required className="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-white focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10 focus:outline-none transition-all appearance-none">
+                          <option value="">Wybierz preferowany kontakt</option>
+                          <option value="email">E-mail</option>
+                          <option value="phone">Telefon</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="telegram">Telegram</option>
+                        </select>
                       </div>
                       <button disabled={isSubmitting} className={`w-full bg-[#00B4B4] text-white font-bold text-base py-4 rounded-xl shadow-md transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed animate-pulse' : 'hover:bg-[#009b9b] hover:-translate-y-0.5 shadow-[#00B4B4]/20'}`} type="submit">
                         {isSubmitting ? t('contact.btnSending') : t('contact.btnPracodawca')}

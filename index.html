@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/logo.webp" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#8CC63F" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Primary Meta Tags -->
@@ -43,12 +46,39 @@
     fbq('init', 'PIXEL_PLACEHOLDER');
     fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=PIXEL_PLACEHOLDER&ev=PageView&noscript=1"
-    /></noscript>
     <!-- End Meta Pixel Code -->
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "JobMe",
+      "url": "https://jobme.pl",
+      "logo": "https://jobme.pl/logo.webp",
+      "description": "Nowoczesna agencja pracy we Wrocławiu (Dolny Śląsk). Legalne zatrudnienie, brak ukrytych kosztów i darmowy upskilling dla kandydatów.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Wrocław",
+        "addressRegion": "Dolny Śląsk",
+        "addressCountry": "PL"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "kontakt@jobme.pl",
+        "contactType": "customer service",
+        "availableLanguage": ["Polish", "Ukrainian", "English"]
+      },
+      "sameAs": [
+        "https://t.me/jobme_hr",
+        "https://wa.me/48000000000"
+      ]
+    }
+    </script>
   </head>
   <body>
+    <!-- Meta Pixel Noscript (fallback) -->
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=PIXEL_PLACEHOLDER&ev=PageView&noscript=1" /></noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

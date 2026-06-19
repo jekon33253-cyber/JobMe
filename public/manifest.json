@@ -1,0 +1,18 @@
+{
+  "name": "JobMe — Nowoczesny Ekosystem HR",
+  "short_name": "JobMe",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#8CC63F",
+  "description": "Nowoczesna agencja pracy we Wrocławiu. Legalne zatrudnienie, brak ukrytych kosztów, darmowy upskilling.",
+  "icons": [
+    {
+      "src": "/logo.webp",
+      "sizes": "any",
+      "type": "image/webp"
+    }
+  ],
+  "lang": "pl",
+  "orientation": "portrait-primary"
+}
