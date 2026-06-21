@@ -47,21 +47,25 @@ export default async function handler(req, res) {
 
     const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage`;
 
-    const response = await fetch(telegramUrl, {
+    const telegramRes = await fetch(telegramUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chat_id: chatId,
         text: messageText,
-        parse_mode: 'HTML',
+        // No parse_mode — plain text avoids HTML escaping issues
       }),
     });
 
-    const result = await response.json();
+    const tgResult = await telegramRes.json();
+    console.log('Telegram API response:', JSON.stringify({ ok: telegramRes.ok, status: telegramRes.status, body: tgResult }));
 
-    if (!response.ok) {
-      console.error('Telegram API Error:', JSON.stringify(result));
-      return res.status(500).json({ error: 'Failed to send message to Telegram', detail: result.description || 'unknown' });
+    if (!telegramRes.ok) {
+      return res.status(500).json({
+        error: 'Failed to send message to Telegram',
+        detail: tgResult.description || 'unknown',
+        code: tgResult.error_code,
+      });
     }
 
     console.log('Lead sent to Telegram:', name, phone);
