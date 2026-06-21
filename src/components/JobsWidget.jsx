@@ -13,7 +13,7 @@ function Icon({ name, className = '' }) {
 // ── compact card shown on home page ────────────────────────────
 function JobCard({ job, index, onNavigate, labels }) {
   const { t } = useLanguage();
-  const icons = ['precision_manufacturing', 'gas_meter', 'warehouse', 'engineering'];
+  const icons = ['precision_manufacturing', 'gas_meter', 'icecream', 'warehouse', 'engineering'];
   const iconName = icons[index % icons.length];
 
   return (

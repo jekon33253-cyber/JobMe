@@ -99,9 +99,11 @@ const JOB_IMAGES = [
   '/job-paczkomaty.jpg',
   // Job 1: gas cylinders / industrial metalwork
   '/job-gas-cylinders.jpg',
-  // Job 2: warehouse / logistics (fallback) — replace with local image before production
+  // Job 2: sweets / confectionery — replace with local image before production
+  'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=1200&q=80',
+  // Job 3: warehouse / logistics (fallback) — replace with local image before production
   'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
-  // Job 3: engineering (fallback) — replace with local image before production
+  // Job 4: engineering (fallback) — replace with local image before production
   'https://images.unsplash.com/photo-1565372195458-9de0b320ef04?auto=format&fit=crop&w=1200&q=80',
 ];
 
@@ -109,7 +111,7 @@ const JOB_IMAGES = [
 // ─── Single job card (expanded) ─────────────────────────────────
 function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighted }) {
   const { t } = useLanguage();
-  const icons = ['precision_manufacturing', 'gas_meter', 'warehouse', 'engineering'];
+  const icons = ['precision_manufacturing', 'gas_meter', 'icecream', 'warehouse', 'engineering'];
   const iconName = icons[index % icons.length];
   const bgImage = JOB_IMAGES[index % JOB_IMAGES.length];
 

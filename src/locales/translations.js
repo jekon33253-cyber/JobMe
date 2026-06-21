@@ -262,6 +262,21 @@ export const translations = {
             "Utrzymanie czystości miejsca pracy"
           ],
           perks: "Darmowa odzież robocza, badania lekarskie na koszt pracodawcy, terminowe wypłaty na konto bankowe do 15. dnia miesiąca, pomoc w dokumentacji zezwolenia na pobyt czasowy."
+        },
+        {
+          jobTitle: "Pracownik zakładu produkcji słodyczy (Świebodzice)",
+          salary: "25,00 zł / godz. netto",
+          salarySub: "(dla studentów: 31,40 zł / godz. netto). Możliwość zaliczki raz w miesiącu.",
+          contract: "Umowa zlecenie ze składkami ZUS. Pełna legalność, pomoc w dokumentach i możliwość złożenia wniosku o kartę pobytu.",
+          location: "Świebodzice (60 km od Wrocławia, Dolny Śląsk)",
+          shifts: "12 godz. w systemie 1- lub 2-zmianowym (06:00–18:00, 18:00–06:00). Praca w weekendy za dopłatą — opcjonalnie.",
+          housing: "Zakwaterowanie w pobliżu zakładu (550 zł / mies., potrącane z wypłaty).",
+          tasks: [
+            "Praca przy linii produkcyjnej słodyczy",
+            "Ręczne pakowanie i kontrola jakości gotowych wyrobów",
+            "Utrzymanie czystości na stanowisku pracy"
+          ],
+          perks: "Bezpłatna odzież robocza, terminowe wypłaty do 15. dnia miesiąca, pełne wsparcie w dokumentach legalizacyjnych, możliwość wnioskowania o kartę pobytu."
         }
       ]
     }
@@ -530,6 +545,21 @@ export const translations = {
             "Підтримання чистоти на робочому місці"
           ],
           perks: "Безкоштовний робочий одяг, медогляд за рахунок роботодавця, своєчасні виплати на банківський рахунок до 15-го числа місяця, допомога з документами на тимчасовий дозвіл на проживання."
+        },
+        {
+          jobTitle: "Працівник на виробництві солодощів (Свебодзіце)",
+          salary: "25,00 зл / год нетто",
+          salarySub: "(для студентів: 31,40 зл / год нетто). Можливість авансу раз на місяць.",
+          contract: "Договір злеценя зі внесками ZUS. Повна легальність, допомога з документами та можливість подачі на карту побиту.",
+          location: "Свебодзіце (60 км від Вроцлава, Нижня Сілезія)",
+          shifts: "12 год у 1- або 2-змінній системі (06:00–18:00, 18:00–06:00). Робота у вихідні за доплатою — опціонально.",
+          housing: "Проживання поблизу виробництва (550 зл / міс., вираховується із зарплати).",
+          tasks: [
+            "Робота на лінії виробництва солодощів",
+            "Ручне пакування та контроль якості готової продукції",
+            "Підтримання чистоти на робочому місці"
+          ],
+          perks: "Безкоштовний робочий одяг, своєчасні виплати до 15-го числа місяця, повна підтримка в оформленні документів, можливість подачі заявки на карту побиту."
         }
       ]
     }
@@ -798,6 +828,21 @@ export const translations = {
             "Maintaining cleanliness in the workspace"
           ],
           perks: "Free work clothing, medical checkups at the employer's expense, timely bank account payouts by the 15th of each month, assistance with temporary residence permit documents."
+        },
+        {
+          jobTitle: "Confectionery Production Worker (Świebodzice)",
+          salary: "PLN 25.00 / hour net",
+          salarySub: "(for students: PLN 31.40 / hour net). Advance payment available once a month.",
+          contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal, assistance with documents and residence card application.",
+          location: "Świebodzice (60 km from Wrocław, Lower Silesia)",
+          shifts: "12-hour shifts, 1 or 2 shifts (06:00–18:00, 18:00–06:00). Weekend work optional with extra pay.",
+          housing: "Accommodation near the facility (PLN 550 / month, deducted from salary).",
+          tasks: [
+            "Operating the confectionery production line",
+            "Manual packaging and quality control of finished products",
+            "Maintaining cleanliness at the workstation"
+          ],
+          perks: "Free work clothing, timely payouts by the 15th of each month, full assistance with legalization documents, residence card application support."
         }
       ]
     }
