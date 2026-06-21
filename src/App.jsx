@@ -26,7 +26,7 @@ function FloatingContactButtons({ t }) {
         href={tgUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-2 bg-[#0088cc] hover:bg-[#0077b3] text-white
+        className="group flex items-center bg-[#0088cc] hover:bg-[#0077b3] text-white
                    rounded-full shadow-xl hover:shadow-2xl transition-all duration-300
                    hover:-translate-y-0.5 overflow-hidden"
         aria-label="Telegram"
@@ -36,8 +36,8 @@ function FloatingContactButtons({ t }) {
             <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.28 13.605l-2.95-.924c-.642-.204-.657-.642.136-.953l11.526-4.445c.536-.194 1.006.131.57.965z"/>
           </svg>
         </div>
-        <span className="pr-4 text-sm font-bold whitespace-nowrap max-w-0 overflow-hidden
-                         group-hover:max-w-xs transition-all duration-300 ease-in-out">
+        <span className="inline-block text-sm font-bold whitespace-nowrap max-w-0 overflow-hidden
+                         group-hover:max-w-xs group-hover:pl-2 group-hover:pr-4 transition-all duration-300 ease-in-out">
           Telegram
         </span>
       </a>
@@ -47,7 +47,7 @@ function FloatingContactButtons({ t }) {
         href={waUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-2 bg-[#25D366] hover:bg-[#1da851] text-white
+        className="group flex items-center bg-[#25D366] hover:bg-[#1da851] text-white
                    rounded-full shadow-xl hover:shadow-2xl transition-all duration-300
                    hover:-translate-y-0.5 overflow-hidden"
         aria-label="WhatsApp"
@@ -58,8 +58,8 @@ function FloatingContactButtons({ t }) {
             <path d="M12 0C5.373 0 0 5.373 0 12c0 2.111.546 4.09 1.5 5.816L0 24l6.34-1.488A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.027-1.387l-.36-.213-3.761.883.898-3.669-.234-.374A9.794 9.794 0 012.182 12C2.182 6.575 6.575 2.182 12 2.182S21.818 6.575 21.818 12 17.425 21.818 12 21.818z"/>
           </svg>
         </div>
-        <span className="pr-4 text-sm font-bold whitespace-nowrap max-w-0 overflow-hidden
-                         group-hover:max-w-xs transition-all duration-300 ease-in-out">
+        <span className="inline-block text-sm font-bold whitespace-nowrap max-w-0 overflow-hidden
+                         group-hover:max-w-xs group-hover:pl-2 group-hover:pr-4 transition-all duration-300 ease-in-out">
           WhatsApp
         </span>
       </a>
