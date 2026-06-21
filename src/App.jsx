@@ -10,6 +10,7 @@ import Upskilling from './components/Upskilling';
 import ContactForm from './components/ContactForm';
 import JobsWidget from './components/JobsWidget';
 import JobsPage from './components/JobsPage';
+import PrivacyPage from './components/PrivacyPage';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
@@ -69,7 +70,7 @@ function FloatingContactButtons({ t }) {
 function App() {
   const [contactTab, setContactTab] = useState('kandydat');
   const [prefillMessage, setPrefillMessage] = useState('');
-  const [page, setPage] = useState('home');          // 'home' | 'jobs'
+  const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy'
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
@@ -142,7 +143,7 @@ function App() {
               </>
             ) : (
               <button
-                onClick={handleBackToHome}
+                onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 className="font-button text-button text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
               >
                 ← {t('nav.about')}
@@ -237,7 +238,7 @@ function App() {
               </div>
             ) : (
               <button
-                onClick={() => { handleBackToHome(); setMobileMenuOpen(false); }}
+                onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); setMobileMenuOpen(false); }}
                 className="block py-2.5 px-4 rounded-xl font-button text-button text-on-surface-variant hover:text-primary transition-colors cursor-pointer text-left w-full"
               >
                 ← {t('nav.about')}
@@ -275,6 +276,11 @@ function App() {
           onApply={(msg) => handleScrollToContact('kandydat')}
           highlightIdx={highlightJobIdx}
         />
+      )}
+
+      {/* ── PRIVACY PAGE ───────────────────────────────────────── */}
+      {page === 'privacy' && (
+        <PrivacyPage onBack={() => setPage('home')} />
       )}
 
       {/* ── HOME PAGE ─────────────────────────────────────────── */}
@@ -495,7 +501,7 @@ function App() {
                   <ul className="space-y-3">
                     <li><a href="#about" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.oNas')}</a></li>
                     <li><a href="#contact" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.kontakt')}</a></li>
-                    <li><a href="#" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.polityka')}</a></li>
+                    <li><button onClick={() => { setPage('privacy'); window.scrollTo({ top: 0 }); }} className="text-zinc-400 hover:text-primary transition-colors text-sm cursor-pointer">{t('footer.polityka')}</button></li>
                   </ul>
                 </div>
               </div>
