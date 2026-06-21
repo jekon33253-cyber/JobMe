@@ -471,7 +471,7 @@ function App() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
                 {/* Brand column */}
                 <div className="space-y-4">
-                  <img src="/logo.webp" alt="JobMe Logo" className="h-7 md:h-8 w-auto object-contain brightness-0 invert opacity-90" />
+                  <img src="/logo.webp" alt="JobMe Logo" className="h-7 md:h-8 w-auto object-contain opacity-90" />
                   <p className="text-zinc-400 text-sm leading-relaxed">{t('footer.desc')}</p>
                 </div>
 
