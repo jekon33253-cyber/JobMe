@@ -234,8 +234,8 @@ export const translations = {
       jobs: [
         {
           jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)",
-          salary: "31,40 zł / godz. brutto",
-          salarySub: "(dla studentów netto). Dla osób powyżej 26 roku życia: 25,50 zł / godz. netto.",
+          salary: "25,50 zł / godz. netto",
+          salarySub: "(dla studentów: 31,40 zł / godz. netto). Możliwość zaliczek.",
           contract: "Umowa zlecenie ze składkami ZUS. Praca w pełni legalna.",
           location: "Nowa Ruda / Kłodzko (Dolny Śląsk)",
           shifts: "Praca w systemie 2-zmianowym (6:00-14:00, 14:00-22:00), od poniedziałku do piątku.",
@@ -517,8 +517,8 @@ export const translations = {
       jobs: [
         {
           jobTitle: "Працівник виробництва поштоматів (Нова Руда / Клодзко)",
-          salary: "31,40 зл / год брутто",
-          salarySub: "(для студентів нетто). Для осіб старше 26 років: 25,50 зл / год нетто.",
+          salary: "25,50 зл / год нетто",
+          salarySub: "(для студентів: 31,40 зл / год нетто). Можливість авансів.",
           contract: "Договір злеценя зі внесками ZUS. Повністю легальна робота.",
           location: "Нова Руда / Клодзко (Нижня Сілезія)",
           shifts: "Робота в 2-змінній системі (6:00-14:00, 14:00-22:00), з понеділка по п'ятницю.",
@@ -800,8 +800,8 @@ export const translations = {
       jobs: [
         {
           jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
-          salary: "PLN 31.40 / hour gross",
-          salarySub: "(net for students). For people over 26 years old: PLN 25.50 / hour net.",
+          salary: "PLN 25.50 / hour net",
+          salarySub: "(for students: PLN 31.40 / hour net). Advance payments available.",
           contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal employment.",
           location: "Nowa Ruda / Kłodzko (Lower Silesia)",
           shifts: "2-shift system (6:00-14:00, 14:00-22:00), Monday to Friday.",
