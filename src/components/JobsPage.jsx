@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import FadeIn from './FadeIn';
+import JobPostingSchema from './JobPostingSchema';
+import FAQSchema from './FAQSchema';
 
 import config from '../config';
 
@@ -321,6 +323,7 @@ export default function JobsPage({ onBack, onApply, highlightIdx = null }) {
       <div className="max-w-4xl mx-auto px-gutter py-14 space-y-10">
         {Array.isArray(jobs) && jobs.map((job, idx) => (
           <FadeIn key={idx}>
+            <JobPostingSchema job={job} />
             <JobCard
               job={job}
               index={idx}
@@ -335,6 +338,7 @@ export default function JobsPage({ onBack, onApply, highlightIdx = null }) {
         {/* FAQ section */}
         {faq.length > 0 && (
           <FadeIn>
+            <FAQSchema faqs={faq} />
             <div className="bg-white rounded-3xl border border-zinc-200 shadow-lg p-7 md:p-10">
               <FaqAccordion faqs={faq} title={t('jobsPage.faqTitle')} />
             </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import FadeIn from './FadeIn';
+import FAQSchema from './FAQSchema';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function FAQSection() {
@@ -27,6 +28,7 @@ export default function FAQSection() {
 
   return (
     <section className="bg-surface-contrast py-20 md:py-24 px-gutter" id="faq">
+      <FAQSchema faqs={faqs} />
       <div className="max-w-4xl mx-auto">
         <FadeIn>
           <div className="text-center mb-16">

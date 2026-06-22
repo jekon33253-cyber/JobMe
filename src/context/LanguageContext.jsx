@@ -3,28 +3,50 @@ import { translations } from '../locales/translations';
 
 const LanguageContext = createContext();
 
+const VALID_LANGS = ['pl', 'ua', 'en'];
+const STORAGE_KEY = 'jobme_language';
+
+function getLangFromParams() {
+  const params = new URLSearchParams(window.location.search);
+  const lang = params.get('lang');
+  return VALID_LANGS.includes(lang) ? lang : null;
+}
+
+function getInitialLang() {
+  // 1. URL param wins
+  const urlLang = getLangFromParams();
+  if (urlLang) return urlLang;
+  // 2. localStorage
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && VALID_LANGS.includes(saved)) return saved;
+  } catch (e) { /* ignore */ }
+  // 3. Default
+  return 'pl';
+}
+
+function syncUrl(lang) {
+  const url = new URL(window.location);
+  url.searchParams.set('lang', lang);
+  // History.replaceState keeps it clean — no redundant history entries
+  window.history.replaceState(null, '', url.toString());
+}
+
 export function LanguageProvider({ children }) {
-  const [currentLanguage, setCurrentLanguage] = useState(() => {
-    try {
-      // Check localStorage first
-      const savedLang = localStorage.getItem('jobme_language');
-      if (savedLang && ['pl', 'ua', 'en'].includes(savedLang)) {
-        return savedLang;
-      }
-    } catch (e) {
-      console.warn('localStorage is not available:', e);
-    }
-    return 'pl';
-  });
+  const [currentLanguage, setCurrentLanguage] = useState(getInitialLang);
+
+  // Set language + persist + update URL
+  const changeLanguage = (lang) => {
+    if (!VALID_LANGS.includes(lang)) return;
+    setCurrentLanguage(lang);
+    try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) { /* ignore */ }
+    syncUrl(lang);
+  };
 
   useEffect(() => {
-    try {
-      localStorage.setItem('jobme_language', currentLanguage);
-    } catch (e) {
-      console.warn('Failed to save language to localStorage:', e);
-    }
-    document.documentElement.lang = currentLanguage;
-  }, [currentLanguage]);
+    document.documentElement.lang = currentLanguage === 'ua' ? 'uk' : currentLanguage;
+    syncUrl(currentLanguage);
+  }, []); // only on mount
 
   const t = (key) => {
     const keys = key.split('.');
@@ -33,13 +55,12 @@ export function LanguageProvider({ children }) {
       if (result && result[k] !== undefined) {
         result = result[k];
       } else {
-        // Fallback to Polish if translation is missing
         let fallback = translations['pl'];
         for (const fk of keys) {
           if (fallback && fallback[fk] !== undefined) {
             fallback = fallback[fk];
           } else {
-            return key; // return key itself if totally missing
+            return key;
           }
         }
         return fallback;
@@ -49,7 +70,7 @@ export function LanguageProvider({ children }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ currentLanguage, setCurrentLanguage, t }}>
+    <LanguageContext.Provider value={{ currentLanguage, setCurrentLanguage: changeLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );

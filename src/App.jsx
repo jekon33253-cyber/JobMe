@@ -13,6 +13,7 @@ import JobsPage from './components/JobsPage';
 import PrivacyPage from './components/PrivacyPage';
 import CookieConsent from './components/CookieConsent';
 import NotFoundPage from './components/NotFoundPage';
+import SEOHead from './components/SEOHead';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
@@ -315,26 +316,36 @@ function App() {
 
       {/* ── JOBS PAGE ─────────────────────────────────────────── */}
       {page === 'jobs' && (
-        <JobsPage
-          onBack={handleBackToHome}
-          onApply={(msg) => handleScrollToContact('kandydat', msg)}
-          highlightIdx={highlightJobIdx}
-        />
+        <>
+          <SEOHead page="jobs" />
+          <JobsPage
+            onBack={handleBackToHome}
+            onApply={(msg) => handleScrollToContact('kandydat', msg)}
+            highlightIdx={highlightJobIdx}
+          />
+        </>
       )}
 
       {/* ── PRIVACY PAGE ───────────────────────────────────────── */}
       {page === 'privacy' && (
-        <PrivacyPage onBack={() => setPage('home')} />
+        <>
+          <SEOHead page="privacy" />
+          <PrivacyPage onBack={() => setPage('home')} />
+        </>
       )}
 
       {/* ── 404 PAGE ──────────────────────────────────────────── */}
       {page === '404' && (
-        <NotFoundPage onNavigateHome={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
+        <>
+          <SEOHead page="notFound" />
+          <NotFoundPage onNavigateHome={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
+        </>
       )}
 
       {/* ── HOME PAGE ─────────────────────────────────────────── */}
       {page === 'home' && (
         <>
+          <SEOHead page="home" />
           <div className="pt-[100px] sm:pt-[80px]">
             <Hero onCtaClick={handleScrollToContact} />
             <StatsBanner />

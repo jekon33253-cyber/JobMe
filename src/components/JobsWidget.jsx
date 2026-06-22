@@ -1,5 +1,6 @@
 import React from 'react';
 import FadeIn from './FadeIn';
+import JobPostingSchema from './JobPostingSchema';
 import { useLanguage } from '../context/LanguageContext';
 
 function Icon({ name, className = '' }) {
@@ -111,13 +112,15 @@ export default function JobsWidget({ onApply, onNavigateToJobs }) {
           {/* cards grid */}
           <div className={`grid gap-6 ${jobs.length === 1 ? 'max-w-sm mx-auto' : 'grid-cols-1 sm:grid-cols-2'}`}>
             {jobs.map((job, idx) => (
-              <JobCard
-                key={idx}
-                job={job}
-                index={idx}
-                onNavigate={(i, title) => onNavigateToJobs(i, title)}
-                labels={labels}
-              />
+              <React.Fragment key={idx}>
+                <JobPostingSchema job={job} />
+                <JobCard
+                  job={job}
+                  index={idx}
+                  onNavigate={(i, title) => onNavigateToJobs(i, title)}
+                  labels={labels}
+                />
+              </React.Fragment>
             ))}
           </div>
 
