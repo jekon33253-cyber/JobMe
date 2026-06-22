@@ -1,7 +1,7 @@
 export const translations = {
   pl: {
     nav: {
-      about: "O nas",
+      about: "Strona główna",
       services: "Usługi",
       advantages: "Zalety",
       team: "Zespół",
@@ -363,7 +363,7 @@ export const translations = {
 
   ua: {
     nav: {
-      about: "Про нас",
+      about: "Головна",
       services: "Послуги",
       advantages: "Переваги",
       team: "Команда",
@@ -725,7 +725,7 @@ export const translations = {
 
   en: {
     nav: {
-      about: "About Us",
+      about: "Home",
       services: "Services",
       advantages: "Advantages",
       team: "Team",
