@@ -11,6 +11,7 @@ import ContactForm from './components/ContactForm';
 import JobsWidget from './components/JobsWidget';
 import JobsPage from './components/JobsPage';
 import PrivacyPage from './components/PrivacyPage';
+import CookieConsent from './components/CookieConsent';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
@@ -523,6 +524,9 @@ function App() {
 
       {/* ── Floating WhatsApp / Telegram buttons (always visible) ── */}
       <FloatingContactButtons t={t} />
+
+      {/* ── Cookie consent banner ── */}
+      <CookieConsent />
 
     </div>
   );
