@@ -344,7 +344,7 @@ function App() {
 
       {/* ── HOME PAGE ─────────────────────────────────────────── */}
       {page === 'home' && (
-        <>
+        <main>
           <SEOHead page="home" />
           <div className="pt-[100px] sm:pt-[80px]">
             <Hero onCtaClick={handleScrollToContact} />
@@ -480,14 +480,14 @@ function App() {
                     { name: 'Anna', roleKey: 'team.t2Role', descKey: 'team.t2Desc', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuATy_o5csBvnV1AQdi6k6zH_lXPDJqOnluCjKaGQ_3KKCn1PHQCDnfSDciVnpqN-2yPsoNMKpIguPqQrZIrcF906rETOWnr7rzWBfSf3cZOTpi0XKmYHtkJ0-XaelNLA-1f30DYAqzqzkQgSNX6JhZ1gjTVrkEP_s5FOyl8pa_NCXbnjui-ib8aqreM-N1KEdhhNSNN_4b_jMew63xJPMG3chAyBhabFJMK3vIGdQ25yFT4Y1WHmQ82bcB73t17Avr-y2KTs3Y6FDc' },
                     { name: 'Tomasz', roleKey: 'team.t3Role', descKey: 'team.t3Desc', src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3oe4bYrI5JrB8a-YWPMLiq93padLNrqsL31IokEcr_dim2VxkBULhMv9eXAXa3Q2oLDntmZ9ahQTnRhYanI5_NkEVLcabZPadS3_Cx31ChnRQJj5CIpJeMcvQPv1uT3OFbKCPPJMgFN6nxPtS-FOmokJnVPNAsXA-1L-SsqAr7ikTvYlocVCUe8OQIByweBB7FbK9q9GKzA5_VStfOwRUuer1pD1idTJZenFbdi9bGgGYsNwa59jVrgpeW6eXlxRs908ietv4aJg' },
                   ].map(({ name, roleKey, descKey, src }) => (
-                    <div key={name} className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
+                    <article key={name} className="bg-white rounded-xxl p-6 text-center group border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300">
                       <div className="w-32 h-32 mx-auto mb-6 overflow-hidden rounded-[2rem] border-4 border-white shadow-md">
                         <img alt={name} loading="lazy" className="w-full h-full object-cover" src={src} />
                       </div>
                       <h3 className="font-headline-md text-headline-md">{name}</h3>
                       <p className="text-primary font-label-bold mb-4">{t(roleKey)}</p>
                       <p className="text-zinc-700 text-base italic leading-relaxed">{t(descKey)}</p>
-                    </div>
+                    </article>
                   ))}
                 </div>
               </div>
@@ -505,7 +505,7 @@ function App() {
                     { stars: 4, textKey: 'testimonials.r2Text', nameKey: 'testimonials.r2Name', roleKey: 'testimonials.r2Role' },
                     { stars: 5, textKey: 'testimonials.r3Text', nameKey: 'testimonials.r3Name', roleKey: 'testimonials.r3Role' },
                   ].map(({ stars, textKey, nameKey, roleKey }, i) => (
-                    <div key={i} className="bg-white p-8 rounded-xl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative z-0 overflow-hidden">
+                    <article key={i} className="bg-white p-8 rounded-xl border border-zinc-100 shadow-xl shadow-zinc-200/50 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative z-0 overflow-hidden">
                       <span className="material-symbols-outlined absolute -top-4 -left-2 text-9xl text-zinc-100/50 -z-10">format_quote</span>
                       <div className="flex gap-1 mb-4">
                         {[...Array(stars)].map((_, si) => (
@@ -515,7 +515,7 @@ function App() {
                       </div>
                       <p className="font-body-md text-body-md text-on-surface mb-6">"{t(textKey)}"</p>
                       <p className="font-label-bold text-label-bold">— {t(nameKey)} {roleKey ? `(${t(roleKey)})` : ''}</p>
-                    </div>
+                    </article>
                   ))}
                 </div>
               </div>
@@ -578,7 +578,7 @@ function App() {
               </div>
             </div>
           </footer>
-        </>
+        </main>
       )}
 
       {/* ── Floating WhatsApp / Telegram buttons (always visible) ── */}

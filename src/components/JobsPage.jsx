@@ -153,7 +153,7 @@ function JobCard({ job, index, labels, quickContactLabels, onApply, isHighlighte
               {t('jobsWidget.badgeActive')}
             </span>
           </div>
-          <h2 className="text-xl md:text-2xl font-black leading-tight">{job.jobTitle}</h2>
+          <h3 className="text-xl md:text-2xl font-black leading-tight">{job.jobTitle}</h3>
         </div>
       </div>
 
