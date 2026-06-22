@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Hero from './components/Hero';
 import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
@@ -20,6 +21,22 @@ import Blog from './components/Blog';
 import ChatWidget from './components/ChatWidget';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
+
+// Portal pages
+import LoginPage from './components/portal/LoginPage';
+import Dashboard from './components/portal/Dashboard';
+import ProfilePage from './components/portal/ProfilePage';
+import DocumentsPage from './components/portal/DocumentsPage';
+import LegalizationTracker from './components/portal/LegalizationTracker';
+import ApplicationsPage from './components/portal/ApplicationsPage';
+import NotificationsPage from './components/portal/NotificationsPage';
+
+// Admin pages
+import AdminDashboard from './components/admin/AdminDashboard';
+import AdminCandidates from './components/admin/AdminCandidates';
+import AdminDocReview from './components/admin/AdminDocReview';
+
+import { ProtectedRoute } from './context/AuthContext';
 
 // ── floating chat buttons + scroll-to-top ─────────────────────
 function FloatingContactButtons() {
@@ -51,7 +68,8 @@ function FloatingContactButtons() {
   );
 }
 
-function App() {
+// ── Main site (existing logic) ────────────────────────────────
+function MainSite() {
   const [contactTab, setContactTab] = useState('kandydat');
   const [prefillMessage, setPrefillMessage] = useState('');
   const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy' | 'blog' | '404'
@@ -577,6 +595,30 @@ function App() {
       <CookieConsent />
 
     </div>
+  );
+}
+
+// ── App with Routes ──────────────────────────────────────────
+function App() {
+  return (
+    <Routes>
+      {/* Portal routes */}
+      <Route path="/portal/login" element={<LoginPage />} />
+      <Route path="/portal/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/portal/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+      <Route path="/portal/documents" element={<ProtectedRoute><DocumentsPage /></ProtectedRoute>} />
+      <Route path="/portal/legalization" element={<ProtectedRoute><LegalizationTracker /></ProtectedRoute>} />
+      <Route path="/portal/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
+      <Route path="/portal/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+
+      {/* Admin routes */}
+      <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/candidates" element={<ProtectedRoute adminOnly><AdminCandidates /></ProtectedRoute>} />
+      <Route path="/admin/documents" element={<ProtectedRoute adminOnly><AdminDocReview /></ProtectedRoute>} />
+
+      {/* Main site (catch-all) */}
+      <Route path="*" element={<MainSite />} />
+    </Routes>
   );
 }
 

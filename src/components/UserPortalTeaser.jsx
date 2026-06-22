@@ -102,10 +102,10 @@ export default function UserPortalTeaser() {
         <FadeIn>
           {/* header */}
           <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#00B4B4]/10 text-[#00B4B4] text-xs font-bold uppercase tracking-wide mb-4 border border-[#00B4B4]/20">
-              <span className="w-2 h-2 rounded-full bg-[#00B4B4] animate-pulse" />
-              Coming Soon
-            </span>
+            <a href="/portal/login" className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8CC63F]/10 text-[#8CC63F] text-xs font-bold uppercase tracking-wide mb-4 border border-[#8CC63F]/20 hover:bg-[#8CC63F]/20 transition-all">
+              <span className="w-2 h-2 rounded-full bg-[#8CC63F] animate-pulse" />
+              {t('userPortal.badge') || 'Zaloguj się'}
+            </a>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-3">
               {t('userPortal.title')}
             </h2>
