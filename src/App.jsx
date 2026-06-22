@@ -15,13 +15,34 @@ import CookieConsent from './components/CookieConsent';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
-// ── floating chat buttons ─────────────────────────────────────
+// ── floating chat buttons + scroll-to-top ─────────────────────
 function FloatingContactButtons({ t }) {
   const waUrl = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent('Hej! Chciałbym dowiedzieć się więcej o ofertach pracy.')}`;
   const tgUrl = `https://t.me/${config.telegramUsername}`;
+  const [showTop, setShowTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 300);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
     <div className="fixed bottom-6 right-5 z-[900] flex flex-col gap-3 items-end">
+      {/* Scroll to Top */}
+      <button
+        onClick={scrollToTop}
+        aria-label="Do góry"
+        className={`w-12 h-12 rounded-full bg-white border border-zinc-200 shadow-lg flex items-center justify-center
+                   hover:shadow-xl hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer
+                   ${showTop ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'}`}
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8CC63F" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="18 15 12 9 6 15" />
+        </svg>
+      </button>
       {/* Telegram */}
       <a
         href={tgUrl}
