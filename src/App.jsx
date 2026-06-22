@@ -14,6 +14,8 @@ import PrivacyPage from './components/PrivacyPage';
 import CookieConsent from './components/CookieConsent';
 import NotFoundPage from './components/NotFoundPage';
 import SEOHead from './components/SEOHead';
+import ReferralProgram from './components/ReferralProgram';
+import UserPortalTeaser from './components/UserPortalTeaser';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
@@ -127,7 +129,10 @@ function App() {
   const handleScrollToContact = (tab, jobTitle) => {
     setPage('home');
     setContactTab(tab);
-    if (jobTitle) setLastJobTitle(jobTitle);
+    if (jobTitle) {
+      setLastJobTitle(jobTitle);
+      setPrefillMessage(jobTitle);
+    }
     setTimeout(() => {
       const element = document.getElementById('contact');
       if (element) element.scrollIntoView({ behavior: 'smooth' });
@@ -467,6 +472,7 @@ function App() {
           </section>
 
           <Upskilling />
+          <UserPortalTeaser />
 
           {/* Team Section */}
           <section className="bg-background-white py-20 md:py-24 px-gutter" id="team">
@@ -523,6 +529,7 @@ function App() {
           </section>
 
           <FAQSection />
+          <ReferralProgram onReferClick={() => handleScrollToContact('kandydat', 'POLECENIE: Program poleceń')} />
           <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
 
           {/* Footer */}

@@ -12,25 +12,24 @@ function Icon({ name, className = '' }) {
 }
 
 // ── compact card shown on home page ────────────────────────────
-function JobCard({ job, index, onNavigate, labels }) {
+function JobCard({ job, index, onNavigate, onApply, labels }) {
   const { t } = useLanguage();
   const icons = ['precision_manufacturing', 'gas_meter', 'icecream', 'warehouse', 'engineering'];
   const iconName = icons[index % icons.length];
+  const isFeatured = index === 0; // paczkomaty = premium offer
 
   return (
-    <button
-      onClick={() => onNavigate(index, job.jobTitle)}
-      aria-label={job.jobTitle}
+    <div
       className="job-card group w-full text-left bg-white rounded-2xl border border-zinc-200 shadow-md
-                 hover:shadow-2xl hover:border-primary/40 hover:-translate-y-1.5
-                 transition-all duration-300 overflow-hidden cursor-pointer focus:outline-none
-                 focus:ring-2 focus:ring-primary/50"
+                 hover:shadow-2xl hover:border-primary/40 transition-all duration-300 overflow-hidden
+                 focus-within:ring-2 focus-within:ring-primary/50"
     >
       {/* top accent bar */}
-      <div className="h-1 bg-gradient-to-r from-primary to-[#00B4B4] group-hover:h-1.5 transition-all duration-300" />
+      <div className={`h-1 bg-gradient-to-r from-primary to-[#00B4B4] transition-all duration-300
+        ${isFeatured ? 'h-2' : 'group-hover:h-1.5'}`} />
 
       <div className="p-6 md:p-7">
-        {/* icon + badge */}
+        {/* icon + badge row */}
         <div className="flex items-start justify-between mb-4">
           <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center
                           group-hover:bg-primary/20 transition-colors duration-300">
@@ -54,8 +53,21 @@ function JobCard({ job, index, onNavigate, labels }) {
           <span className="text-[#5a8a00] font-extrabold text-sm md:text-base">{job.salary}</span>
         </div>
 
+        {/* ── Booking Bonus (featured only) ─────────────────── */}
+        {isFeatured && (
+          <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl
+                          flex items-start gap-2.5 animate-fade-in">
+            <Icon name="military_tech" className="text-amber-500 text-lg shrink-0 mt-0.5" />
+            <div className="min-w-0">
+              <p className="text-amber-800 text-xs md:text-sm font-bold leading-snug">
+                {t('jobsWidget.bookingBonus')}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* quick info rows */}
-        <ul className="space-y-2 mb-5">
+        <ul className="space-y-2 mb-3">
           <li className="flex items-start gap-2 text-sm text-zinc-600">
             <Icon name="location_on" className="text-[#00B4B4] text-base shrink-0 mt-0.5" />
             <span className="leading-snug">{job.location}</span>
@@ -70,14 +82,50 @@ function JobCard({ job, index, onNavigate, labels }) {
           </li>
         </ul>
 
-        {/* CTA hint */}
-        <div className="flex items-center gap-1.5 text-sm font-bold text-primary/80
-                        group-hover:text-primary transition-colors duration-200">
-          <span>{labels.btnDetails}</span>
-          <Icon name="arrow_forward" className="text-base group-hover:translate-x-1 transition-transform duration-200" />
+        {/* ── Scarcity indicator (featured only) ─────────────── */}
+        {isFeatured && (
+          <div className="flex items-center gap-2 mb-5 text-xs font-bold text-red-600 bg-red-50
+                          px-3 py-1.5 rounded-lg border border-red-200 animate-pulse">
+            <Icon name="hourglass_top" className="text-sm" />
+            {t('jobsWidget.scarcityText').replace('{count}', '3')}
+          </div>
+        )}
+
+        {/* ── CTA row ────────────────────────────────────────── */}
+        <div className="flex flex-col sm:flex-row gap-2.5 mt-2">
+          {isFeatured ? (
+            <button
+              onClick={(e) => { e.stopPropagation(); onApply('REZERWACJA: Pracownik produkcji paczkomatów + BONUS'); }}
+              className="flex-1 flex items-center justify-center gap-2 bg-[#8CC63F] hover:bg-[#7ab335]
+                         text-[#2D2D2D] font-bold text-sm px-5 py-3 rounded-xl
+                         shadow-md shadow-primary/20 hover:shadow-lg hover:-translate-y-0.5
+                         transition-all duration-300 cursor-pointer"
+            >
+              <Icon name="confirmation_number" className="text-base" />
+              {t('jobsWidget.btnReserve')}
+            </button>
+          ) : (
+            <button
+              onClick={(e) => { e.stopPropagation(); onNavigate(index, job.jobTitle); }}
+              className="flex-1 flex items-center justify-center gap-1.5 font-bold text-sm px-5 py-3
+                         rounded-xl bg-primary/10 text-primary/90 hover:bg-primary/20
+                         transition-all duration-200 cursor-pointer"
+            >
+              {labels.btnDetails}
+              <Icon name="arrow_forward" className="text-base group-hover:translate-x-1 transition-transform duration-200" />
+            </button>
+          )}
+          <button
+            onClick={(e) => { e.stopPropagation(); onNavigate(index, job.jobTitle); }}
+            className={`flex items-center justify-center gap-1.5 font-bold text-sm px-4 py-3 rounded-xl
+                       border border-zinc-200 text-zinc-500 hover:text-zinc-700 hover:bg-zinc-50
+                       transition-all duration-200 cursor-pointer ${isFeatured ? 'sm:flex-auto' : 'hidden'}`}
+          >
+            {labels.btnDetails}
+          </button>
         </div>
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -99,7 +147,6 @@ export default function JobsWidget({ onApply, onNavigateToJobs }) {
     <section className="bg-background-white py-20 md:py-24 px-gutter" id="oferty">
       <div className="max-w-5xl mx-auto">
         <FadeIn>
-          {/* heading */}
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D2D2D] mb-4">
               {t('jobsWidget.title')}
@@ -109,7 +156,6 @@ export default function JobsWidget({ onApply, onNavigateToJobs }) {
             </p>
           </div>
 
-          {/* cards grid */}
           <div className={`grid gap-6 ${jobs.length === 1 ? 'max-w-sm mx-auto' : 'grid-cols-1 sm:grid-cols-2'}`}>
             {jobs.map((job, idx) => (
               <React.Fragment key={idx}>
@@ -118,13 +164,13 @@ export default function JobsWidget({ onApply, onNavigateToJobs }) {
                   job={job}
                   index={idx}
                   onNavigate={(i, title) => onNavigateToJobs(i, title)}
+                  onApply={onApply}
                   labels={labels}
                 />
               </React.Fragment>
             ))}
           </div>
 
-          {/* "View all" link */}
           <div className="flex justify-center mt-10">
             <button
               onClick={() => onNavigateToJobs(null)}
