@@ -46,6 +46,20 @@ const PAGE_META = {
       desc: 'JobMe privacy policy — how we process personal data. GDPR, cookies, user rights.',
     },
   },
+  blog: {
+    pl: {
+      title: 'Centrum Wiedzy — JobMe | Poradniki: Legalizacja, Zarobki, Upskilling',
+      desc: 'Centrum Wiedzy JobMe — praktyczne poradniki dla kandydatów i pracodawców. Karta Pobytu, status studenta, upskilling, rotacja pracowników.',
+    },
+    ua: {
+      title: 'Центр Знань — JobMe | Посібники: Легалізація, Доходи, Навчання',
+      desc: 'Центр Знань JobMe — практичні посібники для кандидатів та роботодавців. Карта побиту, статус студента, підвищення кваліфікації.',
+    },
+    en: {
+      title: 'Knowledge Center — JobMe | Guides: Legalization, Earnings, Upskilling',
+      desc: 'JobMe Knowledge Center — practical guides for candidates and employers. Residence Card, student tax benefits, employee upskilling, turnover reduction.',
+    },
+  },
   notFound: {
     pl: { title: '404 — Strona nie znaleziona | JobMe', desc: '' },
     ua: { title: '404 — Сторінку не знайдено | JobMe', desc: '' },
@@ -54,9 +68,9 @@ const PAGE_META = {
 };
 
 const BREADCRUMB_LABELS = {
-  pl: { home: 'Strona główna', jobs: 'Oferty Pracy', privacy: 'Polityka Prywatności' },
-  ua: { home: 'Головна', jobs: 'Вакансії', privacy: 'Політика Конфіденційності' },
-  en: { home: 'Home', jobs: 'Job Openings', privacy: 'Privacy Policy' },
+  pl: { home: 'Strona główna', jobs: 'Oferty Pracy', privacy: 'Polityka Prywatności', blog: 'Centrum Wiedzy' },
+  ua: { home: 'Головна', jobs: 'Вакансії', privacy: 'Політика Конфіденційності', blog: 'Центр Знань' },
+  en: { home: 'Home', jobs: 'Job Openings', privacy: 'Privacy Policy', blog: 'Knowledge Center' },
 };
 
 // ── helpers ────────────────────────────────────────────────────

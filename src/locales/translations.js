@@ -7,6 +7,7 @@ export const translations = {
       team: "Zespół",
       contact: "Kontakt",
       jobs: "Oferty Pracy",
+      blog: "Centrum Wiedzy",
       cta: "Zacznij teraz"
     },
     hero: {
@@ -228,6 +229,51 @@ export const translations = {
       polityka: "Polityka Prywatności",
       rights: "JobMe.pl. Wszelkie prawa zastrzeżone."
     },
+    blog: {
+      title: "Centrum Wiedzy JobMe",
+      subtitle: "Praktyczne poradniki dla kandydatów i pracodawców. Legalizacja, zarobki, upskilling.",
+      backBtn: "← Wróć na stronę główną",
+      filterAll: "Wszystkie",
+      filterKandydat: "Dla Kandydata",
+      filterBiznes: "Dla Biznesu",
+      readTime: "min czytania",
+      ctaTitle: "Masz pytania dotyczące tego artykułu?",
+      ctaDesc: "Nasi koordynatorzy odpowiedzą w ciągu 15 minut. Darmowa konsultacja.",
+      ctaBtn: "Zapytaj koordynatora",
+      articles: [
+        {
+          category: "kandydat",
+          tag: "Legalizacja",
+          title: "Jak uzyskać Kartę Pobytu na Dolnym Śląsku w 2026 roku — Przewodnik krok po kroku",
+          readTime: 7,
+          desc: "Kompletny przewodnik po procedurze legalizacji pobytu. Od złożenia wniosku w Urzędzie Wojewódzkim po odbiór karty — wyjaśniamy każdy etap bez urzędniczego żargonu.",
+          body: "Proces uzyskania Karty Pobytu (Zezwolenie na pobyt czasowy) na Dolnym Śląsku składa się z kilku kluczowych etapów. Wniosek składasz osobiście w Urzędzie Wojewódzkim we Wrocławiu (pl. Powstańców Warszawy 1). Do wniosku dołączasz: paszport, umowę o pracę lub zlecenie, zaświadczenie o zameldowaniu, potwierdzenie opłaty skarbowej (340 zł) oraz zdjęcia biometryczne.\n\nW JobMe pomagamy naszym kandydatom na każdym etapie: od przygotowania kompletu dokumentów, przez rejestrację wizyty w urzędzie, aż po osobiste wsparcie tłumacza podczas składania wniosku. Średni czas oczekiwania na decyzję na Dolnym Śląsku to obecnie 3-5 miesięcy, ale z naszym wsparciem unikniesz błędów formalnych, które wydłużają procedurę."
+        },
+        {
+          category: "kandydat",
+          tag: "Zarobki",
+          title: "Status studenta w Polsce: Jak zarabiać 100% stawki brutto bez podatków",
+          readTime: 5,
+          desc: "Wyjaśniamy, jak legalnie otrzymywać pełną stawkę brutto jako student do 26 roku życia. Konkretne wyliczenia i przykłady z naszych ofert pracy.",
+          body: "Studenci do 26 roku życia w Polsce są zwolnieni z podatku dochodowego (PIT), co oznacza że stawka brutto = stawka netto. W praktyce: przy umowie zlecenie ze stawką 31,40 zł brutto/godz., student otrzymuje pełne 31,40 zł na rękę.\n\nDodatkowo, studenci nie podlegają obowiązkowym składkom ZUS przy umowie zlecenie (jeśli nie przekroczą 50% minimalnego wynagrodzenia u jednego płatnika). W JobMe oferujemy specjalne stawki studenckie we wszystkich naszych projektach — sprawdź aktualne oferty i zacznij zarabiać więcej już dziś."
+        },
+        {
+          category: "biznes",
+          tag: "HR",
+          title: "Upskilling pracowników jako klucz do obniżenia kosztów rotacji o 60%",
+          readTime: 6,
+          desc: "Dlaczego inwestycja w szkolenia UDT i SEP dla pracowników fizycznych zwraca się szybciej niż ciągła rekrutacja. Case study z dolnośląskiego rynku pracy.",
+          body: "Rotacja pracowników to największy ukryty koszt w produkcji i logistyce. Średni koszt zastąpienia jednego pracownika fizycznego to 4 000-6 000 PLN (rekrutacja, onboarding, spadek wydajności).\n\nProgram upskillingowy JobMe — finansowanie kursów UDT na wózki widłowe oraz SEP do 1 kV — obniża rotację o 60% w ciągu pierwszych 6 miesięcy. Dlaczego? Pracownik, który widzi realną ścieżkę awansu i wzrostu wynagrodzenia, zostaje w firmie średnio 3 razy dłużej. Nasi partnerzy B2B raportują oszczędności rzędu 120 000 PLN rocznie na 20-osobowym zespole."
+        }
+      ]
+    },
+    chatWidget: {
+      title: "Masz pytania?",
+      subtitle: "Porozmawiaj z koordynatorem JobMe",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      close: "Zamknij",
+    },
     jobsPage: {
       title: "Wszystkie Oferty Pracy",
       subtitle: "Aktualne oferty dla kandydatów. Dołącz do stabilnego zespołu z pełnym pakietem benefitów.",
@@ -323,6 +369,7 @@ export const translations = {
       team: "Команда",
       contact: "Контакти",
       jobs: "Вакансії",
+      blog: "Центр Знань",
       cta: "Почати зараз"
     },
     hero: {
@@ -544,6 +591,51 @@ export const translations = {
       polityka: "Політика конфіденційності",
       rights: "JobMe.pl. Всі права захищені."
     },
+    blog: {
+      title: "Центр Знань JobMe",
+      subtitle: "Практичні посібники для кандидатів та роботодавців. Легалізація, доходи, підвищення кваліфікації.",
+      backBtn: "← Повернутись на головну",
+      filterAll: "Всі",
+      filterKandydat: "Для Кандидата",
+      filterBiznes: "Для Бізнесу",
+      readTime: "хв читання",
+      ctaTitle: "Маєте питання щодо цієї статті?",
+      ctaDesc: "Наші координатори дадуть відповідь протягом 15 хвилин. Безкоштовна консультація.",
+      ctaBtn: "Запитати координатора",
+      articles: [
+        {
+          category: "kandydat",
+          tag: "Легалізація",
+          title: "Як отримати Карту Побиту в Нижній Сілезії у 2026 році — Покроковий посібник",
+          readTime: 7,
+          desc: "Повний посібник з процедури легалізації перебування. Від подання заяви до отримання карти — пояснюємо кожен етап без бюрократичного жаргону.",
+          body: "Процес отримання Карти Побиту (дозвіл на тимчасове проживання) в Нижній Сілезії складається з кількох ключових етапів. Заяву подаєте особисто в Ужонді Воєводськім у Вроцлаві. До заяви додаєте: паспорт, трудовий договір або умову злеценя, довідку про реєстрацію місця проживання, підтвердження оплати гербового збору (340 злотих) та біометричні фото.\n\nУ JobMe ми допомагаємо нашим кандидатам на кожному етапі: від підготовки повного пакету документів, через реєстрацію візиту в ужонді, до особистої підтримки перекладача під час подання заяви. Середній час очікування рішення в Нижній Сілезії — 3-5 місяців, але з нашою підтримкою ви уникнете формальних помилок, які подовжують процедуру."
+        },
+        {
+          category: "kandydat",
+          tag: "Доходи",
+          title: "Статус студента в Польщі: Як заробляти 100% ставки брутто без податків",
+          readTime: 5,
+          desc: "Пояснюємо, як легально отримувати повну ставку брутто студентам до 26 років. Конкретні розрахунки та приклади з наших вакансій.",
+          body: "Студенти до 26 років у Польщі звільнені від податку на доходи (PIT), що означає: ставка брутто = ставка нетто. На практиці: при умові злеценя зі ставкою 31,40 зл брутто/год, студент отримує повні 31,40 зл на руки.\n\nДодатково, студенти не підлягають обов'язковим внескам ZUS при умові злеценя (якщо не перевищують 50% мінімальної зарплати в одного платника). У JobMe ми пропонуємо спеціальні студентські ставки в усіх наших проєктах — перегляньте актуальні вакансії та почніть заробляти більше вже сьогодні."
+        },
+        {
+          category: "biznes",
+          tag: "HR",
+          title: "Підвищення кваліфікації працівників як ключ до зниження витрат на плинність на 60%",
+          readTime: 6,
+          desc: "Чому інвестиція в навчання UDT та SEP для працівників окупається швидше, ніж постійний рекрутинг. Кейс із ринку праці Нижньої Сілезії.",
+          body: "Плинність кадрів — найбільша прихована вартість у виробництві та логістиці. Середня вартість заміни одного працівника фізичної праці становить 4 000-6 000 злотих (рекрутинг, онбординг, падіння продуктивності).\n\nПрограма підвищення кваліфікації JobMe — фінансування курсів UDT на навантажувачі та SEP до 1 кВ — знижує плинність на 60% протягом перших 6 місяців. Чому? Працівник, який бачить реальний шлях підвищення та зростання зарплати, залишається в компанії в середньому в 3 рази довше. Наші B2B-партнери повідомляють про економію близько 120 000 злотих на рік на команді з 20 осіб."
+        }
+      ]
+    },
+    chatWidget: {
+      title: "Маєте питання?",
+      subtitle: "Поговоріть з координатором JobMe",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      close: "Закрити",
+    },
     jobsPage: {
       title: "Усі вакансії",
       subtitle: "Актуальні вакансії для кандидатів. Приєднуйтесь до стабільної команди з повним пакетом пільг та бенефітів.",
@@ -639,6 +731,7 @@ export const translations = {
       team: "Team",
       contact: "Contact",
       jobs: "Job Offers",
+      blog: "Knowledge Center",
       cta: "Start Now"
     },
     hero: {
@@ -859,6 +952,51 @@ export const translations = {
       kontakt: "Contact",
       polityka: "Privacy Policy",
       rights: "JobMe.pl. All rights reserved."
+    },
+    blog: {
+      title: "JobMe Knowledge Center",
+      subtitle: "Practical guides for candidates and employers. Legalization, earnings, upskilling.",
+      backBtn: "← Back to Home",
+      filterAll: "All",
+      filterKandydat: "For Candidates",
+      filterBiznes: "For Business",
+      readTime: "min read",
+      ctaTitle: "Have questions about this article?",
+      ctaDesc: "Our coordinators will respond within 15 minutes. Free consultation.",
+      ctaBtn: "Ask a coordinator",
+      articles: [
+        {
+          category: "kandydat",
+          tag: "Legalization",
+          title: "How to Get a Residence Card in Lower Silesia in 2026 — Step-by-Step Guide",
+          readTime: 7,
+          desc: "A complete guide to the residence legalization procedure. From application submission to card collection — every stage explained without bureaucratic jargon.",
+          body: "The process of obtaining a Residence Card (Temporary Residence Permit) in Lower Silesia consists of several key stages. Applications are submitted in person at the Voivodeship Office in Wrocław. Required documents: passport, employment or mandate contract, residence registration certificate, stamp duty payment confirmation (340 PLN), and biometric photos.\n\nAt JobMe, we assist our candidates at every stage: from preparing complete documentation, through registering the office visit, to personal translator support during the application. The average waiting time for a decision in Lower Silesia is currently 3-5 months, but with our support you will avoid formal errors that prolong the procedure."
+        },
+        {
+          category: "kandydat",
+          tag: "Earnings",
+          title: "Student Status in Poland: How to Earn 100% Gross Rate Tax-Free",
+          readTime: 5,
+          desc: "We explain how students under 26 can legally receive full gross rates. Concrete calculations and examples from our job offers.",
+          body: "Students under 26 in Poland are exempt from income tax (PIT), meaning gross rate = net rate. In practice: with a mandate contract at PLN 31.40 gross/hour, the student receives the full PLN 31.40 in hand.\n\nAdditionally, students are not subject to mandatory ZUS contributions under mandate contracts (if they do not exceed 50% of the minimum wage with one payer). At JobMe, we offer special student rates across all our projects — check current openings and start earning more today."
+        },
+        {
+          category: "biznes",
+          tag: "HR",
+          title: "Employee Upskilling as the Key to Cutting Turnover Costs by 60%",
+          readTime: 6,
+          desc: "Why investing in UDT and SEP training for blue-collar workers pays off faster than continuous recruitment. A case study from the Lower Silesian labor market.",
+          body: "Employee turnover is the largest hidden cost in manufacturing and logistics. The average cost of replacing one blue-collar worker is PLN 4,000-6,000 (recruitment, onboarding, productivity loss).\n\nThe JobMe upskilling program — financing UDT forklift courses and SEP up to 1 kV — reduces turnover by 60% within the first 6 months. Why? An employee who sees a real promotion path and wage growth stays with the company an average of 3 times longer. Our B2B partners report savings of around PLN 120,000 per year on a 20-person team."
+        }
+      ]
+    },
+    chatWidget: {
+      title: "Have questions?",
+      subtitle: "Chat with a JobMe coordinator",
+      whatsapp: "WhatsApp",
+      telegram: "Telegram",
+      close: "Close",
     },
     jobsPage: {
       title: "All Job Openings",

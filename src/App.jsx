@@ -16,6 +16,8 @@ import NotFoundPage from './components/NotFoundPage';
 import SEOHead from './components/SEOHead';
 import ReferralProgram from './components/ReferralProgram';
 import UserPortalTeaser from './components/UserPortalTeaser';
+import Blog from './components/Blog';
+import ChatWidget from './components/ChatWidget';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
@@ -100,7 +102,7 @@ function FloatingContactButtons({ t, jobTitle }) {
 function App() {
   const [contactTab, setContactTab] = useState('kandydat');
   const [prefillMessage, setPrefillMessage] = useState('');
-  const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy' | '404'
+  const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy' | 'blog' | '404'
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
   const [lastJobTitle, setLastJobTitle] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -208,6 +210,15 @@ function App() {
             >
               {t('nav.jobs')}
             </button>
+            <button
+              onClick={() => { setPage('blog'); window.scrollTo({ top: 0 }); }}
+              className={`font-button text-button font-bold transition-colors cursor-pointer px-3 py-1.5 rounded-lg
+                ${page === 'blog'
+                  ? 'text-primary bg-primary/10'
+                  : 'text-on-surface-variant hover:text-primary hover:bg-primary/5'}`}
+            >
+              {t('nav.blog')}
+            </button>
           </div>
 
           <div className="flex items-center gap-4">
@@ -303,6 +314,14 @@ function App() {
               {t('nav.jobs')}
             </button>
 
+            <button
+              onClick={() => { setPage('blog'); window.scrollTo({ top: 0 }); setMobileMenuOpen(false); }}
+              className={`block w-full text-left py-2.5 px-4 rounded-xl font-button text-button font-bold transition-colors cursor-pointer
+                ${page === 'blog' ? 'text-primary bg-primary/10' : 'text-on-surface-variant hover:text-primary hover:bg-primary/5'}`}
+            >
+              {t('nav.blog')}
+            </button>
+
             {/* Mobile CTA */}
             <button
               onClick={() => {
@@ -336,6 +355,14 @@ function App() {
         <>
           <SEOHead page="privacy" />
           <PrivacyPage onBack={() => setPage('home')} />
+        </>
+      )}
+
+      {/* ── BLOG PAGE ──────────────────────────────────────────── */}
+      {page === 'blog' && (
+        <>
+          <SEOHead page="blog" />
+          <Blog onContactClick={() => handleScrollToContact('kandydat', 'ZAPYTANIE Z BLOGA: Centrum Wiedzy')} />
         </>
       )}
 
@@ -587,6 +614,9 @@ function App() {
           </footer>
         </main>
       )}
+
+      {/* ── Floating chat widget ── */}
+      <ChatWidget />
 
       {/* ── Floating WhatsApp / Telegram buttons (always visible) ── */}
       <FloatingContactButtons t={t} jobTitle={lastJobTitle} />
