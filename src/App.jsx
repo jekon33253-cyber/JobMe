@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Hero from './components/Hero';
 import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
@@ -72,12 +72,19 @@ function FloatingContactButtons() {
 function MainSite() {
   const [contactTab, setContactTab] = useState('kandydat');
   const [prefillMessage, setPrefillMessage] = useState('');
-  const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy' | 'blog' | '404'
+  const [page, setPage] = useState(() => {
+    const path = window.location.pathname;
+    if (path === '/privacy') return 'privacy';
+    if (path === '/jobs' || path === '/oferty') return 'jobs';
+    if (path === '/blog') return 'blog';
+    return 'home';
+  });
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
   const [lastJobTitle, setLastJobTitle] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (currentLanguage === 'ua') {
@@ -116,8 +123,24 @@ function MainSite() {
     }
   }, [navigate]);
 
+  // Synchronize router location.pathname with page state
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === '/privacy') {
+      setPage('privacy');
+      window.scrollTo({ top: 0 });
+    } else if (path === '/jobs' || path === '/oferty') {
+      setPage('jobs');
+    } else if (path === '/blog') {
+      setPage('blog');
+      window.scrollTo({ top: 0 });
+    } else if (path === '/' || path === '') {
+      setPage('home');
+    }
+  }, [location.pathname]);
+
   const handleScrollToContact = (tab, jobTitle) => {
-    setPage('home');
+    navigate('/');
     setContactTab(tab);
     if (jobTitle) {
       setLastJobTitle(jobTitle);
@@ -132,12 +155,11 @@ function MainSite() {
   const handleNavigateToJobs = (jobIdx, jobTitle) => {
     setHighlightJobIdx(jobIdx);
     if (jobTitle) setLastJobTitle(jobTitle);
-    setPage('jobs');
-    window.scrollTo({ top: 0 });
+    navigate('/jobs');
   };
 
   const handleBackToHome = () => {
-    setPage('home');
+    navigate('/');
     setTimeout(() => {
       const el = document.getElementById('oferty');
       if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -164,7 +186,7 @@ function MainSite() {
       <nav className="bg-background-white/90 backdrop-blur-md fixed top-0 w-full z-50 shadow-sm">
         <div className="flex justify-between items-center px-gutter py-4 max-w-7xl mx-auto">
           <button
-            onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             aria-label="Strona główna"
             className="cursor-pointer shrink-0"
           >
@@ -183,7 +205,7 @@ function MainSite() {
               </>
             ) : (
               <button
-                onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                 className="font-button text-button text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
               >
                 ← {t('nav.about')}
@@ -199,7 +221,7 @@ function MainSite() {
               {t('nav.jobs')}
             </button>
             <button
-              onClick={() => { setPage('blog'); window.scrollTo({ top: 0 }); }}
+              onClick={() => { navigate('/blog'); }}
               className={`font-button text-button font-bold transition-colors cursor-pointer px-3 py-1.5 rounded-lg
                 ${page === 'blog'
                   ? 'text-primary bg-primary/10'
@@ -296,7 +318,7 @@ function MainSite() {
               </div>
             ) : (
               <button
-                onClick={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); setMobileMenuOpen(false); }}
+                onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); setMobileMenuOpen(false); }}
                 className="block py-2.5 px-4 rounded-xl font-button text-button text-on-surface-variant hover:text-primary transition-colors cursor-pointer text-left w-full"
               >
                 ← {t('nav.about')}
@@ -312,7 +334,7 @@ function MainSite() {
             </button>
 
             <button
-              onClick={() => { setPage('blog'); window.scrollTo({ top: 0 }); setMobileMenuOpen(false); }}
+              onClick={() => { navigate('/blog'); setMobileMenuOpen(false); }}
               className={`block w-full text-left py-2.5 px-4 rounded-xl font-button text-button font-bold transition-colors cursor-pointer
                 ${page === 'blog' ? 'text-primary bg-primary/10' : 'text-on-surface-variant hover:text-primary hover:bg-primary/5'}`}
             >
@@ -604,7 +626,7 @@ function MainSite() {
                   <ul className="space-y-3">
                     <li><a href="#about" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.oNas')}</a></li>
                     <li><a href="#contact" className="text-zinc-400 hover:text-primary transition-colors text-sm">{t('footer.kontakt')}</a></li>
-                    <li><button onClick={() => { setPage('privacy'); window.scrollTo({ top: 0 }); }} className="text-zinc-400 hover:text-primary transition-colors text-sm cursor-pointer">{t('footer.polityka')}</button></li>
+                    <li><button onClick={() => { navigate('/privacy'); }} className="text-zinc-400 hover:text-primary transition-colors text-sm cursor-pointer">{t('footer.polityka')}</button></li>
                   </ul>
                 </div>
               </div>

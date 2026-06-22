@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -270,7 +271,7 @@ export default function LoginPage() {
         {/* Footer */}
         <p className="text-center text-zinc-600 text-xs mt-6">
           {t('auth.termsNote')}{' '}
-          <a href="/privacy" className="text-[#8CC63F] hover:underline">{t('auth.privacyLink')}</a>
+          <Link to="/privacy" className="text-[#8CC63F] hover:underline">{t('auth.privacyLink')}</Link>
         </p>
       </div>
     </div>
