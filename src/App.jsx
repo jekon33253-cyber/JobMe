@@ -90,7 +90,12 @@ function MainSite() {
     const knownHashes = ['', '#about', '#services', '#advantages', '#team', '#contact',
                          '#oferty', '#legalization', '#upskilling', '#jak-to-dziala', '#faq', '#sectors'];
     const checkHash = () => {
-      if (page === 'home' && window.location.hash && !knownHashes.includes(window.location.hash)) {
+      const hash = window.location.hash;
+      // Skip checking if it is a Supabase authentication callback fragment
+      if (hash && (hash.startsWith('#access_token') || hash.startsWith('#error') || hash.startsWith('#type=') || hash.startsWith('#refresh_token') || hash.startsWith('#recovery_token'))) {
+        return;
+      }
+      if (page === 'home' && hash && !knownHashes.includes(hash)) {
         setPage('404');
       }
     };
@@ -98,6 +103,18 @@ function MainSite() {
     window.addEventListener('hashchange', checkHash);
     return () => window.removeEventListener('hashchange', checkHash);
   }, [page]);
+
+  // Handle Supabase redirect after email confirmation / password recovery
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash && hash.includes('access_token=')) {
+      // Small timeout to allow Supabase SDK to parse session from hash and set auth state
+      const timer = setTimeout(() => {
+        navigate('/portal/dashboard');
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [navigate]);
 
   const handleScrollToContact = (tab, jobTitle) => {
     setPage('home');
