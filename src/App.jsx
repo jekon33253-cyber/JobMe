@@ -12,6 +12,7 @@ import JobsWidget from './components/JobsWidget';
 import JobsPage from './components/JobsPage';
 import PrivacyPage from './components/PrivacyPage';
 import CookieConsent from './components/CookieConsent';
+import NotFoundPage from './components/NotFoundPage';
 import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
@@ -92,7 +93,7 @@ function FloatingContactButtons({ t }) {
 function App() {
   const [contactTab, setContactTab] = useState('kandydat');
   const [prefillMessage, setPrefillMessage] = useState('');
-  const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy'
+  const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy' | '404'
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
@@ -102,6 +103,20 @@ function App() {
       setContactTab('kandydat');
     }
   }, [currentLanguage]);
+
+  // Detect unknown hash routes → show 404
+  useEffect(() => {
+    const knownHashes = ['', '#about', '#services', '#advantages', '#team', '#contact',
+                         '#oferty', '#legalization', '#upskilling', '#jak-to-dziala', '#faq', '#sectors'];
+    const checkHash = () => {
+      if (page === 'home' && window.location.hash && !knownHashes.includes(window.location.hash)) {
+        setPage('404');
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, [page]);
 
   const handleScrollToContact = (tab) => {
     setPage('home');
@@ -303,6 +318,11 @@ function App() {
       {/* ── PRIVACY PAGE ───────────────────────────────────────── */}
       {page === 'privacy' && (
         <PrivacyPage onBack={() => setPage('home')} />
+      )}
+
+      {/* ── 404 PAGE ──────────────────────────────────────────── */}
+      {page === '404' && (
+        <NotFoundPage onNavigateHome={() => { setPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
       )}
 
       {/* ── HOME PAGE ─────────────────────────────────────────── */}
