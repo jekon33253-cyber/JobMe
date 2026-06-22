@@ -18,7 +18,7 @@ function JobCard({ job, index, onNavigate, labels }) {
 
   return (
     <button
-      onClick={() => onNavigate(index)}
+      onClick={() => onNavigate(index, job.jobTitle)}
       aria-label={job.jobTitle}
       className="job-card group w-full text-left bg-white rounded-2xl border border-zinc-200 shadow-md
                  hover:shadow-2xl hover:border-primary/40 hover:-translate-y-1.5
@@ -115,7 +115,7 @@ export default function JobsWidget({ onApply, onNavigateToJobs }) {
                 key={idx}
                 job={job}
                 index={idx}
-                onNavigate={(i) => onNavigateToJobs(i)}
+                onNavigate={(i, title) => onNavigateToJobs(i, title)}
                 labels={labels}
               />
             ))}

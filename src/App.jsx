@@ -17,8 +17,12 @@ import { useLanguage } from './context/LanguageContext';
 import config from './config';
 
 // ── floating chat buttons + scroll-to-top ─────────────────────
-function FloatingContactButtons({ t }) {
-  const waUrl = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent('Hej! Chciałbym dowiedzieć się więcej o ofertach pracy.')}`;
+function FloatingContactButtons({ t, jobTitle }) {
+  const defaultMsg = 'Hej! Chciałbym dowiedzieć się więcej o ofertach pracy.';
+  const waMsg = jobTitle
+    ? `Hej! Jestem zainteresowany ofertą: ${jobTitle}`
+    : defaultMsg;
+  const waUrl = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(waMsg)}`;
   const tgUrl = `https://t.me/${config.telegramUsername}`;
   const [showTop, setShowTop] = useState(false);
 
@@ -95,6 +99,7 @@ function App() {
   const [prefillMessage, setPrefillMessage] = useState('');
   const [page, setPage] = useState('home');          // 'home' | 'jobs' | 'privacy' | '404'
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
+  const [lastJobTitle, setLastJobTitle] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
 
@@ -118,17 +123,19 @@ function App() {
     return () => window.removeEventListener('hashchange', checkHash);
   }, [page]);
 
-  const handleScrollToContact = (tab) => {
+  const handleScrollToContact = (tab, jobTitle) => {
     setPage('home');
     setContactTab(tab);
+    if (jobTitle) setLastJobTitle(jobTitle);
     setTimeout(() => {
       const element = document.getElementById('contact');
       if (element) element.scrollIntoView({ behavior: 'smooth' });
     }, 50);
   };
 
-  const handleNavigateToJobs = (jobIdx) => {
+  const handleNavigateToJobs = (jobIdx, jobTitle) => {
     setHighlightJobIdx(jobIdx);
+    if (jobTitle) setLastJobTitle(jobTitle);
     setPage('jobs');
     window.scrollTo({ top: 0 });
   };
@@ -310,7 +317,7 @@ function App() {
       {page === 'jobs' && (
         <JobsPage
           onBack={handleBackToHome}
-          onApply={(msg) => handleScrollToContact('kandydat')}
+          onApply={(msg) => handleScrollToContact('kandydat', msg)}
           highlightIdx={highlightJobIdx}
         />
       )}
@@ -564,7 +571,7 @@ function App() {
       )}
 
       {/* ── Floating WhatsApp / Telegram buttons (always visible) ── */}
-      <FloatingContactButtons t={t} />
+      <FloatingContactButtons t={t} jobTitle={lastJobTitle} />
 
       {/* ── Cookie consent banner ── */}
       <CookieConsent />
