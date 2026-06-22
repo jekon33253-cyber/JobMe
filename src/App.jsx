@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Hero from './components/Hero';
 import FadeIn from './components/FadeIn';
 import HowItWorks from './components/HowItWorks';
@@ -77,6 +77,7 @@ function MainSite() {
   const [lastJobTitle, setLastJobTitle] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentLanguage === 'ua') {
@@ -199,6 +200,15 @@ function MainSite() {
               <LangButton lang="en" />
             </div>
 
+            {/* Candidate Portal button (desktop) */}
+            <button
+              onClick={() => navigate('/portal/login')}
+              className="hidden md:flex items-center gap-2 border border-zinc-200 hover:border-zinc-300 text-on-surface font-button text-button px-5 py-3 rounded-xl hover:bg-zinc-50 transition-all duration-300 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-lg">account_circle</span>
+              {t('nav.portal')}
+            </button>
+
             {/* CTA button (desktop) */}
             <button
               onClick={() => {
@@ -290,6 +300,18 @@ function MainSite() {
                 ${page === 'blog' ? 'text-primary bg-primary/10' : 'text-on-surface-variant hover:text-primary hover:bg-primary/5'}`}
             >
               {t('nav.blog')}
+            </button>
+
+            {/* Mobile Candidate Portal */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate('/portal/login');
+              }}
+              className="w-full flex items-center justify-center gap-2 border border-zinc-200 text-on-surface font-button text-button px-6 py-3 rounded-xl hover:bg-zinc-50 transition-all duration-300 cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-lg">account_circle</span>
+              {t('nav.portal')}
             </button>
 
             {/* Mobile CTA */}

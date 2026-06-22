@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import { useLanguage } from '../../context/LanguageContext';
 import AdminLayout from './AdminLayout';
 
 export default function AdminCandidates() {
+  const { t } = useLanguage();
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -80,7 +82,7 @@ export default function AdminCandidates() {
                 ))}
                 {(c.preferred_sectors || []).map(s => (
                   <span key={s} className="px-2 py-0.5 rounded-md bg-[#8CC63F]/10 text-[#8CC63F] text-xs font-bold border border-[#8CC63F]/20">
-                    {s}
+                    {t(`portalSectors.${s}`) || s}
                   </span>
                 ))}
               </div>

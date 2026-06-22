@@ -194,7 +194,7 @@ export default function ProfilePage() {
                     : 'bg-[#1a1a1a] border-zinc-800 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700'
                 }`}
               >
-                {t(`sectors.${s}`)}
+                {t(`portalSectors.${s}`)}
               </button>
             ))}
           </div>

@@ -8,7 +8,8 @@ export const translations = {
       contact: "Kontakt",
       jobs: "Oferty Pracy",
       blog: "Centrum Wiedzy",
-      cta: "Zacznij teraz"
+      cta: "Zacznij teraz",
+      portal: "Strefa Kandydata"
     },
     hero: {
       tag: "Nowoczesny Ekosystem HR",
@@ -490,7 +491,7 @@ export const translations = {
         justNow: 'Teraz',
       },
     },
-    sectors: {
+    portalSectors: {
       logistics: 'Logistyka',
       production: 'Produkcja',
       hospitality: 'Hotelarstwo',
@@ -511,7 +512,8 @@ export const translations = {
       contact: "Контакти",
       jobs: "Вакансії",
       blog: "Центр Знань",
-      cta: "Почати зараз"
+      cta: "Почати зараз",
+      portal: "Кабінет Кандидата"
     },
     hero: {
       tag: "Сучасна HR-Екосистема",
@@ -993,7 +995,7 @@ export const translations = {
         justNow: 'Зараз',
       },
     },
-    sectors: {
+    portalSectors: {
       logistics: 'Логістика',
       production: 'Виробництво',
       hospitality: 'Готельний бізнес',
@@ -1014,7 +1016,8 @@ export const translations = {
       contact: "Contact",
       jobs: "Job Offers",
       blog: "Knowledge Center",
-      cta: "Start Now"
+      cta: "Start Now",
+      portal: "Candidate Area"
     },
     hero: {
       tag: "Modern HR Ecosystem",
@@ -1496,7 +1499,7 @@ export const translations = {
         justNow: 'Just now',
       },
     },
-    sectors: {
+    portalSectors: {
       logistics: 'Logistics',
       production: 'Production',
       hospitality: 'Hospitality',
