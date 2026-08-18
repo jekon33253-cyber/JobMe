@@ -104,14 +104,27 @@ export default function RecruiterNewCandidate() {
     if (!agreed) return;
     setSubmitting(true);
     try {
+      // Format payload: convert empty string date fields to null for Postgres DATE type
+      const payload = {
+        ...form,
+        arrival_date: form.arrival_date ? form.arrival_date : null,
+        candidate_dob: form.candidate_dob ? form.candidate_dob : null,
+        recruiter_id: user.id,
+      };
+
       // 1. Insert candidate record
       const { data: candData, error: candError } = await supabase
         .from('recruiter_candidates')
-        .insert({ ...form, recruiter_id: user.id })
+        .insert(payload)
         .select()
         .single();
 
-      if (candError) throw candError;
+      if (candError) {
+        console.error('Candidate insert error:', candError);
+        alert(`Błąd: ${candError.message || JSON.stringify(candError)}`);
+        setSubmitting(false);
+        return;
+      }
 
       // 2. Upload documents to Supabase storage
       for (const doc of uploadedDocs) {
@@ -122,7 +135,7 @@ export default function RecruiterNewCandidate() {
           await supabase.from('recruiter_documents').insert({
             recruiter_candidate_id: candData.id,
             recruiter_id: user.id,
-            doc_type: 'other',
+            doc_type: doc.docType || 'other',
             file_name: doc.name,
             file_path: path,
             file_size: doc.size,
@@ -133,7 +146,8 @@ export default function RecruiterNewCandidate() {
       setDone(true);
     } catch (err) {
       console.error('Submit error:', err);
-      alert(isUA ? 'Помилка при відправці. Спробуйте ще раз.' : 'Błąd podczas wysyłania. Spróbuj ponownie.');
+      const msg = err.message || JSON.stringify(err);
+      alert(`Błąd: ${msg}`);
     }
     setSubmitting(false);
   }
