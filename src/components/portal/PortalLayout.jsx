@@ -11,7 +11,7 @@ const navItems = [
   { key: 'notifications', icon: 'notifications', path: '/portal/notifications' },
 ];
 
-function SidebarLink({ item, isActive, onClick, t, notifCount }) {
+function SidebarLink({ item, isActive, onClick, t, notifCount, labelOverride }) {
   return (
     <button
       onClick={onClick}
@@ -22,7 +22,7 @@ function SidebarLink({ item, isActive, onClick, t, notifCount }) {
       }`}
     >
       <span className="material-symbols-outlined text-xl">{item.icon}</span>
-      <span className="flex-1 text-left">{t(`portal.nav.${item.key}`)}</span>
+      <span className="flex-1 text-left">{labelOverride || t(`portal.nav.${item.key}`)}</span>
       {item.key === 'notifications' && notifCount > 0 && (
         <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center">
           {notifCount > 9 ? '9+' : notifCount}
@@ -107,11 +107,13 @@ export default function PortalLayout({ children, activePage }) {
           {isAdmin && (
             <>
               <div className="h-px bg-zinc-800 my-3 mx-4" />
-              <p className="px-4 pt-2 pb-1 text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-                Admin
+              <p className="px-4 pt-2 pb-1 text-red-400 text-[10px] font-bold uppercase tracking-widest flex items-center gap-1">
+                <span className="material-symbols-outlined text-xs">admin_panel_settings</span>
+                Panel Admina
               </p>
               <SidebarLink
                 item={{ key: 'adminDashboard', icon: 'admin_panel_settings', path: '/admin' }}
+                labelOverride="Dashboard Admina"
                 isActive={activePage === 'adminDashboard'}
                 onClick={() => navigate('/admin')}
                 t={t}
@@ -119,6 +121,7 @@ export default function PortalLayout({ children, activePage }) {
               />
               <SidebarLink
                 item={{ key: 'adminCandidates', icon: 'group', path: '/admin/candidates' }}
+                labelOverride="Kandydaci"
                 isActive={activePage === 'adminCandidates'}
                 onClick={() => navigate('/admin/candidates')}
                 t={t}
@@ -126,6 +129,7 @@ export default function PortalLayout({ children, activePage }) {
               />
               <SidebarLink
                 item={{ key: 'adminDocs', icon: 'fact_check', path: '/admin/documents' }}
+                labelOverride="Dokumenty"
                 isActive={activePage === 'adminDocs'}
                 onClick={() => navigate('/admin/documents')}
                 t={t}
@@ -178,6 +182,26 @@ export default function PortalLayout({ children, activePage }) {
 
         {/* Page content */}
         <main className="flex-1 p-4 md:p-8 lg:p-10 max-w-7xl w-full mx-auto">
+          {isAdmin && (
+            <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-red-900/40 via-red-800/20 to-zinc-900 border border-red-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-xl">shield_person</span>
+                </div>
+                <div>
+                  <p className="text-white text-sm font-bold">Jesteś zalogowany jako Administrator</p>
+                  <p className="text-zinc-400 text-xs">Masz pełne uprawnienia zarządcze w serwisie</p>
+                </div>
+              </div>
+              <button
+                onClick={() => navigate('/admin')}
+                className="px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer shrink-0"
+              >
+                <span>Otwórz Admin Panel</span>
+                <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+          )}
           {children}
         </main>
 

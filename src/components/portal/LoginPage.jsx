@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 export default function LoginPage() {
-  const { signIn, signUp, resetPassword } = useAuth();
+  const { signIn, signUp, resetPassword, fetchProfile } = useAuth();
   const { t } = useLanguage();
   const [mode, setMode] = useState('login'); // 'login' | 'register' | 'forgot'
   const [email, setEmail] = useState('');
@@ -41,22 +41,34 @@ export default function LoginPage() {
           setSuccess(t('auth.checkEmail'));
         }
       } else if (mode === 'login') {
-        const { error: signInError } = await signIn(email, password);
+        const { data: signInData, error: signInError } = await signIn(email, password);
         if (signInError) {
           setError(t('auth.invalidCredentials'));
         } else {
+          const user = signInData?.user;
+          if (user) {
+            const userProfile = await fetchProfile(user.id);
+            if (userProfile?.role === 'admin') {
+              window.location.href = '/admin';
+              return;
+            }
+          }
           window.location.href = '/portal/dashboard';
         }
       } else if (mode === 'forgot') {
         const { error: resetError } = await resetPassword(email);
         if (resetError) {
-          setError(resetError.message);
+          console.error('Reset password error:', resetError);
+          const msg = resetError.message || resetError.error_description || (typeof resetError === 'string' ? resetError : 'Nie udało się wysłać linku resetującego.');
+          setError(typeof msg === 'string' ? msg : JSON.stringify(msg));
         } else {
           setSuccess(t('auth.resetSent'));
         }
       }
     } catch (err) {
-      setError(err.message);
+      console.error('Auth error:', err);
+      const msg = err.message || 'Wystąpił nieoczekiwany błąd.';
+      setError(typeof msg === 'string' ? msg : JSON.stringify(msg));
     }
     setLoading(false);
   }
