@@ -343,46 +343,118 @@ export default function RecruiterNewCandidate() {
 
           {/* Step 2: Documents */}
           {step === 2 && (
-            <div>
-              <h2 className="text-lg font-bold text-white mb-2">{L.docsTitle}</h2>
-              <p className="text-zinc-500 text-sm mb-6">{L.docsHint}</p>
-
-              {/* Drop zone */}
-              <div
-                onDrop={handleDrop}
-                onDragOver={e => e.preventDefault()}
-                className="border-2 border-dashed border-zinc-700 rounded-2xl p-8 text-center hover:border-[#00B4B4]/50 transition-colors cursor-pointer"
-                onClick={() => fileRef.current?.click()}
-              >
-                <span className="material-symbols-outlined text-4xl text-zinc-600 mb-2 block">upload_file</span>
-                <p className="text-white font-bold text-sm mb-1">{L.upload}</p>
-                <p className="text-zinc-500 text-xs">{L.dragHint}</p>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  multiple
-                  className="hidden"
-                  onChange={e => handleFileUpload(Array.from(e.target.files))}
-                  accept=".pdf,.jpg,.jpeg,.png"
-                />
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-lg font-bold text-white mb-1">{L.docsTitle}</h2>
+                <p className="text-zinc-500 text-xs mb-4">{isUA ? 'Завантажте документи кандидата у відповідні розділи' : 'Prześlij dokumenty kandydata w odpowiednich sekcjach'}</p>
               </div>
 
-              {uploadedDocs.length > 0 && (
-                <div className="mt-4 space-y-2">
-                  {uploadedDocs.map((doc, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 bg-[#1a1a1a] rounded-xl border border-zinc-800/40">
-                      <span className="material-symbols-outlined text-[#00B4B4] text-lg">description</span>
-                      <span className="text-white text-sm flex-1 truncate">{doc.name}</span>
-                      <span className="text-zinc-500 text-xs">{(doc.size / 1024).toFixed(0)} KB</span>
-                      <button onClick={() => setUploadedDocs(prev => prev.filter((_, j) => j !== i))} className="text-zinc-600 hover:text-red-400 transition">
-                        <span className="material-symbols-outlined text-sm">close</span>
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div className="space-y-4">
+                {[
+                  {
+                    key: 'pesel',
+                    icon: 'badge',
+                    color: 'text-blue-400',
+                    bgColor: 'bg-blue-500/10',
+                    borderColor: 'border-blue-500/30',
+                    titlePL: 'PESEL',
+                    titleUA: 'ПЕСЕЛЬ',
+                    descPL: 'Zaświadczenie o nadaniu numeru PESEL',
+                    descUA: 'Довідка про надання номера ПЕСЕЛЬ',
+                  },
+                  {
+                    key: 'passport',
+                    icon: 'menu_book',
+                    color: 'text-amber-400',
+                    bgColor: 'bg-amber-500/10',
+                    borderColor: 'border-amber-500/30',
+                    titlePL: 'Paszport',
+                    titleUA: 'Паспорт',
+                    descPL: 'Pierwsza strona oraz wszystkie strony z pieczątkami i wpisami',
+                    descUA: 'Перша сторінка, і всі сторінки з печатками та відмітками',
+                  },
+                  {
+                    key: 'karta_pobytu',
+                    icon: 'credit_card',
+                    color: 'text-emerald-400',
+                    bgColor: 'bg-emerald-500/10',
+                    borderColor: 'border-emerald-500/30',
+                    titlePL: 'Karta Pobytu',
+                    titleUA: 'Карта Побиту',
+                    descPL: 'Decyzja wojewody oraz oba boki Karty Pobytu (jeśli posiada)',
+                    descUA: 'Децизія та карта побиту з двох сторін (якщо є)',
+                  },
+                  {
+                    key: 'other',
+                    icon: 'folder',
+                    color: 'text-purple-400',
+                    bgColor: 'bg-purple-500/10',
+                    borderColor: 'border-purple-500/30',
+                    titlePL: 'Inne dokumenty',
+                    titleUA: 'Інші документи',
+                    descPL: 'Wszystkie pozostałe dokumenty (wiza, oświadczenie, kursy itp.)',
+                    descUA: 'Всі інші наявні документи (віза, освядчення, сертифікати тощо)',
+                  },
+                ].map(cat => {
+                  const catFiles = uploadedDocs.filter(d => d.docType === cat.key);
+                  return (
+                    <div key={cat.key} className={`p-4 bg-[#1a1a1a] rounded-2xl border ${cat.borderColor}`}>
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                        <div className="flex items-start gap-3">
+                          <div className={`w-9 h-9 rounded-xl ${cat.bgColor} flex items-center justify-center shrink-0`}>
+                            <span className={`material-symbols-outlined ${cat.color} text-lg`}>{cat.icon}</span>
+                          </div>
+                          <div>
+                            <p className="text-white text-sm font-bold">{isUA ? cat.titleUA : cat.titlePL}</p>
+                            <p className="text-zinc-500 text-xs mt-0.5">{isUA ? cat.descUA : cat.descPL}</p>
+                          </div>
+                        </div>
 
-              <p className="text-zinc-600 text-xs text-center mt-4">{L.noDocsHint}</p>
+                        <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold transition cursor-pointer self-start sm:self-center shrink-0">
+                          <span className="material-symbols-outlined text-sm">upload</span>
+                          <span>{isUA ? 'Додати файли' : 'Dodaj pliki'}</span>
+                          <input
+                            type="file"
+                            multiple
+                            className="hidden"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            onChange={e => {
+                              const files = Array.from(e.target.files);
+                              const newDocs = files.map(file => ({ name: file.name, file, size: file.size, docType: cat.key }));
+                              setUploadedDocs(prev => [...prev, ...newDocs]);
+                              e.target.value = '';
+                            }}
+                          />
+                        </label>
+                      </div>
+
+                      {/* List files for this category */}
+                      {catFiles.length > 0 ? (
+                        <div className="space-y-2 mt-3 pt-3 border-t border-zinc-800/60">
+                          {catFiles.map((doc, idx) => (
+                            <div key={idx} className="flex items-center gap-2 px-3 py-2 bg-[#111] rounded-xl border border-zinc-800/40">
+                              <span className={`material-symbols-outlined ${cat.color} text-base`}>description</span>
+                              <span className="text-white text-xs font-medium flex-1 truncate">{doc.name}</span>
+                              <span className="text-zinc-500 text-[10px]">{(doc.size / 1024).toFixed(0)} KB</span>
+                              <button
+                                type="button"
+                                onClick={() => setUploadedDocs(prev => prev.filter(d => d !== doc))}
+                                className="text-zinc-600 hover:text-red-400 transition p-1"
+                              >
+                                <span className="material-symbols-outlined text-sm">close</span>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-zinc-600 text-[11px] italic mt-1">{isUA ? 'Файли не завантажено' : 'Brak wgranych plików'}</p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <p className="text-zinc-600 text-xs text-center pt-2">{L.noDocsHint}</p>
             </div>
           )}
 
@@ -411,12 +483,27 @@ export default function RecruiterNewCandidate() {
                 </SummaryBlock>
 
                 <SummaryBlock icon="folder" label={L.confirmDocs} color="text-amber-400">
-                  {uploadedDocs.length === 0
-                    ? <p className="text-zinc-500 text-sm">{isUA ? 'Без документів' : 'Bez dokumentów'}</p>
-                    : uploadedDocs.map((d, i) => (
-                      <p key={i} className="text-zinc-300 text-sm">📎 {d.name}</p>
-                    ))
-                  }
+                  {uploadedDocs.length === 0 ? (
+                    <p className="text-zinc-500 text-sm">{isUA ? 'Без документів' : 'Bez dokumentów'}</p>
+                  ) : (
+                    <div className="space-y-1">
+                      {[
+                        { key: 'pesel', labelPL: 'PESEL', labelUA: 'ПЕСЕЛЬ' },
+                        { key: 'passport', labelPL: 'Paszport', labelUA: 'Паспорт' },
+                        { key: 'karta_pobytu', labelPL: 'Karta Pobytu', labelUA: 'Карта Побиту' },
+                        { key: 'other', labelPL: 'Inne', labelUA: 'Інші' },
+                      ].map(cat => {
+                        const catFiles = uploadedDocs.filter(d => d.docType === cat.key);
+                        if (catFiles.length === 0) return null;
+                        return (
+                          <div key={cat.key} className="text-xs">
+                            <span className="text-[#00B4B4] font-bold">{isUA ? cat.labelUA : cat.labelPL}: </span>
+                            <span className="text-zinc-300">{catFiles.map(f => f.name).join(', ')}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </SummaryBlock>
               </div>
 
