@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
 const AuthContext = createContext(null);
@@ -29,13 +30,24 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // Check active session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      if (currentUser) fetchProfile(currentUser.id);
-      setLoading(false);
-    });
+    let isMounted = true;
+
+    async function initAuth() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const currentUser = session?.user ?? null;
+        if (isMounted) setUser(currentUser);
+        if (currentUser) {
+          await fetchProfile(currentUser.id);
+        }
+      } catch (err) {
+        console.error('Auth init error:', err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+
+    initAuth();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -51,7 +63,10 @@ export function AuthProvider({ children }) {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   async function signUp(email, password, fullName) {
@@ -134,13 +149,11 @@ export function ProtectedRoute({ children, adminOnly = false }) {
   }
 
   if (!user) {
-    window.location.href = '/portal/login';
-    return null;
+    return <Navigate to="/portal/login" replace />;
   }
 
   if (adminOnly && !isAdmin) {
-    window.location.href = '/portal/dashboard';
-    return null;
+    return <Navigate to="/portal/dashboard" replace />;
   }
 
   return children;
