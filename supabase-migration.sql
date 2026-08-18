@@ -3,6 +3,17 @@
 -- Run this in Supabase Dashboard > SQL Editor
 -- =================================================
 
+-- Helper function to check if current user is admin without RLS infinite recursion
+CREATE OR REPLACE FUNCTION public.is_admin(user_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = user_id AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- 1. Profiles table
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -28,9 +39,7 @@ CREATE POLICY "Users manage own profile" ON profiles
   FOR ALL USING (auth.uid() = id);
 
 CREATE POLICY "Admins read all profiles" ON profiles
-  FOR SELECT USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR SELECT USING (public.is_admin(auth.uid()));
 
 -- Auto-create profile on registration
 CREATE OR REPLACE FUNCTION handle_new_user()
@@ -68,9 +77,7 @@ CREATE POLICY "Users manage own docs" ON documents
   FOR ALL USING (auth.uid() = user_id);
 
 CREATE POLICY "Admins manage all docs" ON documents
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR ALL USING (public.is_admin(auth.uid()));
 
 
 -- 3. Legalization steps
@@ -91,9 +98,7 @@ CREATE POLICY "Users see own steps" ON legalization_steps
   FOR SELECT USING (auth.uid() = user_id);
 
 CREATE POLICY "Admins manage all steps" ON legalization_steps
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR ALL USING (public.is_admin(auth.uid()));
 
 
 -- 4. Applications
@@ -115,9 +120,7 @@ CREATE POLICY "Users manage own applications" ON applications
   FOR ALL USING (auth.uid() = user_id);
 
 CREATE POLICY "Admins manage all applications" ON applications
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR ALL USING (public.is_admin(auth.uid()));
 
 
 -- 5. Notifications
@@ -138,9 +141,7 @@ CREATE POLICY "Users manage own notifications" ON notifications
   FOR ALL USING (auth.uid() = user_id);
 
 CREATE POLICY "Admins manage all notifications" ON notifications
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR ALL USING (public.is_admin(auth.uid()));
 
 
 -- 6. Storage buckets (run separately in Storage settings)

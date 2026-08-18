@@ -21,6 +21,9 @@ export function AuthProvider({ children }) {
       .select('*')
       .eq('id', userId)
       .single();
+    if (error) {
+      console.error('Error fetching profile:', error);
+    }
     if (!error && data) setProfile(data);
     return data;
   }
@@ -78,7 +81,7 @@ export function AuthProvider({ children }) {
 
   async function resetPassword(email) {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/portal/reset-password`,
+      redirectTo: `${window.location.origin}/portal/login`,
     });
     return { data, error };
   }
