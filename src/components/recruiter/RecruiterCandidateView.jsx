@@ -185,11 +185,14 @@ export default function RecruiterCandidateView() {
           <h2 className="text-lg font-bold text-white mb-4">{L.info}</h2>
           <div className="space-y-3">
             <InfoRow icon="work_outline" color="text-[#00B4B4]" label={L.vacancy} value={`${candidate.job_title}${candidate.job_location ? ` · ${candidate.job_location}` : ''}`} />
-            {candidate.candidate_phone && <InfoRow icon="phone" color="text-emerald-400" label={L.phone} value={candidate.candidate_phone} />}
+            {candidate.candidate_phone && <InfoRow icon="phone" color="text-emerald-400" label={L.phone} value={`${candidate.candidate_phone}${candidate.messenger ? ` (${candidate.messenger})` : ''}`} />}
+            {candidate.arrival_date && <InfoRow icon="event" color="text-[#00B4B4]" label={isUA ? 'Дата приїзду' : 'Planowana data przyjazdu'} value={new Date(candidate.arrival_date).toLocaleDateString('pl-PL')} />}
             {candidate.candidate_email && <InfoRow icon="mail" color="text-blue-400" label={L.email} value={candidate.candidate_email} />}
             {candidate.candidate_nationality && <InfoRow icon="public" color="text-purple-400" label={L.nationality} value={candidate.candidate_nationality} />}
             {candidate.candidate_city && <InfoRow icon="location_on" color="text-amber-400" label={L.city} value={candidate.candidate_city} />}
             {candidate.candidate_dob && <InfoRow icon="cake" color="text-pink-400" label={L.dob} value={new Date(candidate.candidate_dob).toLocaleDateString('pl-PL')} />}
+            <InfoRow icon="factory" color="text-indigo-400" label={isUA ? 'Працювали раніше на підприємстві' : 'Czy pracował/a wcześniej w zakładzie'} value={candidate.worked_before ? (isUA ? 'Так' : 'Tak') : (isUA ? 'Ні' : 'Nie')} />
+            {candidate.health_issues && <InfoRow icon="medical_services" color="text-red-400" label={isUA ? 'Проблеми зі здоров\'ям / обмеження' : 'Problemy zdrowotne / ograniczenia'} value={candidate.health_issues} />}
           </div>
 
           {candidate.candidate_notes && (

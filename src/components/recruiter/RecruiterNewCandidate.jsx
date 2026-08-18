@@ -29,6 +29,10 @@ export default function RecruiterNewCandidate() {
     candidate_nationality: '',
     candidate_city: '',
     candidate_notes: '',
+    arrival_date: '',
+    messenger: '',
+    worked_before: false,
+    health_issues: '',
   });
 
   function set(key, val) { setForm(f => ({ ...f, [key]: val })); }
@@ -54,11 +58,18 @@ export default function RecruiterNewCandidate() {
     // Personal step
     firstName: isUA ? 'Ім\'я' : 'Imię',
     lastName: isUA ? 'Прізвище' : 'Nazwisko',
-    phone: isUA ? 'Телефон кандидата' : 'Telefon kandydata',
+    phone: isUA ? 'Телефон (Viber, WhatsApp, Telegram)' : 'Telefon (Viber, WhatsApp, Telegram)',
     email: isUA ? 'Email кандидата' : 'Email kandydata',
+    messengers: isUA ? 'Активні месенджери на номері' : 'Komunikatory na numerze',
+    arrivalDate: isUA ? 'Дата приїзду' : 'Planowana data przyjazdu',
     dob: isUA ? 'Дата народження' : 'Data urodzenia',
     nationality: isUA ? 'Громадянство' : 'Narodowość',
     city: isUA ? 'Місто проживання' : 'Miasto zamieszkania',
+    workedBefore: isUA ? 'Працювали раніше на цьому підприємстві?' : 'Czy pracował/a wcześniej w tym zakładzie?',
+    workedYes: isUA ? 'Так, працював(ла)' : 'Tak, pracował/a',
+    workedNo: isUA ? 'Ні, вперше' : 'Nie, po raz pierwszy',
+    healthIssues: isUA ? 'Проблеми зі здоров\'ям / обмеження' : 'Problemy zdrowotne / ograniczenia',
+    healthPlaceholder: isUA ? 'Немає або вкажіть особливості...' : 'Brak lub opisz ewentualne ograniczenia...',
     notes: isUA ? 'Примітки (додаткова інфо)' : 'Uwagi (dodatkowe info)',
     // Documents step
     docsTitle: isUA ? 'Завантажте документи' : 'Prześlij dokumenty',
@@ -144,7 +155,7 @@ export default function RecruiterNewCandidate() {
               {L.viewAll}
             </button>
             <button
-              onClick={() => { setDone(false); setStep(0); setForm({ job_title: '', job_location: '', candidate_first_name: '', candidate_last_name: '', candidate_phone: '', candidate_email: '', candidate_dob: '', candidate_nationality: '', candidate_city: '', candidate_notes: '' }); setUploadedDocs([]); setAgreed(false); }}
+              onClick={() => { setDone(false); setStep(0); setForm({ job_title: '', job_location: '', candidate_first_name: '', candidate_last_name: '', candidate_phone: '', candidate_email: '', candidate_dob: '', candidate_nationality: '', candidate_city: '', candidate_notes: '', arrival_date: '', messenger: '', worked_before: false, health_issues: '' }); setUploadedDocs([]); setAgreed(false); }}
               className="px-6 py-3 rounded-xl border border-zinc-700 text-zinc-300 font-bold text-sm hover:border-zinc-500 transition"
             >
               {L.addAnother}
@@ -227,29 +238,103 @@ export default function RecruiterNewCandidate() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label={L.phone}>
-                  <Input value={form.candidate_phone} onChange={v => set('candidate_phone', v)} placeholder="+380..." type="tel" />
+                  <Input value={form.candidate_phone} onChange={v => set('candidate_phone', v)} placeholder="+380... (Viber, WhatsApp, Telegram)" type="tel" />
                 </Field>
                 <Field label={L.email}>
                   <Input value={form.candidate_email} onChange={v => set('candidate_email', v)} placeholder="ivan@email.com" type="email" />
                 </Field>
               </div>
+
+              {/* Messengers tags */}
+              <div>
+                <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
+                  {L.messengers}
+                </label>
+                <div className="flex gap-2 flex-wrap">
+                  {['Viber', 'WhatsApp', 'Telegram'].map(m => {
+                    const active = (form.messenger || '').includes(m);
+                    return (
+                      <button
+                        key={m}
+                        type="button"
+                        onClick={() => {
+                          const currentArr = form.messenger ? form.messenger.split(', ').filter(Boolean) : [];
+                          const newArr = active ? currentArr.filter(x => x !== m) : [...currentArr, m];
+                          set('messenger', newArr.join(', '));
+                        }}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                          active
+                            ? 'bg-[#00B4B4] text-white border-[#00B4B4]'
+                            : 'bg-[#1a1a1a] text-zinc-400 border-zinc-800 hover:border-zinc-600'
+                        }`}
+                      >
+                        {m} {active && '✓'}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Field label={L.arrivalDate}>
+                  <Input value={form.arrival_date} onChange={v => set('arrival_date', v)} type="date" />
+                </Field>
                 <Field label={L.dob}>
                   <Input value={form.candidate_dob} onChange={v => set('candidate_dob', v)} type="date" />
                 </Field>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <Field label={L.nationality}>
                   <Input value={form.candidate_nationality} onChange={v => set('candidate_nationality', v)} placeholder="Ukraina" />
                 </Field>
+                <Field label={L.city}>
+                  <Input value={form.candidate_city} onChange={v => set('candidate_city', v)} placeholder="Wrocław" />
+                </Field>
               </div>
-              <Field label={L.city}>
-                <Input value={form.candidate_city} onChange={v => set('candidate_city', v)} placeholder="Wrocław" />
+
+              {/* Worked before */}
+              <div>
+                <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
+                  {L.workedBefore}
+                </label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => set('worked_before', false)}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${
+                      !form.worked_before
+                        ? 'bg-[#1a1a1a] text-white border-[#00B4B4]'
+                        : 'bg-[#1a1a1a]/50 text-zinc-500 border-zinc-800'
+                    }`}
+                  >
+                    {L.workedNo}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => set('worked_before', true)}
+                    className={`flex-1 py-2.5 rounded-xl text-xs font-bold border transition-all ${
+                      form.worked_before
+                        ? 'bg-[#00B4B4]/20 text-[#00B4B4] border-[#00B4B4]'
+                        : 'bg-[#1a1a1a]/50 text-zinc-500 border-zinc-800'
+                    }`}
+                  >
+                    {L.workedYes}
+                  </button>
+                </div>
+              </div>
+
+              {/* Health issues */}
+              <Field label={L.healthIssues}>
+                <Input value={form.health_issues} onChange={v => set('health_issues', v)} placeholder={L.healthPlaceholder} />
               </Field>
+
               <Field label={L.notes}>
                 <textarea
                   value={form.candidate_notes}
                   onChange={e => set('candidate_notes', e.target.value)}
                   placeholder={isUA ? 'Додаткові відомості...' : 'Dodatkowe informacje...'}
-                  rows={3}
+                  rows={2}
                   className="w-full px-3 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-[#00B4B4]/50 transition-all resize-none"
                 />
               </Field>
@@ -314,11 +399,14 @@ export default function RecruiterNewCandidate() {
 
                 <SummaryBlock icon="person" label={L.confirmCandidate} color="text-[#8CC63F]">
                   <p className="text-white font-bold">{form.candidate_first_name} {form.candidate_last_name}</p>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mt-1">
-                    {form.candidate_phone && <p className="text-zinc-400 text-xs">📞 {form.candidate_phone}</p>}
-                    {form.candidate_email && <p className="text-zinc-400 text-xs">✉ {form.candidate_email}</p>}
-                    {form.candidate_nationality && <p className="text-zinc-400 text-xs">🌍 {form.candidate_nationality}</p>}
-                    {form.candidate_city && <p className="text-zinc-400 text-xs">📍 {form.candidate_city}</p>}
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2 text-xs text-zinc-400">
+                    {form.candidate_phone && <p>📞 {form.candidate_phone} {form.messenger ? `(${form.messenger})` : ''}</p>}
+                    {form.candidate_email && <p>✉ {form.candidate_email}</p>}
+                    {form.arrival_date && <p className="text-[#00B4B4] font-bold">🗓 {L.arrivalDate}: {new Date(form.arrival_date).toLocaleDateString('pl-PL')}</p>}
+                    {form.candidate_nationality && <p>🌍 {form.candidate_nationality}</p>}
+                    {form.candidate_city && <p>📍 {form.candidate_city}</p>}
+                    <p>🏭 {L.workedBefore}: <span className={form.worked_before ? 'text-emerald-400 font-bold' : ''}>{form.worked_before ? L.workedYes : L.workedNo}</span></p>
+                    {form.health_issues && <p className="col-span-2 text-amber-400">🏥 {L.healthIssues}: {form.health_issues}</p>}
                   </div>
                 </SummaryBlock>
 

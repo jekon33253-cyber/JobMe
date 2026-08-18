@@ -194,6 +194,11 @@ CREATE TABLE IF NOT EXISTS recruiter_candidates (
   candidate_nationality TEXT,
   candidate_city TEXT,
   candidate_notes TEXT,
+  -- Additional recruitment fields
+  arrival_date DATE,
+  messenger TEXT, -- 'Viber', 'WhatsApp', 'Telegram', etc.
+  worked_before BOOLEAN DEFAULT FALSE,
+  health_issues TEXT,
   -- Status
   status TEXT DEFAULT 'submitted',
   -- 'submitted' | 'reviewing' | 'approved' | 'hired' | 'rejected'
