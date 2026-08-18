@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function LoginPage() {
   const { signIn, signUp, resetPassword, fetchProfile } = useAuth();
@@ -35,10 +36,18 @@ export default function LoginPage() {
           setLoading(false);
           return;
         }
-        const { error: signUpError } = await signUp(email, password, fullName, selectedRole);
+        const { data: signUpData, error: signUpError } = await signUp(email, password, fullName, selectedRole);
         if (signUpError) {
           setError(signUpError.message);
         } else {
+          // If session is immediately created (email confirmation disabled), ensure role is updated in profiles table
+          if (signUpData?.user) {
+            await supabase.from('profiles').update({ role: selectedRole }).eq('id', signUpData.user.id);
+            if (selectedRole === 'recruiter') {
+              window.location.href = '/recruiter/dashboard';
+              return;
+            }
+          }
           setSuccess(t('auth.checkEmail'));
         }
       } else if (mode === 'login') {
