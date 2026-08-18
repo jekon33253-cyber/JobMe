@@ -7,6 +7,7 @@ export default function LoginPage() {
   const { signIn, signUp, resetPassword, fetchProfile } = useAuth();
   const { t } = useLanguage();
   const [mode, setMode] = useState('login'); // 'login' | 'register' | 'forgot'
+  const [selectedRole, setSelectedRole] = useState('candidate'); // 'candidate' | 'recruiter'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -34,7 +35,7 @@ export default function LoginPage() {
           setLoading(false);
           return;
         }
-        const { error: signUpError } = await signUp(email, password, fullName);
+        const { error: signUpError } = await signUp(email, password, fullName, selectedRole);
         if (signUpError) {
           setError(signUpError.message);
         } else {
@@ -50,6 +51,10 @@ export default function LoginPage() {
             const userProfile = await fetchProfile(user.id);
             if (userProfile?.role === 'admin') {
               window.location.href = '/admin';
+              return;
+            }
+            if (userProfile?.role === 'recruiter') {
+              window.location.href = '/recruiter/dashboard';
               return;
             }
           }
@@ -131,6 +136,62 @@ export default function LoginPage() {
             {mode === 'register' && t('auth.registerSubtitle')}
             {mode === 'forgot' && t('auth.resetSubtitle')}
           </p>
+
+          {/* Role selection (only for register) */}
+          {mode === 'register' && (
+            <div className="mb-6">
+              <p className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-3">
+                {t('auth.selectRole')}
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('candidate')}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
+                    selectedRole === 'candidate'
+                      ? 'border-[#8CC63F] bg-[#8CC63F]/10'
+                      : 'border-zinc-800 bg-[#1a1a1a] hover:border-zinc-600'
+                  }`}
+                >
+                  <span className={`material-symbols-outlined text-3xl ${selectedRole === 'candidate' ? 'text-[#8CC63F]' : 'text-zinc-500'}`}>
+                    person_search
+                  </span>
+                  <div className="text-center">
+                    <p className={`text-sm font-bold ${selectedRole === 'candidate' ? 'text-white' : 'text-zinc-400'}`}>
+                      {t('auth.roleCandidate')}
+                    </p>
+                    <p className="text-xs text-zinc-600 mt-0.5">{t('auth.roleCandidateDesc')}</p>
+                  </div>
+                  {selectedRole === 'candidate' && (
+                    <span className="material-symbols-outlined text-[#8CC63F] text-lg">check_circle</span>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('recruiter')}
+                  className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all duration-200 cursor-pointer ${
+                    selectedRole === 'recruiter'
+                      ? 'border-[#00B4B4] bg-[#00B4B4]/10'
+                      : 'border-zinc-800 bg-[#1a1a1a] hover:border-zinc-600'
+                  }`}
+                >
+                  <span className={`material-symbols-outlined text-3xl ${selectedRole === 'recruiter' ? 'text-[#00B4B4]' : 'text-zinc-500'}`}>
+                    handshake
+                  </span>
+                  <div className="text-center">
+                    <p className={`text-sm font-bold ${selectedRole === 'recruiter' ? 'text-white' : 'text-zinc-400'}`}>
+                      {t('auth.roleRecruiter')}
+                    </p>
+                    <p className="text-xs text-zinc-600 mt-0.5">{t('auth.roleRecruiterDesc')}</p>
+                  </div>
+                  {selectedRole === 'recruiter' && (
+                    <span className="material-symbols-outlined text-[#00B4B4] text-lg">check_circle</span>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Alerts */}
           {error && (
@@ -248,10 +309,13 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#8CC63F] to-[#6BA32E] text-white font-bold text-sm
-                         shadow-lg shadow-[#8CC63F]/25 hover:shadow-xl hover:shadow-[#8CC63F]/30
-                         hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200
-                         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              className={`w-full py-3.5 rounded-xl text-white font-bold text-sm
+                         shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200
+                         disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0
+                         ${selectedRole === 'recruiter' && mode === 'register'
+                           ? 'bg-gradient-to-r from-[#00B4B4] to-[#007A7A] shadow-[#00B4B4]/25 hover:shadow-[#00B4B4]/30'
+                           : 'bg-gradient-to-r from-[#8CC63F] to-[#6BA32E] shadow-[#8CC63F]/25 hover:shadow-[#8CC63F]/30'
+                         }`}
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">

@@ -45,8 +45,12 @@ CREATE POLICY "Admins read all profiles" ON profiles
 CREATE OR REPLACE FUNCTION handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, full_name)
-  VALUES (NEW.id, NEW.raw_user_meta_data->>'full_name');
+  INSERT INTO public.profiles (id, full_name, role)
+  VALUES (
+    NEW.id,
+    NEW.raw_user_meta_data->>'full_name',
+    COALESCE(NEW.raw_user_meta_data->>'role', 'candidate')
+  );
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -147,6 +151,7 @@ CREATE POLICY "Admins manage all notifications" ON notifications
 -- 6. Storage buckets (run separately in Storage settings)
 -- Create bucket: 'documents' (private)
 -- Create bucket: 'avatars' (public)
+-- Create bucket: 'recruiter-docs' (private)
 
 -- Storage policies for 'documents' bucket:
 -- INSERT: auth.uid()::text = (storage.foldername(name))[1]
@@ -156,3 +161,97 @@ CREATE POLICY "Admins manage all notifications" ON notifications
 -- Storage policies for 'avatars' bucket:
 -- INSERT: auth.uid()::text = split_part(name, '.', 1) OR split_part(name, '/', 1) = 'avatars'
 -- SELECT: true (public)
+
+
+-- =================================================
+-- RECRUITER PORTAL TABLES
+-- =================================================
+
+-- Helper: check if recruiter
+CREATE OR REPLACE FUNCTION public.is_recruiter(user_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = user_id AND role = 'recruiter'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 7. Recruiter candidates (submitted by recruiter)
+CREATE TABLE IF NOT EXISTS recruiter_candidates (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  recruiter_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  -- Job info (from site)
+  job_title TEXT NOT NULL,
+  job_location TEXT,
+  -- Candidate personal data
+  candidate_first_name TEXT NOT NULL,
+  candidate_last_name TEXT NOT NULL,
+  candidate_phone TEXT,
+  candidate_email TEXT,
+  candidate_dob DATE,
+  candidate_nationality TEXT,
+  candidate_city TEXT,
+  candidate_notes TEXT,
+  -- Status
+  status TEXT DEFAULT 'submitted',
+  -- 'submitted' | 'reviewing' | 'approved' | 'hired' | 'rejected'
+  status_notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE recruiter_candidates ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Recruiter manages own candidates" ON recruiter_candidates
+  FOR ALL USING (auth.uid() = recruiter_id);
+
+CREATE POLICY "Admins manage all recruiter candidates" ON recruiter_candidates
+  FOR ALL USING (public.is_admin(auth.uid()));
+
+
+-- 8. Documents for recruiter's candidates
+CREATE TABLE IF NOT EXISTS recruiter_documents (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  recruiter_candidate_id UUID REFERENCES recruiter_candidates(id) ON DELETE CASCADE,
+  recruiter_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  doc_type TEXT NOT NULL,
+  file_name TEXT NOT NULL,
+  file_path TEXT NOT NULL,
+  file_size INT,
+  status TEXT DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
+  reviewer_notes TEXT,
+  uploaded_at TIMESTAMPTZ DEFAULT NOW(),
+  reviewed_at TIMESTAMPTZ
+);
+
+ALTER TABLE recruiter_documents ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Recruiter manages own docs" ON recruiter_documents
+  FOR ALL USING (auth.uid() = recruiter_id);
+
+CREATE POLICY "Admins manage all recruiter docs" ON recruiter_documents
+  FOR ALL USING (public.is_admin(auth.uid()));
+
+
+-- 9. Recruiter earnings (added manually by Admin when candidate is hired)
+CREATE TABLE IF NOT EXISTS recruiter_earnings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  recruiter_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  recruiter_candidate_id UUID REFERENCES recruiter_candidates(id) ON DELETE CASCADE,
+  amount NUMERIC(10, 2) NOT NULL,
+  currency TEXT DEFAULT 'PLN',
+  status TEXT DEFAULT 'pending', -- 'pending' | 'paid'
+  notes TEXT,
+  paid_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE recruiter_earnings ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Recruiter sees own earnings" ON recruiter_earnings
+  FOR SELECT USING (auth.uid() = recruiter_id);
+
+CREATE POLICY "Admins manage all earnings" ON recruiter_earnings
+  FOR ALL USING (public.is_admin(auth.uid()));

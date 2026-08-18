@@ -69,12 +69,12 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  async function signUp(email, password, fullName) {
+  async function signUp(email, password, fullName, role = 'candidate') {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: { full_name: fullName, role },
       },
     });
     return { data, error };
@@ -124,6 +124,7 @@ export function AuthProvider({ children }) {
     updateProfile,
     fetchProfile,
     isAdmin: profile?.role === 'admin',
+    isRecruiter: profile?.role === 'recruiter',
   };
 
   return (
@@ -134,8 +135,8 @@ export function AuthProvider({ children }) {
 }
 
 // Protected route wrapper
-export function ProtectedRoute({ children, adminOnly = false }) {
-  const { user, loading, isAdmin } = useAuth();
+export function ProtectedRoute({ children, adminOnly = false, recruiterOnly = false }) {
+  const { user, loading, isAdmin, isRecruiter } = useAuth();
 
   if (loading) {
     return (
@@ -153,6 +154,10 @@ export function ProtectedRoute({ children, adminOnly = false }) {
   }
 
   if (adminOnly && !isAdmin) {
+    return <Navigate to="/portal/dashboard" replace />;
+  }
+
+  if (recruiterOnly && !isRecruiter && !isAdmin) {
     return <Navigate to="/portal/dashboard" replace />;
   }
 

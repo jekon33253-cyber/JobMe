@@ -36,6 +36,14 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import AdminCandidates from './components/admin/AdminCandidates';
 import AdminDocReview from './components/admin/AdminDocReview';
 
+// Recruiter pages
+import RecruiterDashboard from './components/recruiter/RecruiterDashboard';
+import RecruiterJobs from './components/recruiter/RecruiterJobs';
+import RecruiterCandidates from './components/recruiter/RecruiterCandidates';
+import RecruiterNewCandidate from './components/recruiter/RecruiterNewCandidate';
+import RecruiterCandidateView from './components/recruiter/RecruiterCandidateView';
+import RecruiterEarnings from './components/recruiter/RecruiterEarnings';
+
 import { ProtectedRoute } from './context/AuthContext';
 
 // ── floating chat buttons + scroll-to-top ─────────────────────
@@ -676,6 +684,14 @@ function App() {
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
       <Route path="/admin/candidates" element={<ProtectedRoute adminOnly><AdminCandidates /></ProtectedRoute>} />
       <Route path="/admin/documents" element={<ProtectedRoute adminOnly><AdminDocReview /></ProtectedRoute>} />
+
+      {/* Recruiter routes */}
+      <Route path="/recruiter/dashboard" element={<ProtectedRoute recruiterOnly><RecruiterDashboard /></ProtectedRoute>} />
+      <Route path="/recruiter/jobs" element={<ProtectedRoute recruiterOnly><RecruiterJobs /></ProtectedRoute>} />
+      <Route path="/recruiter/candidates" element={<ProtectedRoute recruiterOnly><RecruiterCandidates /></ProtectedRoute>} />
+      <Route path="/recruiter/candidates/new" element={<ProtectedRoute recruiterOnly><RecruiterNewCandidate /></ProtectedRoute>} />
+      <Route path="/recruiter/candidates/:id" element={<ProtectedRoute recruiterOnly><RecruiterCandidateView /></ProtectedRoute>} />
+      <Route path="/recruiter/earnings" element={<ProtectedRoute recruiterOnly><RecruiterEarnings /></ProtectedRoute>} />
 
       {/* Main site (catch-all) */}
       <Route path="*" element={<MainSite />} />

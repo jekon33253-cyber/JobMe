@@ -387,6 +387,23 @@ export const translations = {
       resetSent: 'Link do resetowania hasła został wysłany',
       termsNote: 'Rejestrując się akceptujesz naszą',
       privacyLink: 'Politykę Prywatności',
+      selectRole: 'Wybierz typ konta',
+      roleCandidate: 'Szukam pracy',
+      roleCandidateDesc: 'Rejestruję się jako kandydat',
+      roleRecruiter: 'Polecam kandydatów',
+      roleRecruiterDesc: 'Jestem freelance rekruterem',
+    },
+    recruiter: {
+      nav: {
+        menu: 'Menu',
+        dashboard: 'Dashboard',
+        jobs: 'Oferty pracy',
+        candidates: 'Moi kandydaci',
+        earnings: 'Zarobki',
+        profile: 'Profil',
+        logout: 'Wyloguj się',
+        newCandidate: 'Nowy kandydat',
+      },
     },
     portal: {
       nav: {
@@ -891,6 +908,23 @@ export const translations = {
       resetSent: 'Посилання для скидання пароля надіслано',
       termsNote: 'Реєструючись ви приймаєте нашу',
       privacyLink: 'Політику конфіденційності',
+      selectRole: 'Оберіть тип акаунту',
+      roleCandidate: 'Шукаю роботу',
+      roleCandidateDesc: 'Реєструюсь як кандидат',
+      roleRecruiter: 'Рекомендую кандидатів',
+      roleRecruiterDesc: 'Я фріланс-рекрутер',
+    },
+    recruiter: {
+      nav: {
+        menu: 'Меню',
+        dashboard: 'Дашборд',
+        jobs: 'Вакансії',
+        candidates: 'Мої кандидати',
+        earnings: 'Заробіток',
+        profile: 'Профіль',
+        logout: 'Вийти',
+        newCandidate: 'Новий кандидат',
+      },
     },
     portal: {
       nav: {
