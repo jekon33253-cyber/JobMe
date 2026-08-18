@@ -7,7 +7,7 @@ export default function RecruiterJobs() {
   const isUA = language === 'ua';
   const [selectedJob, setSelectedJob] = useState(null);
 
-  const jobs = t('jobsPage.jobs') || [];
+  const jobs = t('jobsWidget.jobs') || [];
 
   const L = {
     title: isUA ? 'Актуальні вакансії' : 'Aktualne oferty pracy',

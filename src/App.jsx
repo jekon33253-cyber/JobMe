@@ -43,6 +43,7 @@ import RecruiterCandidates from './components/recruiter/RecruiterCandidates';
 import RecruiterNewCandidate from './components/recruiter/RecruiterNewCandidate';
 import RecruiterCandidateView from './components/recruiter/RecruiterCandidateView';
 import RecruiterEarnings from './components/recruiter/RecruiterEarnings';
+import RecruiterProfile from './components/recruiter/RecruiterProfile';
 
 import { ProtectedRoute } from './context/AuthContext';
 
@@ -692,6 +693,7 @@ function App() {
       <Route path="/recruiter/candidates/new" element={<ProtectedRoute recruiterOnly><RecruiterNewCandidate /></ProtectedRoute>} />
       <Route path="/recruiter/candidates/:id" element={<ProtectedRoute recruiterOnly><RecruiterCandidateView /></ProtectedRoute>} />
       <Route path="/recruiter/earnings" element={<ProtectedRoute recruiterOnly><RecruiterEarnings /></ProtectedRoute>} />
+      <Route path="/recruiter/profile" element={<ProtectedRoute recruiterOnly><RecruiterProfile /></ProtectedRoute>} />
 
       {/* Main site (catch-all) */}
       <Route path="*" element={<MainSite />} />
