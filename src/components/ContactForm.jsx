@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FadeIn from './FadeIn';
 import { useLanguage } from '../context/LanguageContext';
+import config from '../config';
 
 // ── validators ────────────────────────────────────────────────
 function validatePhone(value) {
@@ -95,7 +96,7 @@ export default function ContactForm({ activeTab, onTabChange, prefillMessage }) 
                 </div>
                 <div className="flex items-center gap-4">
                   <span className="material-symbols-outlined text-[#00B4B4]">mail</span>
-                  <span className="font-body-md">kontakt@jobme.pl</span>
+                  <span className="font-body-md">{config.contactEmail}</span>
                 </div>
               </div>
             </div>
@@ -136,7 +137,7 @@ export default function ContactForm({ activeTab, onTabChange, prefillMessage }) 
                       </div>
                       <div>
                         <label htmlFor="cand-phone" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
-                        <input id="cand-phone" name="phone" required className={`${baseInput} ${fieldErrors.phone ? errRing : 'border-zinc-200 focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10'}`} placeholder="+48 123 456 789" type="tel" />
+                        <input id="cand-phone" name="phone" required className={`${baseInput} ${fieldErrors.phone ? errRing : 'border-zinc-200 focus:border-[#A1DD22] focus:ring-4 focus:ring-[#A1DD22]/10'}`} placeholder="+48 574 220 849" type="tel" />
                         {fieldErrors.phone && <p className="text-red-500 text-xs mt-1">{fieldErrors.phone}</p>}
                       </div>
                       <div>
@@ -176,7 +177,7 @@ export default function ContactForm({ activeTab, onTabChange, prefillMessage }) 
                       </div>
                       <div>
                         <label htmlFor="biz-phone" className="block font-bold text-zinc-800 text-sm mb-2">{t('contact.phoneLabel')}</label>
-                        <input id="biz-phone" name="phone" required className={`${baseInput} ${fieldErrors.phone ? errRing : 'border-zinc-200 focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10'}`} placeholder="+48 123 456 789" type="tel" />
+                        <input id="biz-phone" name="phone" required className={`${baseInput} ${fieldErrors.phone ? errRing : 'border-zinc-200 focus:border-[#00B4B4] focus:ring-4 focus:ring-[#00B4B4]/10'}`} placeholder="+48 574 220 849" type="tel" />
                         {fieldErrors.phone && <p className="text-red-500 text-xs mt-1">{fieldErrors.phone}</p>}
                       </div>
                       <div>

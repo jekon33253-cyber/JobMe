@@ -3,19 +3,23 @@
 
 const config = {
   // Contact channels
-  whatsappNumber: '48000000000', // replace with real WhatsApp number (digits only, e.g., '48123456789')
-  telegramUsername: 'jobme_hr',  // replace with real Telegram username (without @)
+  whatsappNumber: '48574220849',
+  telegramUsername: 'jobmelead_bot',
 
   // Analytics (set via env or replace directly)
   ga4Id: 'G-GA4_PLACEHOLDER',   // Google Analytics 4 Measurement ID
   metaPixelId: 'PIXEL_PLACEHOLDER', // Meta Pixel ID
 
   // Contact email
-  contactEmail: 'kontakt@jobme.pl',
+  contactEmail: 'rekrutacja@jobme.pl',
 
   // Company info
-  companyName: 'JobMe',
-  location: 'Wrocław, Polska',
+  companyName: 'GRUPA JOBME S.A.',
+  nip: '8971826557',
+  regon: '364989820',
+  krs: '0000628931',
+  location: 'Globis, Powstańców Śląskich 7A, 53-332 Wrocław',
+  fullAddress: 'Powstańców Śląskich 7A, 53-332 Wrocław',
 
   // API
   apiBasePath: '/api',

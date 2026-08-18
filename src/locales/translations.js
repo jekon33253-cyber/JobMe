@@ -228,7 +228,7 @@ export const translations = {
       oNas: "O Nas",
       kontakt: "Kontakt",
       polityka: "Polityka Prywatności",
-      rights: "JobMe.pl. Wszelkie prawa zastrzeżone."
+      rights: "GRUPA JOBME S.A. Wszelkie prawa zastrzeżone."
     },
     blog: {
       title: "Centrum Wiedzy JobMe",
@@ -314,8 +314,8 @@ export const translations = {
       jobs: [
         {
           jobTitle: "Pracownik produkcji paczkomatów (Nowa Ruda / Kłodzko)",
-          salary: "25,50 zł / godz. netto",
-          salarySub: "(dla studentów: 31,40 zł / godz. netto). Możliwość zaliczek.",
+          salary: "25,00 zł / godz. netto",
+          salarySub: "(dla studentów: 31,40 zł / godz. brutto). Możliwość zaliczek.",
           contract: "Umowa zlecenie ze składkami ZUS. Praca w pełni legalna.",
           location: "Nowa Ruda / Kłodzko (Dolny Śląsk)",
           shifts: "Praca w systemie 2-zmianowym (6:00-14:00, 14:00-22:00), od poniedziałku do piątku.",
@@ -329,8 +329,8 @@ export const translations = {
         },
         {
           jobTitle: "Pracownik produkcji butli gazowych (Sosnowiec)",
-          salary: "25,50 zł / godz. netto",
-          salarySub: "(dla studentów: 31,40 zł / godz. netto). Możliwość zaliczek.",
+          salary: "25,00 zł / godz. netto",
+          salarySub: "(dla studentów: 31,40 zł / godz. brutto). Możliwość zaliczek.",
           contract: "Umowa zlecenie ze składkami ZUS. Pełne wsparcie dokumentacyjne, możliwość złożenia wniosku o kartę pobytu.",
           location: "Sosnowiec (Śląsk)",
           shifts: "8-12 godz. w systemie 3-zmianowym (6:00-14:00, 14:00-22:00, 22:00-06:00), dni powszednie (soboty w razie potrzeby).",
@@ -346,7 +346,7 @@ export const translations = {
         {
           jobTitle: "Pracownik zakładu produkcji słodyczy (Świebodzice)",
           salary: "25,00 zł / godz. netto",
-          salarySub: "(dla studentów: 31,40 zł / godz. netto). Możliwość zaliczki raz w miesiącu.",
+          salarySub: "(dla studentów: 31,40 zł / godz. brutto). Możliwość zaliczki raz w miesiącu.",
           contract: "Umowa zlecenie ze składkami ZUS. Pełna legalność, pomoc w dokumentach i możliwość złożenia wniosku o kartę pobytu.",
           location: "Świebodzice (60 km od Wrocławia, Dolny Śląsk)",
           shifts: "12 godz. w systemie 1- lub 2-zmianowym (06:00–18:00, 18:00–06:00). Praca w weekendy za dopłatą — opcjonalnie.",
@@ -731,8 +731,8 @@ export const translations = {
       firma: "Компанія",
       oNas: "Про нас",
       kontakt: "Контакти",
-      polityka: "Політика конфіденційності",
-      rights: "JobMe.pl. Всі права захищені."
+      polityka: "Політика Конфіденційності",
+      rights: "GRUPA JOBME S.A. Всі права захищені."
     },
     blog: {
       title: "Центр Знань JobMe",
@@ -818,8 +818,8 @@ export const translations = {
       jobs: [
         {
           jobTitle: "Працівник виробництва поштоматів (Нова Руда / Клодзко)",
-          salary: "25,50 зл / год нетто",
-          salarySub: "(для студентів: 31,40 зл / год нетто). Можливість авансів.",
+          salary: "25,00 зл / год нетто",
+          salarySub: "(для студентів: 31,40 зл / год брутто). Можливість авансів.",
           contract: "Договір злеценя зі внесками ZUS. Повністю легальна робота.",
           location: "Нова Руда / Клодзко (Нижня Сілезія)",
           shifts: "Робота в 2-змінній системі (6:00-14:00, 14:00-22:00), з понеділка по п'ятницю.",
@@ -833,8 +833,8 @@ export const translations = {
         },
         {
           jobTitle: "Працівник виробництва газових балонів (Сосновець)",
-          salary: "25,50 зл / год нетто",
-          salarySub: "(для студентів: 31,40 зл / год нетто). Можливість авансів.",
+          salary: "25,00 зл / год нетто",
+          salarySub: "(для студентів: 31,40 зл / год брутто). Можливість авансів.",
           contract: "Договір злеценя зі внесками ZUS. Повна документальна підтримка, можливість подачі заявки на картку побиту.",
           location: "Сосновець (Сілезія)",
           shifts: "8-12 год у 3-змінній системі (6:00-14:00, 14:00-22:00, 22:00-06:00), будні (суботи за потребою).",
@@ -850,7 +850,7 @@ export const translations = {
         {
           jobTitle: "Працівник на виробництві солодощів (Свебодзіце)",
           salary: "25,00 зл / год нетто",
-          salarySub: "(для студентів: 31,40 зл / год нетто). Можливість авансу раз на місяць.",
+          salarySub: "(для студентів: 31,40 зл / год брутто). Можливість авансу раз на місяць.",
           contract: "Договір злеценя зі внесками ZUS. Повна легальність, допомога з документами та можливість подачі на карту побиту.",
           location: "Свебодзіце (60 км від Вроцлава, Нижня Сілезія)",
           shifts: "12 год у 1- або 2-змінній системі (06:00–18:00, 18:00–06:00). Робота у вихідні за доплатою — опціонально.",
@@ -1236,7 +1236,7 @@ export const translations = {
       oNas: "About Us",
       kontakt: "Contact",
       polityka: "Privacy Policy",
-      rights: "JobMe.pl. All rights reserved."
+      rights: "GRUPA JOBME S.A. All rights reserved."
     },
     blog: {
       title: "JobMe Knowledge Center",
@@ -1322,8 +1322,8 @@ export const translations = {
       jobs: [
         {
           jobTitle: "Parcel Locker Production Worker (Nowa Ruda / Kłodzko)",
-          salary: "PLN 25.50 / hour net",
-          salarySub: "(for students: PLN 31.40 / hour net). Advance payments available.",
+          salary: "PLN 25.00 / hour net",
+          salarySub: "(for students: PLN 31.40 / hour gross). Advance payments available.",
           contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal employment.",
           location: "Nowa Ruda / Kłodzko (Lower Silesia)",
           shifts: "2-shift system (6:00-14:00, 14:00-22:00), Monday to Friday.",
@@ -1337,8 +1337,8 @@ export const translations = {
         },
         {
           jobTitle: "Gas Cylinder Production Worker (Sosnowiec)",
-          salary: "PLN 25.50 / hour net",
-          salarySub: "(for students: PLN 31.40 / hour net). Advance payments available.",
+          salary: "PLN 25.00 / hour net",
+          salarySub: "(for students: PLN 31.40 / hour gross). Advance payments available.",
           contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Full document support, residence card application possibility.",
           location: "Sosnowiec (Silesia)",
           shifts: "8-12 hours in 3 shifts (6:00-14:00, 14:00-22:00, 22:00-06:00), weekdays (Saturdays if required).",
@@ -1354,7 +1354,7 @@ export const translations = {
         {
           jobTitle: "Confectionery Production Worker (Świebodzice)",
           salary: "PLN 25.00 / hour net",
-          salarySub: "(for students: PLN 31.40 / hour net). Advance payment available once a month.",
+          salarySub: "(for students: PLN 31.40 / hour gross). Advance payment available once a month.",
           contract: "Mandate contract (umowa zlecenie) with ZUS contributions. Fully legal, assistance with documents and residence card application.",
           location: "Świebodzice (60 km from Wrocław, Lower Silesia)",
           shifts: "12-hour shifts, 1 or 2 shifts (06:00–18:00, 18:00–06:00). Weekend work optional with extra pay.",
