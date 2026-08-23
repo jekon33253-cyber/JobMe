@@ -156,7 +156,7 @@ export const translations = {
     contact: {
       title: "Zmieńmy razem rynek pracy",
       desc: "Czekamy na Ciebie we Wrocławiu. Porozmawiajmy o Twoich celach biznesowych lub zawodowych.",
-      location: "Wrocław, Polska",
+      location: "ul. Powstańców Śląskich 7A, 53-332 Wrocław (Globis)",
       freeConsultation: "Bezpłatna konsultacja",
       tabKandydat: "Dla Kandydata",
       tabPracodawca: "Dla Pracodawcy",
@@ -685,7 +685,7 @@ export const translations = {
     contact: {
       title: "Змінимо ринок праці разом",
       desc: "Чекаємо на вас у Вроцлаві. Давайте поговоримо про ваші бізнес або професійні цілі.",
-      location: "Вроцлав, Польща",
+      location: "вул. Powstańców Śląskich 7A, 53-332 Вроцлав (Globis)",
       freeConsultation: "Безкоштовна консультація",
       tabKandydat: "Для Кандидата",
       tabPracodawca: "Для Роботодавця",
@@ -1214,7 +1214,7 @@ export const translations = {
     contact: {
       title: "Let's change the labor market together",
       desc: "We are waiting for you in Wrocław. Let's talk about your business or professional goals.",
-      location: "Wrocław, Poland",
+      location: "ul. Powstańców Śląskich 7A, 53-332 Wrocław (Globis)",
       freeConsultation: "Free consultation",
       tabKandydat: "For Candidates",
       tabPracodawca: "For Employers",
