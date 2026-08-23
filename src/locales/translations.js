@@ -9,7 +9,7 @@ export const translations = {
       jobs: "Oferty Pracy",
       blog: "Centrum Wiedzy",
       cta: "Zacznij teraz",
-      portal: "Strefa Kandydata"
+      portal: "Moje Konto"
     },
     hero: {
       tag: "Nowoczesny Ekosystem HR",
@@ -538,7 +538,7 @@ export const translations = {
       jobs: "Вакансії",
       blog: "Центр Знань",
       cta: "Почати зараз",
-      portal: "Кабінет Кандидата"
+      portal: "Особистий Кабінет"
     },
     hero: {
       tag: "Сучасна HR-Екосистема",
@@ -1067,7 +1067,7 @@ export const translations = {
       jobs: "Job Offers",
       blog: "Knowledge Center",
       cta: "Start Now",
-      portal: "Candidate Area"
+      portal: "My Account"
     },
     hero: {
       tag: "Modern HR Ecosystem",
