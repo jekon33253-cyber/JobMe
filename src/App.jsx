@@ -602,7 +602,7 @@ function MainSite() {
           </section>
 
           <FAQSection />
-          <ReferralProgram onReferClick={() => handleScrollToContact('kandydat', 'POLECENIE: Program poleceń')} />
+          <ReferralProgram />
           <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
 
           {/* Footer */}
