@@ -20,6 +20,7 @@ import UserPortalTeaser from './components/UserPortalTeaser';
 import Blog from './components/Blog';
 import ChatWidget from './components/ChatWidget';
 import { useLanguage } from './context/LanguageContext';
+import { useAuth, ProtectedRoute } from './context/AuthContext';
 import config from './config';
 
 // Portal pages
@@ -35,6 +36,9 @@ import NotificationsPage from './components/portal/NotificationsPage';
 import AdminDashboard from './components/admin/AdminDashboard';
 import AdminCandidates from './components/admin/AdminCandidates';
 import AdminDocReview from './components/admin/AdminDocReview';
+import AdminProfile from './components/admin/AdminProfile';
+
+import PasswordResetModal from './components/PasswordResetModal';
 
 // Recruiter pages
 import RecruiterDashboard from './components/recruiter/RecruiterDashboard';
@@ -44,8 +48,6 @@ import RecruiterNewCandidate from './components/recruiter/RecruiterNewCandidate'
 import RecruiterCandidateView from './components/recruiter/RecruiterCandidateView';
 import RecruiterEarnings from './components/recruiter/RecruiterEarnings';
 import RecruiterProfile from './components/recruiter/RecruiterProfile';
-
-import { ProtectedRoute } from './context/AuthContext';
 
 // ── floating chat buttons + scroll-to-top ─────────────────────
 function FloatingContactButtons() {
@@ -124,6 +126,10 @@ function MainSite() {
   useEffect(() => {
     const hash = window.location.hash;
     if (hash && hash.includes('access_token=')) {
+      if (hash.includes('type=recovery')) {
+        navigate('/portal/login' + hash, { replace: true });
+        return;
+      }
       // Small timeout to allow Supabase SDK to parse session from hash and set auth state
       const timer = setTimeout(() => {
         navigate('/portal/dashboard');
@@ -669,35 +675,57 @@ function MainSite() {
 }
 
 // ── App with Routes ──────────────────────────────────────────
+function AuthRedirectHandler() {
+  const { isRecovery } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (isRecovery || (hash && hash.includes('type=recovery'))) {
+      if (location.pathname !== '/portal/login') {
+        navigate('/portal/login' + (hash || ''), { replace: true });
+      }
+    }
+  }, [isRecovery, location.pathname, navigate]);
+
+  return null;
+}
+
 function App() {
   return (
-    <Routes>
-      {/* Portal routes */}
-      <Route path="/portal/login" element={<LoginPage />} />
-      <Route path="/portal/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/portal/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-      <Route path="/portal/documents" element={<ProtectedRoute><DocumentsPage /></ProtectedRoute>} />
-      <Route path="/portal/legalization" element={<ProtectedRoute><LegalizationTracker /></ProtectedRoute>} />
-      <Route path="/portal/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
-      <Route path="/portal/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+    <>
+      <AuthRedirectHandler />
+      <PasswordResetModal />
+      <Routes>
+        {/* Portal routes */}
+        <Route path="/portal/login" element={<LoginPage />} />
+        <Route path="/portal/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/portal/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/portal/documents" element={<ProtectedRoute><DocumentsPage /></ProtectedRoute>} />
+        <Route path="/portal/legalization" element={<ProtectedRoute><LegalizationTracker /></ProtectedRoute>} />
+        <Route path="/portal/applications" element={<ProtectedRoute><ApplicationsPage /></ProtectedRoute>} />
+        <Route path="/portal/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
 
-      {/* Admin routes */}
-      <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/candidates" element={<ProtectedRoute adminOnly><AdminCandidates /></ProtectedRoute>} />
-      <Route path="/admin/documents" element={<ProtectedRoute adminOnly><AdminDocReview /></ProtectedRoute>} />
+        {/* Admin routes */}
+        <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
+        <Route path="/admin/candidates" element={<ProtectedRoute adminOnly><AdminCandidates /></ProtectedRoute>} />
+        <Route path="/admin/documents" element={<ProtectedRoute adminOnly><AdminDocReview /></ProtectedRoute>} />
+        <Route path="/admin/profile" element={<ProtectedRoute adminOnly><AdminProfile /></ProtectedRoute>} />
 
-      {/* Recruiter routes */}
-      <Route path="/recruiter/dashboard" element={<ProtectedRoute recruiterOnly><RecruiterDashboard /></ProtectedRoute>} />
-      <Route path="/recruiter/jobs" element={<ProtectedRoute recruiterOnly><RecruiterJobs /></ProtectedRoute>} />
-      <Route path="/recruiter/candidates" element={<ProtectedRoute recruiterOnly><RecruiterCandidates /></ProtectedRoute>} />
-      <Route path="/recruiter/candidates/new" element={<ProtectedRoute recruiterOnly><RecruiterNewCandidate /></ProtectedRoute>} />
-      <Route path="/recruiter/candidates/:id" element={<ProtectedRoute recruiterOnly><RecruiterCandidateView /></ProtectedRoute>} />
-      <Route path="/recruiter/earnings" element={<ProtectedRoute recruiterOnly><RecruiterEarnings /></ProtectedRoute>} />
-      <Route path="/recruiter/profile" element={<ProtectedRoute recruiterOnly><RecruiterProfile /></ProtectedRoute>} />
+        {/* Recruiter routes */}
+        <Route path="/recruiter/dashboard" element={<ProtectedRoute recruiterOnly><RecruiterDashboard /></ProtectedRoute>} />
+        <Route path="/recruiter/jobs" element={<ProtectedRoute recruiterOnly><RecruiterJobs /></ProtectedRoute>} />
+        <Route path="/recruiter/candidates" element={<ProtectedRoute recruiterOnly><RecruiterCandidates /></ProtectedRoute>} />
+        <Route path="/recruiter/candidates/new" element={<ProtectedRoute recruiterOnly><RecruiterNewCandidate /></ProtectedRoute>} />
+        <Route path="/recruiter/candidates/:id" element={<ProtectedRoute recruiterOnly><RecruiterCandidateView /></ProtectedRoute>} />
+        <Route path="/recruiter/earnings" element={<ProtectedRoute recruiterOnly><RecruiterEarnings /></ProtectedRoute>} />
+        <Route path="/recruiter/profile" element={<ProtectedRoute recruiterOnly><RecruiterProfile /></ProtectedRoute>} />
 
-      {/* Main site (catch-all) */}
-      <Route path="*" element={<MainSite />} />
-    </Routes>
+        {/* Main site (catch-all) */}
+        <Route path="*" element={<MainSite />} />
+      </Routes>
+    </>
   );
 }
 

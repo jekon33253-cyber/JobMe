@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { supabase } from '../../lib/supabaseClient';
 
 export default function LoginPage() {
-  const { signIn, signUp, resetPassword, fetchProfile } = useAuth();
+  const { signIn, signUp, resetPassword, updateUserPassword, fetchProfile, isRecovery } = useAuth();
   const { t } = useLanguage();
-  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'forgot'
+  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'forgot' | 'update_password'
   const [selectedRole, setSelectedRole] = useState('candidate'); // 'candidate' | 'recruiter'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +17,14 @@ export default function LoginPage() {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    const params = new URLSearchParams(window.location.search);
+    if (isRecovery || (hash && hash.includes('type=recovery')) || params.get('mode') === 'update_password') {
+      setMode('update_password');
+    }
+  }, [isRecovery]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -78,6 +86,27 @@ export default function LoginPage() {
         } else {
           setSuccess(t('auth.resetSent'));
         }
+      } else if (mode === 'update_password') {
+        if (password !== confirmPassword) {
+          setError(t('auth.passwordMismatch'));
+          setLoading(false);
+          return;
+        }
+        if (password.length < 6) {
+          setError(t('auth.passwordTooShort'));
+          setLoading(false);
+          return;
+        }
+        const { error: updateErr } = await updateUserPassword(password);
+        if (updateErr) {
+          console.error('Update password error:', updateErr);
+          setError(updateErr.message);
+        } else {
+          setSuccess(t('auth.passwordUpdated'));
+          setTimeout(() => {
+            window.location.href = '/portal/dashboard';
+          }, 1500);
+        }
       }
     } catch (err) {
       console.error('Auth error:', err);
@@ -107,7 +136,7 @@ export default function LoginPage() {
         {/* Card */}
         <div className="bg-[#141414] border border-zinc-800/80 rounded-3xl p-8 shadow-2xl shadow-black/50 backdrop-blur-xl">
           {/* Tabs */}
-          {mode !== 'forgot' && (
+          {mode !== 'forgot' && mode !== 'update_password' && (
             <div className="flex gap-1 p-1 bg-[#1a1a1a] rounded-xl mb-8">
               <button
                 type="button"
@@ -139,11 +168,13 @@ export default function LoginPage() {
             {mode === 'login' && t('auth.welcomeBack')}
             {mode === 'register' && t('auth.createAccount')}
             {mode === 'forgot' && t('auth.resetPassword')}
+            {mode === 'update_password' && t('auth.updatePasswordTitle')}
           </h1>
           <p className="text-zinc-500 text-sm mb-6">
             {mode === 'login' && t('auth.loginSubtitle')}
             {mode === 'register' && t('auth.registerSubtitle')}
             {mode === 'forgot' && t('auth.resetSubtitle')}
+            {mode === 'update_password' && t('auth.updatePasswordSubtitle')}
           </p>
 
           {/* Role selection (only for register) */}
@@ -237,27 +268,29 @@ export default function LoginPage() {
               </div>
             )}
 
-            <div>
-              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
-                Email
-              </label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 text-lg">mail</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  placeholder={t('auth.emailPlaceholder')}
-                  className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-[#8CC63F]/50 focus:ring-1 focus:ring-[#8CC63F]/25 transition-all"
-                />
+            {mode !== 'update_password' && (
+              <div>
+                <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
+                  Email
+                </label>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 text-lg">mail</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    placeholder={t('auth.emailPlaceholder')}
+                    className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-[#8CC63F]/50 focus:ring-1 focus:ring-[#8CC63F]/25 transition-all"
+                  />
+                </div>
               </div>
-            </div>
+            )}
 
             {mode !== 'forgot' && (
               <div>
                 <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
-                  {t('auth.password')}
+                  {mode === 'update_password' ? (t('portal.profile.newPassword') || t('auth.password')) : t('auth.password')}
                 </label>
                 <div className="relative">
                   <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 text-lg">lock</span>
@@ -283,7 +316,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            {mode === 'register' && (
+            {(mode === 'register' || mode === 'update_password') && (
               <div>
                 <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
                   {t('auth.confirmPassword')}
@@ -336,12 +369,13 @@ export default function LoginPage() {
                   {mode === 'login' && t('auth.loginBtn')}
                   {mode === 'register' && t('auth.registerBtn')}
                   {mode === 'forgot' && t('auth.sendResetLink')}
+                  {mode === 'update_password' && t('auth.saveNewPassword')}
                 </>
               )}
             </button>
           </form>
 
-          {mode === 'forgot' && (
+          {(mode === 'forgot' || mode === 'update_password') && (
             <button
               type="button"
               onClick={() => { setMode('login'); setError(''); setSuccess(''); }}

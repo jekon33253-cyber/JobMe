@@ -6,6 +6,7 @@ const adminNavItems = [
   { key: 'adminDashboard', icon: 'admin_panel_settings', path: '/admin', label: 'Dashboard' },
   { key: 'adminCandidates', icon: 'group', path: '/admin/candidates', label: 'Kandydaci' },
   { key: 'adminDocs', icon: 'fact_check', path: '/admin/documents', label: 'Dokumenty' },
+  { key: 'adminProfile', icon: 'settings', path: '/admin/profile', label: 'Profil i Ustawienia' },
 ];
 
 export default function AdminLayout({ children, activePage }) {

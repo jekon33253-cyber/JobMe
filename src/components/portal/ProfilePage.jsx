@@ -8,7 +8,7 @@ const SECTORS = ['logistics', 'production', 'hospitality', 'construction', 'agri
 const LANGUAGES = ['pl', 'ua', 'en', 'ru', 'de', 'fr', 'es'];
 
 export default function ProfilePage() {
-  const { user, profile, updateProfile } = useAuth();
+  const { user, profile, updateProfile, updateUserPassword } = useAuth();
   const { t } = useLanguage();
   const [form, setForm] = useState({
     full_name: '', phone: '', nationality: '', pesel: '',
@@ -18,6 +18,13 @@ export default function ProfilePage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
+
+  // Password change states
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwSaved, setPwSaved] = useState(false);
+  const [pwError, setPwError] = useState('');
 
   useEffect(() => {
     if (profile) {
@@ -58,6 +65,34 @@ export default function ProfilePage() {
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
+  }
+
+  async function handlePasswordSubmit(e) {
+    e.preventDefault();
+    setPwError('');
+    setPwSaved(false);
+
+    if (newPassword !== confirmPassword) {
+      setPwError(t('auth.passwordMismatch'));
+      return;
+    }
+    if (newPassword.length < 6) {
+      setPwError(t('auth.passwordTooShort'));
+      return;
+    }
+
+    setPwSaving(true);
+    const { error } = await updateUserPassword(newPassword);
+    setPwSaving(false);
+
+    if (error) {
+      setPwError(error.message);
+    } else {
+      setPwSaved(true);
+      setNewPassword('');
+      setConfirmPassword('');
+      setTimeout(() => setPwSaved(false), 3000);
+    }
   }
 
   async function handleAvatarUpload(e) {
@@ -101,82 +136,109 @@ export default function ProfilePage() {
                   {initials}
                 </div>
               )}
-              <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-2xl opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
-                <span className="material-symbols-outlined text-white">photo_camera</span>
+              <label className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity">
+                <span className="material-symbols-outlined text-white text-xl">photo_camera</span>
                 <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
               </label>
-              {avatarUploading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/70 rounded-2xl">
-                  <div className="w-6 h-6 border-2 border-[#8CC63F] border-t-transparent rounded-full animate-spin" />
-                </div>
-              )}
             </div>
             <div>
-              <h3 className="text-white font-bold">{form.full_name || t('portal.profile.noName')}</h3>
+              <h2 className="text-lg font-bold text-white">{form.full_name || t('portal.profile.noName')}</h2>
               <p className="text-zinc-500 text-sm">{user?.email}</p>
+              {avatarUploading && <p className="text-xs text-[#8CC63F] mt-1">Przesyłanie zdjęcia...</p>}
             </div>
           </div>
         </div>
 
         {/* Personal info */}
         <div className="bg-[#141414] border border-zinc-800/60 rounded-2xl p-6">
-          <h2 className="text-lg font-bold text-white mb-5 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-[#8CC63F]">person</span>
             {t('portal.profile.personalInfo')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              { key: 'full_name', label: t('portal.profile.fullName'), type: 'text', icon: 'badge' },
-              { key: 'phone', label: t('portal.profile.phone'), type: 'tel', icon: 'phone' },
-              { key: 'nationality', label: t('portal.profile.nationality'), type: 'text', icon: 'flag' },
-              { key: 'pesel', label: 'PESEL', type: 'text', icon: 'pin' },
-              { key: 'date_of_birth', label: t('portal.profile.dob'), type: 'date', icon: 'calendar_today' },
-              { key: 'experience_years', label: t('portal.profile.experience'), type: 'number', icon: 'work_history' },
-            ].map(f => (
-              <div key={f.key}>
-                <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{f.label}</label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 text-lg">{f.icon}</span>
-                  <input
-                    type={f.type}
-                    value={form[f.key]}
-                    onChange={e => handleChange(f.key, f.type === 'number' ? parseInt(e.target.value) || 0 : e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm placeholder-zinc-600
-                               focus:outline-none focus:border-[#8CC63F]/50 focus:ring-1 focus:ring-[#8CC63F]/25 transition-all"
-                  />
-                </div>
-              </div>
-            ))}
-            <div className="md:col-span-2">
+            <div>
+              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.fullName')}</label>
+              <input
+                type="text"
+                value={form.full_name}
+                onChange={e => handleChange('full_name', e.target.value)}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.phone')}</label>
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e => handleChange('phone', e.target.value)}
+                placeholder="+48 123 456 789"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.nationality')}</label>
+              <input
+                type="text"
+                value={form.nationality}
+                onChange={e => handleChange('nationality', e.target.value)}
+                placeholder="np. Ukrainiec, Polak"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">PESEL / ID</label>
+              <input
+                type="text"
+                value={form.pesel}
+                onChange={e => handleChange('pesel', e.target.value)}
+                placeholder="12345678901"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.dob')}</label>
+              <input
+                type="date"
+                value={form.date_of_birth}
+                onChange={e => handleChange('date_of_birth', e.target.value)}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
+            </div>
+            <div>
+              <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.experience')}</label>
+              <input
+                type="number"
+                min="0"
+                max="50"
+                value={form.experience_years}
+                onChange={e => handleChange('experience_years', parseInt(e.target.value) || 0)}
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
+            </div>
+            <div>
               <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.address')}</label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 text-lg">home</span>
-                <input
-                  type="text"
-                  value={form.address}
-                  onChange={e => handleChange('address', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm placeholder-zinc-600
-                             focus:outline-none focus:border-[#8CC63F]/50 focus:ring-1 focus:ring-[#8CC63F]/25 transition-all"
-                />
-              </div>
+              <input
+                type="text"
+                value={form.address}
+                onChange={e => handleChange('address', e.target.value)}
+                placeholder="ul. Główna 12/3"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
             </div>
             <div>
               <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">{t('portal.profile.city')}</label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 text-lg">location_city</span>
-                <input
-                  type="text"
-                  value={form.city}
-                  onChange={e => handleChange('city', e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm placeholder-zinc-600
-                             focus:outline-none focus:border-[#8CC63F]/50 focus:ring-1 focus:ring-[#8CC63F]/25 transition-all"
-                />
-              </div>
+              <input
+                type="text"
+                value={form.city}
+                onChange={e => handleChange('city', e.target.value)}
+                placeholder="Wrocław"
+                className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+              />
             </div>
           </div>
         </div>
 
-        {/* Preferred sectors */}
+        {/* Sectors */}
         <div className="bg-[#141414] border border-zinc-800/60 rounded-2xl p-6">
           <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <span className="material-symbols-outlined text-[#00B4B4]">category</span>
@@ -248,6 +310,77 @@ export default function ProfilePage() {
           )}
         </div>
       </form>
+
+      {/* Change Password Card */}
+      <div className="mt-10 bg-[#141414] border border-zinc-800/60 rounded-2xl p-6">
+        <h2 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
+          <span className="material-symbols-outlined text-amber-400">lock_reset</span>
+          {t('portal.profile.changePasswordTitle')}
+        </h2>
+        <p className="text-zinc-500 text-sm mb-6">{t('portal.profile.changePasswordSubtitle')}</p>
+
+        {pwError && (
+          <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg">error</span>
+            {pwError}
+          </div>
+        )}
+        {pwSaved && (
+          <div className="mb-4 p-3 rounded-xl bg-[#8CC63F]/10 border border-[#8CC63F]/20 text-[#8CC63F] text-sm flex items-center gap-2">
+            <span className="material-symbols-outlined text-lg">check_circle</span>
+            {t('auth.passwordUpdated')}
+          </div>
+        )}
+
+        <form onSubmit={handlePasswordSubmit} className="space-y-4 max-w-md">
+          <div>
+            <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
+              {t('portal.profile.newPassword')}
+            </label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={e => setNewPassword(e.target.value)}
+              required
+              minLength={6}
+              placeholder="••••••••"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+            />
+          </div>
+
+          <div>
+            <label className="block text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1.5">
+              {t('auth.confirmPassword')}
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
+              placeholder="••••••••"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-zinc-800 rounded-xl text-white text-sm focus:outline-none focus:border-[#8CC63F]/50 transition-all"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={pwSaving}
+            className="px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-sm
+                       shadow-lg shadow-amber-500/20 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0
+                       transition-all duration-200 disabled:opacity-50"
+          >
+            {pwSaving ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                {t('portal.profile.saving')}
+              </span>
+            ) : (
+              t('portal.profile.changePasswordBtn')
+            )}
+          </button>
+        </form>
+      </div>
     </PortalLayout>
   );
 }

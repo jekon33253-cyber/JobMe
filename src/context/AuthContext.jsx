@@ -15,6 +15,8 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [isRecovery, setIsRecovery] = useState(false);
+
   // Fetch profile from `profiles` table
   async function fetchProfile(userId) {
     const { data, error } = await supabase
@@ -31,6 +33,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let isMounted = true;
+
+    if (typeof window !== 'undefined' && window.location.hash.includes('type=recovery')) {
+      setIsRecovery(true);
+    }
 
     async function initAuth() {
       try {
@@ -51,7 +57,10 @@ export function AuthProvider({ children }) {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
+        if (event === 'PASSWORD_RECOVERY') {
+          if (isMounted) setIsRecovery(true);
+        }
         const currentUser = session?.user ?? null;
         setUser(currentUser);
         if (currentUser) {
@@ -92,12 +101,23 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut();
     setUser(null);
     setProfile(null);
+    setIsRecovery(false);
   }
 
   async function resetPassword(email) {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/portal/login`,
     });
+    return { data, error };
+  }
+
+  async function updateUserPassword(newPassword) {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+    if (!error) {
+      setIsRecovery(false);
+    }
     return { data, error };
   }
 
@@ -117,10 +137,13 @@ export function AuthProvider({ children }) {
     user,
     profile,
     loading,
+    isRecovery,
+    setIsRecovery,
     signUp,
     signIn,
     signOut,
     resetPassword,
+    updateUserPassword,
     updateProfile,
     fetchProfile,
     isAdmin: profile?.role === 'admin',
