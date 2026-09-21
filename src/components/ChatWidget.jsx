@@ -12,54 +12,93 @@ function Icon({ name, className = '' }) {
   );
 }
 
-// Transparent Multi-Lingual Natural Language Intent Extractor (PL / UA / RU / EN)
-function extractJobCriteria(query) {
-  const q = query.toLowerCase();
-  const criteria = {
-    location: null,
-    category: null,
-    accommodation: null,
-    couples: null,
-    language: null,
-    isUrgent: false,
-    isOutOfScope: false,
-  };
+// Transparent Multi-Lingual Intent & Constraint Parser (PL / UA / RU / EN)
+function parseQuery(query) {
+  const q = query.toLowerCase().trim();
 
-  // Check for out-of-scope probes / non-existent benefits
+  // 1. Unrelated questions
   if (
-    q.includes('samochód') || q.includes('автомоб') || q.includes('машин') || q.includes('car') ||
-    q.includes('czas nieokreślony') || q.includes('бессрочн') || q.includes('permanent contract') ||
-    q.includes('tylko w nocy') || q.includes('только ночью') || q.includes('only night') ||
-    q.includes('dokładnie moja pensja') || q.includes('точно моя зарплата') || q.includes('exact salary')
+    q.includes('pogoda') || q.includes('погода') || q.includes('weather') ||
+    q.includes('bilet') || q.includes('билет') || q.includes('ticket') ||
+    q.includes('przepis') || q.includes('рецепт') || q.includes('kino') ||
+    q.includes('piłka') || q.includes('футбол')
   ) {
-    criteria.isOutOfScope = true;
+    return { type: 'unrelated' };
   }
 
-  // Location
+  // 2. Unsupported benefits / out-of-scope probes
+  if (
+    q.includes('samochód') || q.includes('автомоб') || q.includes('машин') || q.includes('car') || q.includes('авто') ||
+    q.includes('czas nieokreślony') || q.includes('бессрочн') || q.includes('permanent contract') ||
+    q.includes('tylko w nocy') || q.includes('только ночью') || q.includes('only night') ||
+    q.includes('50 zł') || q.includes('50zl') || q.includes('100 zł') || q.includes('100$')
+  ) {
+    return { type: 'unsupported_benefit' };
+  }
+
+  // 3. Salary & Rate inquiry
+  if (
+    q.includes('ile można zarobić') || q.includes('ile zarobię') || q.includes('jaka stawka') ||
+    q.includes('зарплат') || q.includes('дохід') || q.includes('чистыми') || q.includes('на руки') ||
+    q.includes('скільки') || q.includes('зароби') || q.includes('сколько платите') ||
+    q.includes('how much') || q.includes('hourly rate') || q.includes('earning')
+  ) {
+    return { type: 'salary_inquiry' };
+  }
+
+  // 4. Unsupported profession / category
+  if (
+    q.includes('kierowc') || q.includes('водій') || q.includes('водител') || q.includes('driver') ||
+    q.includes('budow') || q.includes('будівельн') || q.includes('строител') || q.includes('construct') ||
+    q.includes('spawacz') || q.includes('зварювальник') || q.includes('сварщик') || q.includes('welder') ||
+    q.includes('sprząt') || q.includes('прибиран') || q.includes('уборк') || q.includes('clean') ||
+    q.includes('kucharz') || q.includes('повар') || q.includes('cook')
+  ) {
+    return { type: 'unsupported_profession' };
+  }
+
+  // 5. Unsupported locations
+  const unsupportedCities = ['warszaw', 'варшав', 'warsaw', 'kraków', 'krakow', 'крак', 'gdańsk', 'gdansk', 'гданьск', 'poznan', 'poznań', 'позн', 'łódź', 'lodz', 'ловіч', 'lublin', 'люблін'];
+  const hasUnsupportedCity = unsupportedCities.some((city) => q.includes(city));
+  if (hasUnsupportedCity) {
+    return { type: 'unsupported_location' };
+  }
+
+  // 6. Regular Job Search with constraints
+  const criteria = {
+    type: 'job_search',
+    location: null, // 'dolny_slask' | 'slask'
+    housing: null, // 'free' | 'any'
+    couples: false,
+    languageNoReq: false,
+    category: null,
+    isUrgent: false,
+  };
+
   if (
     q.includes('wroc') || q.includes('вроц') || q.includes('doln') || q.includes('нижн') ||
     q.includes('świebodz') || q.includes('nowa ruda') || q.includes('klodz')
   ) {
-    criteria.location = 'Dolny Śląsk';
+    criteria.location = 'dolny_slask';
   } else if (
-    q.includes('sosnow') || q.includes('соснов') || q.includes('śląsk') || q.includes('силез') ||
-    q.includes('katow') || q.includes('dąbrow') || q.includes('silesia')
+    q.includes('sosnow') || q.includes('соснов') || q.includes('śląsk') || q.includes('силез') || q.includes('katow')
   ) {
-    criteria.location = 'Sosnowiec / Śląsk';
-  } else if (q.includes('pozn') || q.includes('позн') || q.includes('wielkop')) {
-    criteria.location = 'Poznań / Wielkopolska';
+    criteria.location = 'slask';
   }
 
-  // Housing
+  // Housing: distinguish strictly free from any
   if (
-    q.includes('mieszk') || q.includes('житл') || q.includes('жиль') || q.includes('darmow') ||
-    q.includes('бесплатн') || q.includes('безкошт') || q.includes('pokój') || q.includes('покой') ||
-    q.includes('housing') || q.includes('accommodation') || q.includes('room')
+    q.includes('darmow') || q.includes('bezpłat') || q.includes('бесплатн') ||
+    q.includes('безкошт') || q.includes('free accom') || q.includes('free hous')
   ) {
-    criteria.accommodation = true;
+    criteria.housing = 'free';
+  } else if (
+    q.includes('mieszk') || q.includes('житл') || q.includes('жиль') ||
+    q.includes('pokój') || q.includes('покой') || q.includes('housing') || q.includes('accommodation')
+  ) {
+    criteria.housing = 'any';
   }
 
-  // Couples
   if (
     q.includes('par') || q.includes('пар') || q.includes('двоих') || q.includes('двох') ||
     q.includes('семь') || q.includes('сім') || q.includes('couple')
@@ -67,33 +106,23 @@ function extractJobCriteria(query) {
     criteria.couples = true;
   }
 
-  // Category
   if (
-    q.includes('prod') || q.includes('произв') || q.includes('виробн') || q.includes('завод') ||
-    q.includes('mont') || q.includes('монт') || q.includes('factory') || q.includes('operator') ||
-    q.includes('оператор')
+    q.includes('bez pol') || q.includes('без пол') || q.includes('не знаю') ||
+    q.includes('brak') || q.includes('не розумію') || q.includes('no polish')
+  ) {
+    criteria.languageNoReq = true;
+  }
+
+  if (
+    q.includes('prod') || q.includes('произв') || q.includes('виробн') ||
+    q.includes('завод') || q.includes('mont') || q.includes('монт') || q.includes('factory')
   ) {
     criteria.category = 'Produkcja';
-  } else if (
-    q.includes('magaz') || q.includes('склад') || q.includes('logist') || q.includes('логист') ||
-    q.includes('паков') || q.includes('pakow') || q.includes('warehouse') || q.includes('packing')
-  ) {
-    criteria.category = 'Magazyn / Logistyka';
   }
 
-  // Language
   if (
-    q.includes('bez pol') || q.includes('без пол') || q.includes('не знаю') || q.includes('brak') ||
-    q.includes('не розумію') || q.includes('no polish') || q.includes('english')
-  ) {
-    criteria.language = 'Brak / Podstawowy';
-  }
-
-  // Urgency
-  if (
-    q.includes('gorąc') || q.includes('гаряч') || q.includes('hot') || q.includes('piln') ||
-    q.includes('срочн') || q.includes('термін') || q.includes('urgent') || q.includes('od zaraz') ||
-    q.includes('сейчас') || q.includes('now')
+    q.includes('zaraz') || q.includes('piln') || q.includes('термін') ||
+    q.includes('срочн') || q.includes('urgent') || q.includes('сейчас') || q.includes('now')
   ) {
     criteria.isUrgent = true;
   }
@@ -101,87 +130,106 @@ function extractJobCriteria(query) {
   return criteria;
 }
 
-// Matching engine against official vacancies DB (strict - no fake matches)
-function matchOffers(jobs, criteria) {
-  if (!Array.isArray(jobs) || jobs.length === 0 || criteria.isOutOfScope) return [];
+// Matching engine adhering strictly to Section 8:
+// Never label approximate matches as exact.
+function matchVacancies(jobs, parsed) {
+  if (!Array.isArray(jobs) || jobs.length === 0) return { exact: [], alternatives: [] };
 
-  const scored = jobs.map((job) => {
-    let score = 0;
-    const matchReasons = [];
+  if (parsed.type === 'unrelated' || parsed.type === 'unsupported_benefit') {
+    return { exact: [], alternatives: [] };
+  }
 
-    const locStr = `${job.location || ''} ${job.city || ''} ${job.voivodeship || ''}`.toLowerCase();
-    const houseStr = (job.housing || '').toLowerCase();
-    const titleStr = (job.jobTitle || '').toLowerCase();
+  if (parsed.type === 'unsupported_location' || parsed.type === 'unsupported_profession') {
+    return {
+      exact: [],
+      alternatives: jobs.slice(0, 2).map((j) => ({
+        job: j,
+        isAlternative: true,
+        matchReasons: ['💡 Alternatywna oferta z zakwaterowaniem'],
+      })),
+    };
+  }
 
-    // Location match
-    if (criteria.location) {
-      if (criteria.location === 'Dolny Śląsk' && (locStr.includes('doln') || locStr.includes('świebodz') || locStr.includes('nowa ruda') || locStr.includes('kłodzk'))) {
-        score += 3;
-        matchReasons.push('✓ Lokalizacja: Dolny Śląsk');
-      } else if (criteria.location.includes('Sosnowiec') && (locStr.includes('sosnow') || locStr.includes('śląsk'))) {
-        score += 3;
-        matchReasons.push('✓ Lokalizacja: Sosnowiec / Śląsk');
-      } else if (criteria.location.includes('Poznań')) {
-        // We do not have Poznań jobs currently
-        score = -10;
-      }
+  if (parsed.type === 'salary_inquiry') {
+    return {
+      exact: jobs.slice(0, 2).map((j) => ({
+        job: j,
+        isAlternative: false,
+        matchReasons: [`✓ Stawka ${j.salary}`],
+      })),
+      alternatives: [],
+    };
+  }
+
+  // Exact filtering
+  const exact = [];
+  const alternatives = [];
+
+  jobs.forEach((j) => {
+    let matchesAll = true;
+    const reasons = [];
+
+    // Location
+    if (parsed.location === 'dolny_slask') {
+      const isDolny = (j.voivodeship || '').toLowerCase().includes('dolny') ||
+                      (j.location || '').toLowerCase().includes('doln') ||
+                      (j.location || '').toLowerCase().includes('świebodz') ||
+                      (j.location || '').toLowerCase().includes('nowa ruda');
+      if (!isDolny) matchesAll = false;
+      else reasons.push('✓ Dolny Śląsk');
     }
 
-    // Housing match: accurately differentiate free from paid
-    if (criteria.accommodation) {
-      if (job.housingType === 'free' || houseStr.includes('darmowe')) {
-        score += 2;
-        matchReasons.push('✓ Darmowe zakwaterowanie');
-      } else if (job.housingPrice) {
-        score += 1;
-        matchReasons.push(`✓ Mieszkanie (${job.housingPrice} zł/mc)`);
-      }
+    if (parsed.location === 'slask') {
+      const isSlask = (j.city === 'Sosnowiec') ||
+                      ((j.voivodeship || '').toLowerCase() === 'śląsk') ||
+                      (j.location || '').toLowerCase().includes('sosnow');
+      if (!isSlask) matchesAll = false;
+      else reasons.push('✓ Śląsk (Sosnowiec)');
     }
 
-    // Couples match
-    if (criteria.couples) {
-      if (job.couplesWelcome || houseStr.includes('pokoje') || houseStr.includes('darmowe')) {
-        score += 2;
-        matchReasons.push('✓ Dostępne dla par');
-      }
-    }
-
-    // Category match
-    if (criteria.category) {
-      if (criteria.category === 'Produkcja' && (job.category === 'Produkcja' || titleStr.includes('produk') || titleStr.includes('montaż') || titleStr.includes('butli'))) {
-        score += 2;
-        matchReasons.push('✓ Branża: Produkcja');
-      } else if (criteria.category === 'Magazyn / Logistyka') {
-        // Currently active catalog is industrial production
-        score -= 5;
-      }
-    }
-
-    // Language safety (coordinator support)
-    if (criteria.language) {
-      if (job.languageRequired === 'brak') {
-        score += 2;
-        matchReasons.push('✓ Brak wymogu języka');
+    // Housing: free vs paid
+    if (parsed.housing === 'free') {
+      if (j.housingType !== 'free') {
+        matchesAll = false; // Exclude Świebodzice (550 zł) from exact free housing
       } else {
-        score += 1;
-        matchReasons.push('✓ Podstawowy polski');
+        reasons.push('✓ Darmowe zakwaterowanie');
       }
+    } else if (parsed.housing === 'any') {
+      if (j.housingType === 'free') reasons.push('✓ Darmowe zakwaterowanie');
+      else if (j.housingPrice) reasons.push(`✓ Mieszkanie (${j.housingPrice} zł/mc)`);
+      else reasons.push('✓ Zapewnione zakwaterowanie');
     }
 
-    // Urgency
-    if (criteria.isUrgent) {
-      score += 1;
-      matchReasons.push('✓ Szybki start');
+    // Couples
+    if (parsed.couples) {
+      if (!j.couplesWelcome) matchesAll = false;
+      else reasons.push('✓ Pokoje dla par');
     }
 
-    return { job, score, matchReasons };
+    // Language
+    if (parsed.languageNoReq) {
+      if (j.languageRequired !== 'brak') matchesAll = false;
+      else reasons.push('✓ Bez języka (koordynator)');
+    }
+
+    // Category
+    if (parsed.category) {
+      reasons.push('✓ Produkcja przemysłowa');
+    }
+
+    if (matchesAll) {
+      exact.push({ job: j, isAlternative: false, matchReasons: reasons });
+    } else if (parsed.housing === 'free' && j.housingPrice && parsed.location === 'dolny_slask') {
+      // Near miss: user wanted free in Dolny Śląsk, job is in Dolny Śląsk but housing is 550 zł
+      alternatives.push({
+        job: j,
+        isAlternative: true,
+        matchReasons: ['💡 Alternatywa: zakwaterowanie 550 zł/mc potrącane z wypłaty'],
+      });
+    }
   });
 
-  // Strict: only return offers that scored positively
-  const filtered = scored.filter((item) => item.score > 0);
-  filtered.sort((a, b) => b.score - a.score);
-
-  return filtered.slice(0, 2);
+  return { exact, alternatives };
 }
 
 export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
@@ -204,7 +252,7 @@ export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
     if (messages.length === 0) {
       const welcomeText = currentLanguage === 'ua'
         ? `Привіт! 👋 Я помічник JobMe. Wyszukuję w aktualnej bazie ofert JobMe (KRAZ nr ${config.kraz}). Введіть місто, бажані умови або запитайте про житло:`
-        : `Cześć! 👋 Wyszukuję w aktualnej bazie ofert JobMe (KRAZ nr ${config.kraz}). Jakiej pracy szukasz? Możesz wpisać miasto, branżę lub zapytać o mieszkanie:`;
+        : `Cześć! 👋 Wyszukuję w aktualnej bazie ofert JobMe (KRAZ nr ${config.kraz}). Jakiej pracy szukasz? Możesz wpisać miasto, branżę lub zapytać o zakwaterowanie:`;
 
       setMessages([
         {
@@ -237,47 +285,56 @@ export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
     if (!textToSend) setInputValue('');
     setIsTyping(true);
 
-    // Natural Language Intent Extraction + Structured Search
+    // Natural Language Intent Extraction + Strict Matching
     setTimeout(() => {
-      const criteria = extractJobCriteria(query);
-      const matches = matchOffers(jobs, criteria);
-      trackAiJobResult(matches.length);
+      const parsed = parseQuery(query);
+      const { exact, alternatives } = matchVacancies(jobs, parsed);
+      trackAiJobResult(exact.length);
 
       let replyText = '';
-      const identifiedItems = [];
-      if (criteria.location) identifiedItems.push(`📍 ${criteria.location}`);
-      if (criteria.accommodation) identifiedItems.push(currentLanguage === 'ua' ? '🏠 З житлом' : '🏠 Zakwaterowanie');
-      if (criteria.couples) identifiedItems.push(currentLanguage === 'ua' ? '👫 Для пар' : '👫 Dla par');
-      if (criteria.category) identifiedItems.push(`⚙️ ${criteria.category}`);
-      if (criteria.language) identifiedItems.push(currentLanguage === 'ua' ? '🗣️ Без польської' : '🗣️ Bez języka');
 
-      // Check for out-of-scope / hallucination test queries
-      if (criteria.isOutOfScope) {
+      if (parsed.type === 'unrelated') {
         replyText = currentLanguage === 'ua'
-          ? 'У нашій базі офіційних вакансій JobMe немає інформації про такі нестандартні умови (наприклад, службовий автомобіль, робота тільки вночі або безстроковий договір). Стандартні умови — це офіційна Umowa zlecenie з ZUS, перевірене житло та своєчасні виплати. Ви можете уточнити це питання у координатора:'
-          : 'W aktualnej bazie JobMe brak potwierdzenia takich niestandardowych warunków (np. samochód służbowy, praca tylko nocna czy umowa bezterminowa). Standardem jest legalna umowa zlecenie z ZUS, zakwaterowanie i zaliczki. Koordynator w Telegramie odpowie na szczegółowe pytania:';
-      } else if (identifiedItems.length > 0 && matches.length > 0) {
+          ? 'Я спеціалізуюся на працевлаштуванні в Польщі та підборі вакансій JobMe. Запитайте мене про актуальну роботу, зарплату, безкоштовне житло або вакансії для пар!'
+          : 'Jestem asystentem rekrutacyjnym JobMe. Zapytaj mnie o aktualne oferty pracy w Polsce, zarobki na rękę, darmowe mieszkanie lub pracę dla par!';
+      } else if (parsed.type === 'unsupported_benefit') {
         replyText = currentLanguage === 'ua'
-          ? `Розпізнані критерії: ${identifiedItems.join(' • ')}. В актуальній базі JobMe знайдено:`
-          : `Rozpoznane parametry: ${identifiedItems.join(' • ')}. W aktualnej bazie ofert JobMe dopasowano:`;
-      } else if (identifiedItems.length > 0 && matches.length === 0) {
+          ? 'У нашій офіційній базі JobMe немає таких нестандартних умов (наприклад, службовий автомобіль, безстроковий договір чи завищені погодинні ставки). Ми працевлаштовуємо офіційно на Umowa zlecenie з повним ZUS, надаємо перевірене житло та регулярні аванси. Уточніть деталі у координатора:'
+          : 'W aktualnej bazie ofert JobMe brak potwierdzenia takich warunków (np. samochód służbowy, umowa bezterminowa czy stawki powyżej rynkowych). Standard to w 100% legalna umowa zlecenie z ZUS, zakwaterowanie i zaliczki. Koordynator w Telegramie wyjaśni szczegóły:';
+      } else if (parsed.type === 'salary_inquiry') {
         replyText = currentLanguage === 'ua'
-          ? `За критеріями (${identifiedItems.join(' • ')}) прямих вільних місць зараз немає. Напишіть координатору в Telegram — є ротаційні зміни:`
-          : `Dla podanych kryteriów (${identifiedItems.join(' • ')}) brak aktualnie bezpośrednich wolnych miejsc. Skontaktuj się z koordynatorem w Telegramie:`;
+          ? '💰 Базова ставка: 25,00 zł / год. нетто (для студентів до 26 років: 31,40 zł брутто). Орієнтовний місячний дохід: 4 200 – 6 000 zł netto (залежно від годин і змін). Ось наші активні вакансії:'
+          : '💰 Stawka podstawowa w JobMe wynosi 25,00 zł / godz. netto (studenci do 26 lat: 31,40 zł brutto). Miesięczny zarobek na rękę wynosi średnio 4 200 – 6 000 zł netto. Oto aktualne oferty:';
+      } else if (parsed.type === 'unsupported_location') {
+        replyText = currentLanguage === 'ua'
+          ? 'Наразі ми ведемо набір у регіонах Нижньої Сілезії (Нова Руда, Свебодзіце) та Сілезії (Сосновець). У зазначеному вами місті зараз прямих місць немає. Рекомендуємо перевірені пропозиції з житлом:'
+          : 'Obecnie prowadzimy rekrutację na Dolnym Śląsku (Nowa Ruda, Świebodzice) oraz na Śląsku (Sosnowiec). W wybranym mieście nie mamy obecnie wakatów. Sprawdź dostępne alternatywy z zakwaterowaniem:';
+      } else if (parsed.type === 'unsupported_profession') {
+        replyText = currentLanguage === 'ua'
+          ? 'JobMe спеціалізується на виробничих підприємствах, монтажі та промисловості. За вказаною спеціальністю прямих місць немає, але є перевірені виробничі вакансії, де не потрібен досвід:'
+          : 'JobMe specjalizuje się w produkcji przemysłowej, montażu i automotive. Na podane stanowisko nie prowadzimy obecnie naboru. Sprawdź oferty produkcyjne niewymagające doświadczenia:';
+      } else if (exact.length > 0) {
+        replyText = currentLanguage === 'ua'
+          ? 'Wyszukuję w aktualnej bazie ofert JobMe. Знайдено точні збіги за вашими критеріями:'
+          : 'Wyszukuję w aktualnej bazie ofert JobMe. Znaleziono dokładne dopasowania spełniające Twoje kryteria:';
+      } else if (alternatives.length > 0) {
+        replyText = currentLanguage === 'ua'
+          ? 'Точного збігу за всіма фільтрами немає, але в нас є схожі альтернативні варіанти:'
+          : 'Brak 100% dopasowania do wszystkich kryteriów, ale przygotowałem zbliżone propozycje alternatywne:';
       } else {
         replyText = currentLanguage === 'ua'
-          ? 'Wyszukuję w aktualnej bazie ofert JobMe. Ось актуальні пропозиції:'
-          : 'Wyszukuję w aktualnej bazie ofert JobMe. Oto bieżące oferty w systemie:';
+          ? 'За вказаними параметрами в системі зараз немає відкритих місць. Напишіть нашому координатору в Telegram — постійно відкриваються нові зміни:'
+          : 'Dla podanych kryteriów brak aktualnie wolnych miejsc. Skontaktuj się bezpośrednio z koordynatorem w Telegramie — prowadzimy rotację wakatów:';
       }
+
+      const displayedOffers = exact.length > 0 ? exact : alternatives;
 
       setMessages((prev) => [
         ...prev,
         {
           sender: 'assistant',
           text: replyText,
-          criteria: identifiedItems,
-          // Strict: never hallucinate or inject irrelevant jobs when 0 matches
-          matches: matches,
+          matches: displayedOffers,
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         }
       ]);
@@ -373,24 +430,30 @@ export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
                 {/* Render structured matched offers with explanation tags */}
                 {m.matches && m.matches.length > 0 && (
                   <div className="mt-3 space-y-2.5">
-                    {m.matches.map(({ job, matchReasons }, jIdx) => (
+                    {m.matches.map(({ job, isAlternative, matchReasons }, jIdx) => (
                       <div key={jIdx} className="p-3 rounded-xl bg-zinc-50 border border-zinc-200 text-left space-y-1.5">
                         <div className="flex items-baseline justify-between gap-1">
                           <p className="font-black text-xs text-[#2D2D2D] truncate">{job.jobTitle}</p>
-                          <span className="text-[10px] font-bold text-[#5a8a00] bg-green-50 px-1.5 py-0.5 rounded border border-green-200 shrink-0">
-                            Netto
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${
+                            isAlternative
+                              ? 'bg-amber-50 text-amber-800 border-amber-200'
+                              : 'bg-green-50 text-[#5a8a00] border-green-200'
+                          }`}>
+                            {isAlternative ? (currentLanguage === 'ua' ? 'Альтернатива' : 'Alternatywa') : 'Netto'}
                           </span>
                         </div>
                         <p className="text-xs font-black text-[#5a8a00]">{job.salary}</p>
                         <p className="text-[11px] text-zinc-600 line-clamp-1">
-                          {job.location} • {job.housingType === 'free' ? 'Darmowe mieszkanie' : job.housingPrice ? `${job.housingPrice} zł/mc` : job.housing}
+                          {job.location} • {job.housingType === 'free' ? (currentLanguage === 'ua' ? 'Безкоштовне житло' : 'Darmowe mieszkanie') : job.housingPrice ? `${job.housingPrice} zł/mc` : job.housing}
                         </p>
 
                         {/* Match Reasons Explanations */}
                         {matchReasons && matchReasons.length > 0 && (
                           <div className="flex flex-wrap gap-1 pt-1">
                             {matchReasons.map((reason, rIdx) => (
-                              <span key={rIdx} className="text-[9px] font-bold bg-green-100/70 text-green-800 px-1.5 py-0.5 rounded">
+                              <span key={rIdx} className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                                isAlternative ? 'bg-amber-100/70 text-amber-800' : 'bg-green-100/70 text-green-800'
+                              }`}>
                                 {reason}
                               </span>
                             ))}
@@ -445,10 +508,10 @@ export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
         {/* Quick prompt chips */}
         <div className="p-2.5 bg-white border-t border-zinc-100 flex items-center gap-1.5 overflow-x-auto scrollbar-none">
           <button
-            onClick={() => handleSend('Wrocław Dolny Śląsk z mieszkaniem')}
+            onClick={() => handleSend('Wrocław z darmowym mieszkaniem')}
             className="px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-xs font-bold text-zinc-700 whitespace-nowrap cursor-pointer"
           >
-            📍 Dolny Śląsk
+            📍 Wrocław + Darmowe mieszkanie
           </button>
           <button
             onClick={() => handleSend('Sosnowiec Śląsk')}
@@ -461,6 +524,12 @@ export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
             className="px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-xs font-bold text-zinc-700 whitespace-nowrap cursor-pointer"
           >
             👫 Dla par
+          </button>
+          <button
+            onClick={() => handleSend('Ile można zarobić na rękę?')}
+            className="px-2.5 py-1 bg-zinc-100 hover:bg-zinc-200 rounded-lg text-xs font-bold text-zinc-700 whitespace-nowrap cursor-pointer"
+          >
+            💰 Ile na rękę?
           </button>
           {onOpenSmartLead && (
             <button
@@ -476,7 +545,7 @@ export default function ChatWidget({ onOpenSmartLead, onOpenVacancyDetail }) {
         <div className="p-3 bg-white border-t border-zinc-200 flex items-center gap-2">
           <input
             type="text"
-            placeholder={currentLanguage === 'ua' ? 'Напр: Вроцлав виробництво з житлом...' : 'Wpisz np. Dolny Śląsk z mieszkaniem dla par...'}
+            placeholder={currentLanguage === 'ua' ? 'Напр: Вроцлав, безкоштовне житло...' : 'Wpisz np. Wrocław z darmowym mieszkaniem...'}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}

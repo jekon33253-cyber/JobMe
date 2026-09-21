@@ -74,8 +74,8 @@ export default function VacancyDetailModal({ vacancy, isOpen, onClose, onOpenSma
     }
   };
 
-  const isHousingFree = vacancy.housingType === 'free' || (vacancy.housing || '').toLowerCase().includes('darmowe');
-  const isAdvancesWeekly = vacancy.advances === 'weekly' || (vacancy.salarySub && vacancy.salarySub.toLowerCase().includes('zaliczek'));
+  const isHousingFree = vacancy.housingType === 'free' || vacancy.housingPrice === 0;
+  const isAdvancesWeekly = vacancy.advances === 'weekly';
 
   return (
     <div

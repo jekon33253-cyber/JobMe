@@ -118,16 +118,31 @@ function MainSite() {
   const handleOpenVacancyDetail = (vacancy) => {
     setSelectedVacancyDetail(vacancy);
     if (vacancy?.slug) {
-      window.history.replaceState(null, '', `/oferty/${vacancy.slug}`);
+      window.history.pushState({ modal: 'vacancy', slug: vacancy.slug }, '', `/oferty/${vacancy.slug}`);
     }
   };
 
   const handleCloseVacancyDetail = () => {
     setSelectedVacancyDetail(null);
     if (window.location.pathname.startsWith('/oferty/') || window.location.pathname.startsWith('/jobs/')) {
-      window.history.replaceState(null, '', page === 'jobs' ? '/oferty' : '/');
+      if (window.history.state?.modal === 'vacancy') {
+        window.history.back();
+      } else {
+        window.history.replaceState(null, '', page === 'jobs' ? '/oferty' : '/');
+      }
     }
   };
+
+  useEffect(() => {
+    const handlePopState = (e) => {
+      // If a vacancy modal was open and user pressed browser Back, dismiss modal smoothly
+      if (selectedVacancyDetail && (!e.state || e.state.modal !== 'vacancy')) {
+        setSelectedVacancyDetail(null);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedVacancyDetail]);
 
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
   const navigate = useNavigate();

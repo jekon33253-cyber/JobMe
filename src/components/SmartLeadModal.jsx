@@ -83,17 +83,24 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
     if (candidateCity && candidateCity !== 'any') {
       filtered = jobs.filter((j) => {
         const loc = (j.location || '').toLowerCase();
-        if (candidateCity === 'wroclaw') return loc.includes('wroc') || loc.includes('doln') || loc.includes('świebodz');
-        if (candidateCity === 'sosnowiec') return loc.includes('sosnow') || loc.includes('śląsk') || loc.includes('katow') || loc.includes('dąbrow');
-        if (candidateCity === 'poznan') return loc.includes('pozna') || loc.includes('wielkop');
+        if (candidateCity === 'wroclaw') {
+          return (j.voivodeship || '').toLowerCase().includes('dolny') || loc.includes('wroc') || loc.includes('doln') || loc.includes('świebodz') || loc.includes('nowa ruda');
+        }
+        if (candidateCity === 'sosnowiec') {
+          return j.city === 'Sosnowiec' || loc.includes('sosnow') || (loc.includes('śląsk') && !loc.includes('dolny'));
+        }
+        if (candidateCity === 'poznan') {
+          return (j.voivodeship || '').toLowerCase().includes('wielkop') || loc.includes('pozna');
+        }
         return true;
       });
     }
 
     // Secondary filter: housing if specified
-    if (housingPreference === 'couple') {
-      const coupleFriendly = filtered.filter((j) => (j.housing || '').toLowerCase().includes('pokoje'));
-      if (coupleFriendly.length > 0) filtered = coupleFriendly;
+    if (housingPreference === 'free') {
+      filtered = filtered.filter((j) => j.housingType === 'free' || (j.housing || '').toLowerCase().includes('darmowe'));
+    } else if (housingPreference === 'couple') {
+      filtered = filtered.filter((j) => j.couplesWelcome || (j.housing || '').toLowerCase().includes('pokoje'));
     }
 
     const hasExact = filtered.length > 0;
@@ -115,7 +122,7 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
     if (alternativeJobs.length > 0) {
       return alternativeJobs[0].salary;
     }
-    return '5 200 – 7 600 zł netto / mc';
+    return '25,00 zł / godz. netto';
   }, [matchedJobs, alternativeJobs, initialVacancy]);
 
   // Telegram deep-link generator
@@ -131,8 +138,8 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
       text += `👥 Liczba: ${headcount} osób\n`;
       text += `⏱️ Termin: ${timeline}\n`;
     }
-    if (name) text += `👤 Imię: ${name}\n`;
-    if (contactValue) text += `📞 Kontakt: ${contactValue}\n`;
+    if (name) text += `👤 Imię: ${name.trim()}\n`;
+    if (contactValue) text += `📞 Kontakt: ${contactValue.trim()}\n`;
 
     return `https://t.me/${config.telegramUsername}?text=${encodeURIComponent(text)}`;
   };
@@ -147,27 +154,50 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
     } else {
       text += `🏢 Szukam pracowników B2B: ${employerIndustry} (${headcount} osób)\n`;
     }
-    if (name) text += `👤 Imię: ${name}\n`;
-    if (contactValue) text += `📞 Tel/Kontakt: ${contactValue}\n`;
+    if (name) text += `👤 Imię: ${name.trim()}\n`;
+    if (contactValue) text += `📞 Tel/Kontakt: ${contactValue.trim()}\n`;
 
     const cleanPhone = config.whatsappNumber || config.phoneRaw || '48574220849';
     return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!gdprConsent) return;
+    if (!gdprConsent || isSubmitting) return;
+
+    const trimmedName = name.trim();
+    const trimmedContact = contactValue.trim();
+
+    if (!trimmedName || !trimmedContact) {
+      setFormError(currentLanguage === 'ua' ? 'Будь ласка, заповніть всі обов’язкові поля' : 'Proszę wypełnić wszystkie wymagane pola');
+      return;
+    }
+
+    if (channel === 'phone' || channel === 'whatsapp') {
+      const digits = trimmedContact.replace(/[^0-9]/g, '');
+      if (digits.length < 7) {
+        setFormError(currentLanguage === 'ua' ? 'Введіть коректний номер телефону (мін. 7 цифр)' : 'Proszę podać poprawny numer telefonu (min. 7 cyfr)');
+        return;
+      }
+    }
+
+    setIsSubmitting(true);
+    setFormError('');
 
     trackLeadComplete(leadType, channel, {
-      name,
-      contact: contactValue,
       city: candidateCity,
       matches: matchedJobs.length,
+      has_name: Boolean(trimmedName),
+      has_contact: Boolean(trimmedContact),
     });
     trackSmartMatchComplete(matchedJobs.length, { candidateCity, housingPreference });
     setSubmitted(true);
+    setIsSubmitting(false);
   };
 
   return (
@@ -443,6 +473,13 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
               {/* STEP 3: Contacts & Priority Channel & GDPR Consent */}
               {step === 3 && (
                 <div className="space-y-4">
+                  {formError && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-bold flex items-center gap-2">
+                      <Icon name="error" className="text-base text-red-500" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
+
                   <div>
                     <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1">
                       {currentLanguage === 'ua' ? 'Ваше ім’я' : 'Twoje imię'}
@@ -450,9 +487,13 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
                     <input
                       type="text"
                       required
+                      maxLength={60}
                       placeholder="np. Aleksander"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        if (formError) setFormError('');
+                      }}
                       className="w-full px-4 py-3 rounded-xl border border-zinc-300 focus:ring-2 focus:ring-[#8CC63F] outline-none text-sm"
                     />
                   </div>
@@ -468,9 +509,13 @@ export default function SmartLeadModal({ isOpen, onClose, initialVacancy = null 
                     <input
                       type="text"
                       required
+                      maxLength={80}
                       placeholder={channel === 'telegram' ? '@username lub +48 / +380...' : '+48 / +380...'}
                       value={contactValue}
-                      onChange={(e) => setContactValue(e.target.value)}
+                      onChange={(e) => {
+                        setContactValue(e.target.value);
+                        if (formError) setFormError('');
+                      }}
                       className="w-full px-4 py-3 rounded-xl border border-zinc-300 focus:ring-2 focus:ring-[#8CC63F] outline-none text-sm"
                     />
                   </div>

@@ -108,7 +108,7 @@ function JobCard({ job, index, labels, quickContactLabels, onApply, onViewDetail
   const iconName = icons[index % icons.length];
   const bgImage = JOB_IMAGES[index % JOB_IMAGES.length];
 
-  const isHousingFree = job.housingType === 'free' || (job.housing || '').toLowerCase().includes('darmowe');
+  const isHousingFree = job.housingType === 'free' || job.housingPrice === 0;
 
   return (
     <div

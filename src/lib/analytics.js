@@ -1,25 +1,42 @@
 // Analytics abstraction layer for JobMe recruitment platform
 // Safely integrates Google Analytics 4 (gtag) and Meta Pixel (fbq)
 
+// PII scrubbing safeguard to prevent GDPR/TOS violations
+const SENSITIVE_KEYS = new Set(['name', 'contact', 'phone', 'email', 'full_name', 'telegram', 'phone_number']);
+
+const sanitizeParams = (params = {}) => {
+  const clean = {};
+  for (const [key, val] of Object.entries(params)) {
+    if (SENSITIVE_KEYS.has(key.toLowerCase())) {
+      clean[`has_${key}`] = Boolean(val);
+    } else {
+      clean[key] = val;
+    }
+  }
+  return clean;
+};
+
 export const trackEvent = (eventName, params = {}) => {
   try {
     if (typeof window !== 'undefined') {
+      const sanitized = sanitizeParams(params);
+
       // Google Analytics 4
       if (typeof window.gtag === 'function') {
-        window.gtag('event', eventName, params);
+        window.gtag('event', eventName, sanitized);
       }
 
       // Meta Pixel
       if (typeof window.fbq === 'function') {
         // Map standard events when applicable
         if (eventName === 'lead_complete') {
-          window.fbq('track', 'Lead', params);
+          window.fbq('track', 'Lead', sanitized);
         } else if (eventName === 'job_view') {
-          window.fbq('track', 'ViewContent', { content_name: params.job_title });
+          window.fbq('track', 'ViewContent', { content_name: sanitized.job_title });
         } else if (eventName === 'apply_start') {
-          window.fbq('track', 'Contact', params);
+          window.fbq('track', 'Contact', sanitized);
         } else {
-          window.fbq('trackCustom', eventName, params);
+          window.fbq('trackCustom', eventName, sanitized);
         }
       }
     }

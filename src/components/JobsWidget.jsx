@@ -38,7 +38,7 @@ function JobCard({ job, index, onNavigate, onApply, onOpenSmartLead, onViewDetai
     }
   };
 
-  const isHousingFree = job.housingType === 'free' || (job.housing || '').toLowerCase().includes('darmowe');
+  const isHousingFree = job.housingType === 'free' || job.housingPrice === 0;
 
   return (
     <div

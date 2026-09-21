@@ -19,6 +19,7 @@ export default function JobPostingSchema({ job }) {
     const postalCode = job.postalCode || null;
     const salaryValue = typeof job.salaryHourlyNet === 'number' ? job.salaryHourlyNet : null;
 
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://jobme.pl';
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
@@ -26,17 +27,23 @@ export default function JobPostingSchema({ job }) {
       description: Array.isArray(job.tasks) && job.tasks.length > 0
         ? `${job.tasks.join('. ')}. ${job.perks || ''}`
         : job.perks || job.jobTitle,
-      datePosted: job.datePosted || '2025-01-15',
-      validThrough: '2025-12-31',
       employmentType: 'CONTRACT', // Umowa zlecenie
+      url: `${origin}/oferty/${job.slug}`,
       hiringOrganization: {
         '@type': 'Organization',
-        name: config.companyName || 'JobMe',
-        sameAs: 'https://jobme.pl',
-        logo: 'https://jobme.pl/logo.webp',
+        name: config.companyName || 'GRUPA JOBME S.A.',
+        sameAs: origin,
       },
       directApply: true,
     };
+
+    // Strict date handling: only add if explicitly provided, do not invent
+    if (job.datePosted) {
+      schema.datePosted = job.datePosted;
+    }
+    if (job.validThrough) {
+      schema.validThrough = job.validThrough;
+    }
 
     // Only add jobLocation if city is verified
     if (city) {
