@@ -21,15 +21,15 @@ const PAGE_META = {
   jobs: {
     pl: {
       title: 'Oferty Pracy — JobMe | Praca Produkcja, Logistyka Wrocław i Dolny Śląsk',
-      desc: 'Aktualne oferty pracy: produkcja słodyczy, paczkomaty, butle gazowe. Legalne zatrudnienie, umowa zlecenie z ZUS, darmowe zakwaterowanie. Aplikuj przez WhatsApp lub Telegram!',
+      desc: 'Aktualne oferty pracy: produkcja słodyczy, paczkomaty, butle gazowe. Legalne zatrudnienie, umowa zlecenie z ZUS, zakwaterowanie. Aplikuj przez WhatsApp lub Telegram!',
     },
     ua: {
       title: 'Вакансії — JobMe | Робота Виробництво, Логістика Вроцлав та Нижня Сілезія',
-      desc: 'Актуальні вакансії: виробництво солодощів, поштомати, газові балони. Легальне працевлаштування, договір злеценя з ZUS, безкоштовне проживання.',
+      desc: 'Актуальні вакансії: виробництво солодощів, поштомати, газові балони. Легальне працевлаштування, договір злеценя з ZUS, проживання.',
     },
     en: {
       title: 'Job Openings — JobMe | Production, Logistics Jobs Wrocław & Lower Silesia',
-      desc: 'Current job openings: confectionery, parcel lockers, gas cylinders. Legal employment, mandate contract with ZUS, free accommodation.',
+      desc: 'Current job openings: confectionery, parcel lockers, gas cylinders. Legal employment, mandate contract with ZUS, accommodation.',
     },
   },
   privacy: {
@@ -61,9 +61,9 @@ const PAGE_META = {
     },
   },
   notFound: {
-    pl: { title: '404 — Strona nie znaleziona | JobMe', desc: '' },
-    ua: { title: '404 — Сторінку не знайдено | JobMe', desc: '' },
-    en: { title: '404 — Page Not Found | JobMe', desc: '' },
+    pl: { title: '404 — Strona nie znaleziona | JobMe', desc: 'Nie znaleziono żądanej strony w JobMe.' },
+    ua: { title: '404 — Сторінку не знайдено | JobMe', desc: 'Сторінку не знайдено.' },
+    en: { title: '404 — Page Not Found | JobMe', desc: 'Page not found.' },
   },
 };
 
@@ -73,28 +73,44 @@ const BREADCRUMB_LABELS = {
   en: { home: 'Home', jobs: 'Job Openings', privacy: 'Privacy Policy', blog: 'Knowledge Center' },
 };
 
-// ── helpers ────────────────────────────────────────────────────
 function cleanupHead() {
   document.querySelectorAll(
-    'link[rel="alternate"][hreflang], link[rel="canonical"], meta[name="description"]'
-  ).forEach(el => el.remove());
+    'link[rel="alternate"][hreflang], link[rel="canonical"], meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]'
+  ).forEach((el) => el.remove());
 }
 
-function buildUrl(lang) {
-  const url = new URL(BASE_URL);
-  url.searchParams.set('lang', lang);
-  return url.toString();
-}
-
-function setMetaDescription(text) {
-  if (!text) return;
-  let meta = document.querySelector('meta[name="description"]');
-  if (!meta) {
-    meta = document.createElement('meta');
-    meta.name = 'description';
-    document.head.appendChild(meta);
+function setMetaTag(attrName, attrValue, content) {
+  if (!content) return;
+  let tag = document.querySelector(`meta[${attrName}="${attrValue}"]`);
+  if (!tag) {
+    tag = document.createElement('meta');
+    tag.setAttribute(attrName, attrValue);
+    document.head.appendChild(tag);
   }
-  meta.setAttribute('content', text);
+  tag.setAttribute('content', content);
+}
+
+function setBreadcrumbsForVacancy(vacancy, lang) {
+  const scriptId = 'ld-breadcrumb';
+  const old = document.getElementById(scriptId);
+  if (old) old.remove();
+
+  const labels = BREADCRUMB_LABELS[lang] || BREADCRUMB_LABELS.pl;
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: labels.home, item: BASE_URL + '/' },
+      { '@type': 'ListItem', position: 2, name: labels.jobs, item: BASE_URL + '/oferty' },
+      { '@type': 'ListItem', position: 3, name: vacancy.jobTitle, item: `${BASE_URL}/oferty/${vacancy.slug}` },
+    ],
+  };
+
+  const script = document.createElement('script');
+  script.type = 'application/ld+json';
+  script.id = scriptId;
+  script.textContent = JSON.stringify(schema);
+  document.head.appendChild(script);
 }
 
 function setBreadcrumb(page, lang) {
@@ -109,7 +125,7 @@ function setBreadcrumb(page, lang) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: labels.home, item: BASE_URL + '/' },
-      { '@type': 'ListItem', position: 2, name: labels[page] || page, item: buildUrl(lang) },
+      { '@type': 'ListItem', position: 2, name: labels[page] || page, item: `${BASE_URL}/${page === 'jobs' ? 'oferty' : page}` },
     ],
   };
 
@@ -120,46 +136,57 @@ function setBreadcrumb(page, lang) {
   document.head.appendChild(script);
 }
 
-// ── component ──────────────────────────────────────────────────
-export default function SEOHead({ page = 'home' }) {
+export default function SEOHead({ page = 'home', vacancy = null }) {
   const { currentLanguage } = useLanguage();
 
   useEffect(() => {
-    const meta = PAGE_META[page]?.[currentLanguage] || PAGE_META[page]?.pl;
-
-    // Title + description
-    if (meta?.title) document.title = meta.title;
-    setMetaDescription(meta?.desc || '');
-
-    // BreadcrumbList
-    setBreadcrumb(page, currentLanguage);
-
-    // hreflang + canonical
     cleanupHead();
-    const head = document.head;
-    const langMap = { pl: 'pl', ua: 'uk', en: 'en' };
 
-    Object.entries(langMap).forEach(([code, hreflangCode]) => {
-      const link = document.createElement('link');
-      link.rel = 'alternate';
-      link.hreflang = hreflangCode;
-      link.href = buildUrl(code);
-      head.appendChild(link);
-    });
+    let pageTitle = '';
+    let pageDesc = '';
+    let canonicalUrl = `${BASE_URL}/`;
 
-    const xDefault = document.createElement('link');
-    xDefault.rel = 'alternate';
-    xDefault.hreflang = 'x-default';
-    xDefault.href = buildUrl('pl');
-    head.appendChild(xDefault);
+    if (vacancy) {
+      pageTitle = `${vacancy.jobTitle} | JobMe Praca w Polsce`;
+      pageDesc = `${vacancy.jobTitle} — ${vacancy.locationSummary || vacancy.location}. Wynagrodzenie: ${vacancy.salary}. Zakwaterowanie: ${vacancy.housingPrice === 0 ? 'Darmowe' : vacancy.housingPrice ? vacancy.housingPrice + ' zł/mc' : 'Zgodnie z ofertą'}. Legalna umowa z ZUS. Aplikuj w 1 minutę!`;
+      canonicalUrl = `${BASE_URL}/oferty/${vacancy.slug}`;
 
-    const canonical = document.createElement('link');
-    canonical.rel = 'canonical';
-    canonical.href = buildUrl(currentLanguage);
-    head.appendChild(canonical);
+      setBreadcrumbsForVacancy(vacancy, currentLanguage);
+    } else {
+      const meta = PAGE_META[page]?.[currentLanguage] || PAGE_META[page]?.pl || PAGE_META.home.pl;
+      pageTitle = meta.title;
+      pageDesc = meta.desc;
+      canonicalUrl = page === 'home' ? `${BASE_URL}/` : `${BASE_URL}/${page === 'jobs' ? 'oferty' : page}`;
+      setBreadcrumb(page, currentLanguage);
+    }
+
+    // Set Document Title
+    if (pageTitle) document.title = pageTitle;
+
+    // Standard Meta Description
+    setMetaTag('name', 'description', pageDesc);
+
+    // Open Graph
+    setMetaTag('property', 'og:title', pageTitle);
+    setMetaTag('property', 'og:description', pageDesc);
+    setMetaTag('property', 'og:url', canonicalUrl);
+    setMetaTag('property', 'og:type', vacancy ? 'article' : 'website');
+    setMetaTag('property', 'og:site_name', 'JobMe — Agencja Pracy');
+    setMetaTag('property', 'og:locale', currentLanguage === 'ua' ? 'uk_UA' : currentLanguage === 'en' ? 'en_US' : 'pl_PL');
+
+    // Twitter Card
+    setMetaTag('name', 'twitter:card', 'summary_large_image');
+    setMetaTag('name', 'twitter:title', pageTitle);
+    setMetaTag('name', 'twitter:description', pageDesc);
+
+    // Canonical link
+    const canonicalLink = document.createElement('link');
+    canonicalLink.rel = 'canonical';
+    canonicalLink.href = canonicalUrl;
+    document.head.appendChild(canonicalLink);
 
     return () => cleanupHead();
-  }, [page, currentLanguage]);
+  }, [page, vacancy, currentLanguage]);
 
   return null;
 }

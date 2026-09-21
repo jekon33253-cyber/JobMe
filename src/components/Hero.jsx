@@ -1,9 +1,11 @@
 import React from 'react';
 import FadeIn from './FadeIn';
 import { useLanguage } from '../context/LanguageContext';
+import config from '../config';
 
-export default function Hero({ onCtaClick }) {
-  const { t } = useLanguage();
+export default function Hero({ onCtaClick, onOpenSmartLead }) {
+  const { t, currentLanguage } = useLanguage();
+  const tgUrl = `https://t.me/${config.telegramUsername}`;
 
   return (
     <section 
@@ -43,18 +45,40 @@ export default function Hero({ onCtaClick }) {
           </FadeIn>
 
           <FadeIn delay={400}>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-start">
-              <button 
-                onClick={() => {
-                  if (window.gtag) window.gtag('event', 'click_find_job');
-                  if (window.fbq) window.fbq('trackCustom', 'ClickFindJob');
-                  onCtaClick('kandydat');
-                }}
-                className="bg-primary hover:bg-[#8ec71e] text-[#2D2D2D] font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group w-full sm:w-auto cursor-pointer"
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-4 justify-start">
+              {/* Telegram Primary Button */}
+              <a 
+                href={tgUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#0088cc] hover:bg-[#0077b3] text-white font-black text-base px-8 py-4 rounded-xl shadow-lg shadow-[#0088cc]/25 hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2.5 group w-full sm:w-auto cursor-pointer"
               >
-                {t('hero.btnKandydat')}
-                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-              </button>
+                <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current shrink-0" aria-hidden="true">
+                  <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.28 13.605l-2.95-.924c-.642-.204-.657-.642.136-.953l11.526-4.445c.536-.194 1.006.131.57.965z"/>
+                </svg>
+                <span>{currentLanguage === 'ua' ? 'Вакансії в Telegram' : 'Oferty w Telegramie'}</span>
+              </a>
+
+              {/* Smart Match 30s Button */}
+              {onOpenSmartLead ? (
+                <button 
+                  onClick={() => onOpenSmartLead(null)}
+                  className="bg-primary hover:bg-[#8ec71e] text-[#2D2D2D] font-black text-base px-8 py-4 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group w-full sm:w-auto cursor-pointer"
+                >
+                  <span className="material-symbols-outlined">bolt</span>
+                  <span>{currentLanguage === 'ua' ? 'Підбір за 30 сек' : 'Dobierz ofertę w 30s'}</span>
+                </button>
+              ) : (
+                <button 
+                  onClick={() => onCtaClick('kandydat')}
+                  className="bg-primary hover:bg-[#8ec71e] text-[#2D2D2D] font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group w-full sm:w-auto cursor-pointer"
+                >
+                  {t('hero.btnKandydat')}
+                  <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+              )}
+
+              {/* Employer Button */}
               <button 
                 onClick={() => {
                   if (window.gtag) window.gtag('event', 'click_find_employees');
@@ -66,6 +90,22 @@ export default function Hero({ onCtaClick }) {
                 {t('hero.btnPracodawca')}
                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">business</span>
               </button>
+            </div>
+
+            {/* Official Trust Badges (EWL / Gremi parity) */}
+            <div className="flex flex-wrap items-center gap-3 pt-3 text-xs md:text-sm text-zinc-300/90 font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
+                <span className="material-symbols-outlined text-[#8CC63F] text-base">verified</span>
+                {currentLanguage === 'ua' ? `Ліцензія KRAZ № ${config.kraz}` : `Certyfikat KRAZ nr ${config.kraz}`}
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
+                <span className="material-symbols-outlined text-[#00B4B4] text-base">security</span>
+                {currentLanguage === 'ua' ? '100% легальна робота (ZUS)' : '100% legalna praca i ZUS'}
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
+                <span className="material-symbols-outlined text-amber-400 text-base">home</span>
+                {currentLanguage === 'ua' ? 'Перевірене житло' : 'Sprawdzone zakwaterowanie'}
+              </span>
             </div>
           </FadeIn>
         </div>

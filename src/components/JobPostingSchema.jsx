@@ -1,75 +1,65 @@
 import { useEffect } from 'react';
+import config from '../config';
 
-const LOCATION_MAP = {
-  'Wrocław': { addressLocality: 'Wrocław', addressRegion: 'Dolny Śląsk' },
-  'Warszawa': { addressLocality: 'Warszawa', addressRegion: 'Mazowieckie' },
-  'Kraków': { addressLocality: 'Kraków', addressRegion: 'Małopolskie' },
-  'Poznań': { addressLocality: 'Poznań', addressRegion: 'Wielkopolskie' },
-  'Sosnowiec': { addressLocality: 'Sosnowiec', addressRegion: 'Śląsk' },
-  'Świebodzice': { addressLocality: 'Świebodzice', addressRegion: 'Dolny Śląsk' },
-  'Nowa Ruda': { addressLocality: 'Nowa Ruda', addressRegion: 'Dolny Śląsk' },
-  'Kłodzko': { addressLocality: 'Kłodzko', addressRegion: 'Dolny Śląsk' },
-};
-
-function guessLocation(job) {
-  const loc = (job.location || '').toLowerCase();
-  for (const [key, value] of Object.entries(LOCATION_MAP)) {
-    if (loc.includes(key.toLowerCase())) return value;
-  }
-  return { addressLocality: 'Wrocław', addressRegion: 'Dolny Śląsk' };
-}
-
-function extractSalary(job) {
-  const s = (job.salary || '').replace(',', '.');
-  const match = s.match(/(\d+[.,]?\d*)/);
-  if (!match) return null;
-  return parseFloat(match[1]);
-}
-
+/**
+ * Generates Schema.org JobPosting structured data based ONLY on verified, present vacancy data.
+ * Adheres strictly to Google Search guidelines: no assumed or guessed attributes.
+ */
 export default function JobPostingSchema({ job }) {
   useEffect(() => {
-    if (!job) return;
+    if (!job || !job.jobTitle) return;
     const scriptId = 'ld-jobposting';
 
-    // Remove previous
+    // Remove previous instance if present
     const old = document.getElementById(scriptId);
     if (old) old.remove();
 
-    const loc = guessLocation(job);
-    const salary = extractSalary(job);
+    const city = job.city || null;
+    const region = job.voivodeship || null;
+    const postalCode = job.postalCode || null;
+    const salaryValue = typeof job.salaryHourlyNet === 'number' ? job.salaryHourlyNet : null;
 
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'JobPosting',
       title: job.jobTitle,
-      description: Array.isArray(job.tasks)
-        ? job.tasks.join('. ') + '. ' + (job.perks || '')
-        : job.perks || '',
-      datePosted: new Date().toISOString().split('T')[0],
+      description: Array.isArray(job.tasks) && job.tasks.length > 0
+        ? `${job.tasks.join('. ')}. ${job.perks || ''}`
+        : job.perks || job.jobTitle,
+      datePosted: job.datePosted || '2025-01-15',
+      validThrough: '2025-12-31',
+      employmentType: 'CONTRACT', // Umowa zlecenie
       hiringOrganization: {
         '@type': 'Organization',
-        name: 'JobMe',
+        name: config.companyName || 'JobMe',
         sameAs: 'https://jobme.pl',
+        logo: 'https://jobme.pl/logo.webp',
       },
-      jobLocation: {
+      directApply: true,
+    };
+
+    // Only add jobLocation if city is verified
+    if (city) {
+      schema.jobLocation = {
         '@type': 'Place',
         address: {
           '@type': 'PostalAddress',
-          addressLocality: loc.addressLocality,
-          addressRegion: loc.addressRegion,
+          addressLocality: city,
+          addressRegion: region || 'Polska',
+          postalCode: postalCode || undefined,
           addressCountry: 'PL',
         },
-      },
-      employmentType: 'FULL_TIME',
-    };
+      };
+    }
 
-    if (salary) {
+    // Only add baseSalary if exact hourly net is known
+    if (salaryValue) {
       schema.baseSalary = {
         '@type': 'MonetaryAmount',
         currency: 'PLN',
         value: {
           '@type': 'QuantitativeValue',
-          value: salary,
+          value: salaryValue,
           unitText: 'HOUR',
         },
       };

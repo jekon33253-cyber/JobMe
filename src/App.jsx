@@ -10,44 +10,51 @@ import LegalizationTimeline from './components/LegalizationTimeline';
 import Upskilling from './components/Upskilling';
 import ContactForm from './components/ContactForm';
 import JobsWidget from './components/JobsWidget';
-import JobsPage from './components/JobsPage';
-import PrivacyPage from './components/PrivacyPage';
+// Lazy loaded Portal pages
+const LoginPage = React.lazy(() => import('./components/portal/LoginPage'));
+const Dashboard = React.lazy(() => import('./components/portal/Dashboard'));
+const ProfilePage = React.lazy(() => import('./components/portal/ProfilePage'));
+const DocumentsPage = React.lazy(() => import('./components/portal/DocumentsPage'));
+const LegalizationTracker = React.lazy(() => import('./components/portal/LegalizationTracker'));
+const ApplicationsPage = React.lazy(() => import('./components/portal/ApplicationsPage'));
+const NotificationsPage = React.lazy(() => import('./components/portal/NotificationsPage'));
+
+// Lazy loaded Admin pages
+const AdminDashboard = React.lazy(() => import('./components/admin/AdminDashboard'));
+const AdminCandidates = React.lazy(() => import('./components/admin/AdminCandidates'));
+const AdminDocReview = React.lazy(() => import('./components/admin/AdminDocReview'));
+const AdminProfile = React.lazy(() => import('./components/admin/AdminProfile'));
+
+const PasswordResetModal = React.lazy(() => import('./components/PasswordResetModal'));
+
+// Lazy loaded Recruiter pages
+const RecruiterDashboard = React.lazy(() => import('./components/recruiter/RecruiterDashboard'));
+const RecruiterJobs = React.lazy(() => import('./components/recruiter/RecruiterJobs'));
+const RecruiterCandidates = React.lazy(() => import('./components/recruiter/RecruiterCandidates'));
+const RecruiterNewCandidate = React.lazy(() => import('./components/recruiter/RecruiterNewCandidate'));
+const RecruiterCandidateView = React.lazy(() => import('./components/recruiter/RecruiterCandidateView'));
+const RecruiterEarnings = React.lazy(() => import('./components/recruiter/RecruiterEarnings'));
+const RecruiterProfile = React.lazy(() => import('./components/recruiter/RecruiterProfile'));
+
+// Lazy loaded secondary views
+const Blog = React.lazy(() => import('./components/Blog'));
+const PrivacyPage = React.lazy(() => import('./components/PrivacyPage'));
+const JobsPage = React.lazy(() => import('./components/JobsPage'));
+const VacancyDetailPage = React.lazy(() => import('./components/VacancyDetailPage'));
+
 import CookieConsent from './components/CookieConsent';
 import NotFoundPage from './components/NotFoundPage';
 import SEOHead from './components/SEOHead';
 import ReferralProgram from './components/ReferralProgram';
 import UserPortalTeaser from './components/UserPortalTeaser';
-import Blog from './components/Blog';
 import ChatWidget from './components/ChatWidget';
+import SmartLeadModal from './components/SmartLeadModal';
+import MobileStickyBar from './components/MobileStickyBar';
+import VacancyDetailModal from './components/VacancyDetailModal';
+import { trackPageView } from './lib/analytics';
 import { useLanguage } from './context/LanguageContext';
 import { useAuth, ProtectedRoute } from './context/AuthContext';
 import config from './config';
-
-// Portal pages
-import LoginPage from './components/portal/LoginPage';
-import Dashboard from './components/portal/Dashboard';
-import ProfilePage from './components/portal/ProfilePage';
-import DocumentsPage from './components/portal/DocumentsPage';
-import LegalizationTracker from './components/portal/LegalizationTracker';
-import ApplicationsPage from './components/portal/ApplicationsPage';
-import NotificationsPage from './components/portal/NotificationsPage';
-
-// Admin pages
-import AdminDashboard from './components/admin/AdminDashboard';
-import AdminCandidates from './components/admin/AdminCandidates';
-import AdminDocReview from './components/admin/AdminDocReview';
-import AdminProfile from './components/admin/AdminProfile';
-
-import PasswordResetModal from './components/PasswordResetModal';
-
-// Recruiter pages
-import RecruiterDashboard from './components/recruiter/RecruiterDashboard';
-import RecruiterJobs from './components/recruiter/RecruiterJobs';
-import RecruiterCandidates from './components/recruiter/RecruiterCandidates';
-import RecruiterNewCandidate from './components/recruiter/RecruiterNewCandidate';
-import RecruiterCandidateView from './components/recruiter/RecruiterCandidateView';
-import RecruiterEarnings from './components/recruiter/RecruiterEarnings';
-import RecruiterProfile from './components/recruiter/RecruiterProfile';
 
 // ── floating chat buttons + scroll-to-top ─────────────────────
 function FloatingContactButtons() {
@@ -62,7 +69,7 @@ function FloatingContactButtons() {
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
-    <div className="fixed bottom-6 right-5 z-[900] flex flex-col gap-3 items-end">
+    <div className="hidden md:flex fixed bottom-6 right-5 z-[900] flex-col gap-3 items-end">
       {/* Scroll to Top */}
       <button
         onClick={scrollToTop}
@@ -87,15 +94,48 @@ function MainSite() {
     const path = window.location.pathname;
     if (path === '/privacy') return 'privacy';
     if (path === '/jobs' || path === '/oferty') return 'jobs';
+    if (path.startsWith('/oferty/') || path.startsWith('/jobs/')) return 'vacancyDetail';
     if (path === '/blog') return 'blog';
     return 'home';
   });
   const [highlightJobIdx, setHighlightJobIdx] = useState(null);
   const [lastJobTitle, setLastJobTitle] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [smartLeadOpen, setSmartLeadOpen] = useState(false);
+  const [smartLeadVacancy, setSmartLeadVacancy] = useState(null);
+  const [selectedVacancyDetail, setSelectedVacancyDetail] = useState(null);
+
+  const handleOpenSmartLead = (vacancy = null) => {
+    setSmartLeadVacancy(vacancy);
+    setSmartLeadOpen(true);
+  };
+
+  const handleCloseSmartLead = () => {
+    setSmartLeadOpen(false);
+    setSmartLeadVacancy(null);
+  };
+
+  const handleOpenVacancyDetail = (vacancy) => {
+    setSelectedVacancyDetail(vacancy);
+    if (vacancy?.slug) {
+      window.history.replaceState(null, '', `/oferty/${vacancy.slug}`);
+    }
+  };
+
+  const handleCloseVacancyDetail = () => {
+    setSelectedVacancyDetail(null);
+    if (window.location.pathname.startsWith('/oferty/') || window.location.pathname.startsWith('/jobs/')) {
+      window.history.replaceState(null, '', page === 'jobs' ? '/oferty' : '/');
+    }
+  };
+
   const { t, currentLanguage, setCurrentLanguage } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    trackPageView(page);
+  }, [page]);
 
   useEffect(() => {
     if (currentLanguage === 'ua') {
@@ -146,6 +186,9 @@ function MainSite() {
       window.scrollTo({ top: 0 });
     } else if (path === '/jobs' || path === '/oferty') {
       setPage('jobs');
+    } else if (path.startsWith('/oferty/') || path.startsWith('/jobs/')) {
+      setPage('vacancyDetail');
+      window.scrollTo({ top: 0 });
     } else if (path === '/blog') {
       setPage('blog');
       window.scrollTo({ top: 0 });
@@ -153,6 +196,10 @@ function MainSite() {
       setPage('home');
     }
   }, [location.pathname]);
+
+  const vacancySlug = (location.pathname.startsWith('/oferty/') || location.pathname.startsWith('/jobs/'))
+    ? location.pathname.replace(/^\/(oferty|jobs)\/?/, '').split('/')[0]
+    : '';
 
   const handleScrollToContact = (tab, jobTitle) => {
     navigate('/');
@@ -386,30 +433,46 @@ function MainSite() {
 
       {/* ── JOBS PAGE ─────────────────────────────────────────── */}
       {page === 'jobs' && (
-        <>
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-50"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
           <SEOHead page="jobs" />
           <JobsPage
             onBack={handleBackToHome}
             onApply={(msg) => handleScrollToContact('kandydat', msg)}
+            onOpenSmartLead={handleOpenSmartLead}
+            onOpenVacancyDetail={handleOpenVacancyDetail}
             highlightIdx={highlightJobIdx}
           />
-        </>
+        </React.Suspense>
+      )}
+
+      {/* ── STANDALONE VACANCY DETAIL PAGE (INDEXABLE DIRECT URL) ── */}
+      {page === 'vacancyDetail' && (
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-50"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+          <VacancyDetailPage
+            slug={vacancySlug}
+            onOpenSmartLead={handleOpenSmartLead}
+            onBackToJobs={() => {
+              navigate('/oferty');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        </React.Suspense>
       )}
 
       {/* ── PRIVACY PAGE ───────────────────────────────────────── */}
       {page === 'privacy' && (
-        <>
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-50"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
           <SEOHead page="privacy" />
           <PrivacyPage onBack={() => setPage('home')} />
-        </>
+        </React.Suspense>
       )}
 
       {/* ── BLOG PAGE ──────────────────────────────────────────── */}
       {page === 'blog' && (
-        <>
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-zinc-50"><div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
           <SEOHead page="blog" />
           <Blog onContactClick={() => handleScrollToContact('kandydat', 'ZAPYTANIE Z BLOGA: Centrum Wiedzy')} />
-        </>
+        </React.Suspense>
       )}
 
       {/* ── 404 PAGE ──────────────────────────────────────────── */}
@@ -425,13 +488,15 @@ function MainSite() {
         <main>
           <SEOHead page="home" />
           <div className="pt-[100px] sm:pt-[80px]">
-            <Hero onCtaClick={handleScrollToContact} />
+            <Hero onCtaClick={handleScrollToContact} onOpenSmartLead={handleOpenSmartLead} />
             <StatsBanner />
           </div>
 
           <JobsWidget
             onApply={(msg) => handleScrollToContact('kandydat', msg)}
             onNavigateToJobs={handleNavigateToJobs}
+            onOpenSmartLead={handleOpenSmartLead}
+            onViewDetails={handleOpenVacancyDetail}
           />
 
           {/* About Section */}
@@ -662,10 +727,40 @@ function MainSite() {
       )}
 
       {/* ── Floating chat widget ── */}
-      <ChatWidget />
+      <ChatWidget 
+        onOpenSmartLead={handleOpenSmartLead} 
+        onOpenVacancyDetail={handleOpenVacancyDetail}
+      />
 
       {/* ── Floating WhatsApp / Telegram buttons (always visible) ── */}
       <FloatingContactButtons />
+
+      {/* ── Mobile Sticky Action Bar ── */}
+      {page !== 'vacancyDetail' && (
+        <MobileStickyBar
+          onOpenSmartLead={() => handleOpenSmartLead(null)}
+          onNavigateToJobs={() => handleNavigateToJobs(null)}
+          isModalOpen={smartLeadOpen || !!selectedVacancyDetail}
+        />
+      )}
+
+      {/* ── Vacancy Detail Modal ── */}
+      <VacancyDetailModal
+        vacancy={selectedVacancyDetail}
+        isOpen={!!selectedVacancyDetail}
+        onClose={handleCloseVacancyDetail}
+        onOpenSmartLead={(vac) => {
+          handleCloseVacancyDetail();
+          handleOpenSmartLead(vac);
+        }}
+      />
+
+      {/* ── Smart Lead Modal ── */}
+      <SmartLeadModal
+        isOpen={smartLeadOpen}
+        onClose={handleCloseSmartLead}
+        initialVacancy={smartLeadVacancy}
+      />
 
       {/* ── Cookie consent banner ── */}
       <CookieConsent />
@@ -694,7 +789,13 @@ function AuthRedirectHandler() {
 
 function App() {
   return (
-    <>
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-zinc-50">
+          <div className="w-10 h-10 border-4 border-[#8CC63F] border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
       <AuthRedirectHandler />
       <PasswordResetModal />
       <Routes>
@@ -722,10 +823,16 @@ function App() {
         <Route path="/recruiter/earnings" element={<ProtectedRoute recruiterOnly><RecruiterEarnings /></ProtectedRoute>} />
         <Route path="/recruiter/profile" element={<ProtectedRoute recruiterOnly><RecruiterProfile /></ProtectedRoute>} />
 
-        {/* Main site (catch-all) */}
+        {/* Main site explicit and catch-all routes */}
+        <Route path="/oferty/:slug" element={<MainSite />} />
+        <Route path="/jobs/:slug" element={<MainSite />} />
+        <Route path="/oferty" element={<MainSite />} />
+        <Route path="/jobs" element={<MainSite />} />
+        <Route path="/blog" element={<MainSite />} />
+        <Route path="/privacy" element={<MainSite />} />
         <Route path="*" element={<MainSite />} />
       </Routes>
-    </>
+    </React.Suspense>
   );
 }
 
