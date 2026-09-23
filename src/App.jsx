@@ -631,6 +631,9 @@ function MainSite() {
           <Upskilling />
           <UserPortalTeaser />
 
+          {/* Recruiter Cabinet / Referral Program Section */}
+          <ReferralProgram />
+
           {/* Team Section */}
           <section className="bg-background-white py-20 md:py-24 px-gutter" id="team">
             <FadeIn>
@@ -686,7 +689,6 @@ function MainSite() {
           </section>
 
           <FAQSection />
-          <ReferralProgram />
           <ContactForm activeTab={contactTab} onTabChange={setContactTab} prefillMessage={prefillMessage} />
 
           {/* Footer */}
