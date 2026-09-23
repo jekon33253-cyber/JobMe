@@ -819,6 +819,7 @@ function App() {
       <PasswordResetModal />
       <Routes>
         {/* Portal routes */}
+        <Route path="/portal" element={<LoginPage />} />
         <Route path="/portal/login" element={<LoginPage />} />
         <Route path="/portal/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/portal/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />

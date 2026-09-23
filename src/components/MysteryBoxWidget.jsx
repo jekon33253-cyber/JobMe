@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import FadeIn from './FadeIn';
 
@@ -218,6 +219,7 @@ function ConfettiOverlay() {
 
 export default function MysteryBoxWidget() {
   const { currentLanguage } = useLanguage();
+  const navigate = useNavigate();
   const [openedIndex, setOpenedIndex] = useState(null);
   const [openingIndex, setOpeningIndex] = useState(null);
   const [wonPrize, setWonPrize] = useState(null);
@@ -266,7 +268,8 @@ export default function MysteryBoxWidget() {
 
   const handleClaimAndRegister = () => {
     const bonusId = wonPrize?.id || 'housing';
-    window.location.href = `/portal?mode=register&role=candidate&bonus=${bonusId}`;
+    navigate(`/portal/login?mode=register&role=candidate&bonus=${bonusId}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const t = {

@@ -7,8 +7,21 @@ import { supabase } from '../../lib/supabaseClient';
 export default function LoginPage() {
   const { signIn, signUp, resetPassword, updateUserPassword, fetchProfile, isRecovery } = useAuth();
   const { t } = useLanguage();
-  const [mode, setMode] = useState('login'); // 'login' | 'register' | 'forgot' | 'update_password'
-  const [selectedRole, setSelectedRole] = useState('candidate'); // 'candidate' | 'recruiter'
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'register') return 'register';
+      if (params.get('mode') === 'update_password') return 'update_password';
+    }
+    return 'login';
+  });
+  const [selectedRole, setSelectedRole] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('role')) return params.get('role');
+    }
+    return 'candidate';
+  });
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -18,7 +31,21 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const [pendingBonus, setPendingBonus] = useState(null);
+  const [pendingBonus, setPendingBonus] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const b = params.get('bonus');
+      if (b) return b;
+      try {
+        const stored = localStorage.getItem('jobme_pending_bonus');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.id) return parsed.id;
+        }
+      } catch {}
+    }
+    return null;
+  });
 
   useEffect(() => {
     const hash = window.location.hash;
