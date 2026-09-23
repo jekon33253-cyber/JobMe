@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabaseClient';
 
 export default function LoginPage() {
   const { signIn, signUp, resetPassword, updateUserPassword, fetchProfile, isRecovery } = useAuth();
-  const { t } = useLanguage();
+  const { t, currentLanguage = 'pl' } = useLanguage();
   const [mode, setMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
