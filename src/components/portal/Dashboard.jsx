@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { supabase } from '../../lib/supabaseClient';
 import PortalLayout from './PortalLayout';
+import config from '../../config';
 
 function StatCard({ icon, value, label, color, bgColor }) {
   return (
@@ -107,6 +108,23 @@ export default function Dashboard() {
   const [legalSteps, setLegalSteps] = useState([]);
   const [recentApps, setRecentApps] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [activeBonus, setActiveBonus] = useState(null);
+
+  useEffect(() => {
+    if (profile?.welcome_bonus) {
+      setActiveBonus(profile.welcome_bonus);
+      return;
+    }
+    try {
+      const stored = localStorage.getItem('jobme_claimed_bonus');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.id) setActiveBonus(parsed.id);
+      }
+    } catch {
+      // Ignore
+    }
+  }, [profile]);
 
   useEffect(() => {
     if (!user) return;
@@ -160,6 +178,58 @@ export default function Dashboard() {
           {displayName} <span className="text-2xl">👋</span>
         </h1>
       </div>
+
+      {/* Active Welcome Bonus Card */}
+      {activeBonus && (
+        <div className="mb-8 p-6 rounded-3xl bg-gradient-to-r from-zinc-900 via-zinc-850 to-zinc-900 border-2 border-[#8CC63F]/70 shadow-2xl shadow-[#8CC63F]/15 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#8CC63F]/15 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 relative z-10">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#8CC63F] text-zinc-950 flex items-center justify-center shrink-0 shadow-lg shadow-[#8CC63F]/30">
+                <span className="material-symbols-outlined text-3xl font-black">
+                  {activeBonus === 'housing' ? 'home' : activeBonus === 'cash_bonus' ? 'payments' : 'shopping_bag'}
+                </span>
+              </div>
+              <div className="space-y-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#8CC63F] text-zinc-950 text-[10px] font-black uppercase tracking-wider">
+                    🎉 {t('portal.dashboard.activeBonusTag') || 'AKTYWNY BONUS NA START'}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Przypisany do profilu
+                  </span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-black text-white">
+                  {activeBonus === 'cash_bonus' && 'Premia na start: +500 zł netto do pierwszej wypłaty'}
+                  {activeBonus === 'housing' && '1 miesiąc darmowego mieszkania (lub +400 zł/mc dodatku)'}
+                  {activeBonus === 'welcome_pack' && 'Welcome Pack: Karta 200 zł (Biedronka / Lidl)'}
+                </h3>
+                <p className="text-xs text-zinc-400 max-w-xl leading-relaxed">
+                  Bonus został zarezerwowany i przypisany do Twojego profilu w JobMe. Koordynator aktywuje wypłatę lub świadczenie po rozpoczęciu pracy na projekcie.
+                </p>
+              </div>
+            </div>
+
+            <a
+              href={`https://t.me/${config.telegramUsername || 'jobmelead_bot'}?text=${encodeURIComponent(
+                `Cześć! Mam aktywny bonus w portalu JobMe (${
+                  activeBonus === 'cash_bonus' ? 'Premia +500 zł' : activeBonus === 'housing' ? 'Darmowe mieszkanie' : 'Welcome Pack 200 zł'
+                }). Chcę potwierdzić rozpoczęcie pracy!`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 w-full md:w-auto inline-flex items-center justify-center gap-2 bg-[#8CC63F] hover:bg-[#9de043] text-zinc-950 font-black text-xs md:text-sm px-6 py-3.5 rounded-xl shadow-lg shadow-[#8CC63F]/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current shrink-0" aria-hidden="true">
+                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.28 13.605l-2.95-.924c-.642-.204-.657-.642.136-.953l11.526-4.445c.536-.194 1.006.131.57.965z"/>
+              </svg>
+              <span>Zgłoś koordynatorowi</span>
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">

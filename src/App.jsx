@@ -10,6 +10,7 @@ import LegalizationTimeline from './components/LegalizationTimeline';
 import Upskilling from './components/Upskilling';
 import ContactForm from './components/ContactForm';
 import JobsWidget from './components/JobsWidget';
+import MysteryBoxWidget from './components/MysteryBoxWidget';
 // Lazy loaded Portal pages
 const LoginPage = React.lazy(() => import('./components/portal/LoginPage'));
 const Dashboard = React.lazy(() => import('./components/portal/Dashboard'));
@@ -513,6 +514,9 @@ function MainSite() {
             onOpenSmartLead={handleOpenSmartLead}
             onViewDetails={handleOpenVacancyDetail}
           />
+
+          {/* ── INTERACTIVE WELCOME BONUS & 3D MYSTERY BOXES ── */}
+          <MysteryBoxWidget />
 
           {/* About Section */}
           <section className="bg-surface-contrast py-20 md:py-28 px-gutter" id="about">

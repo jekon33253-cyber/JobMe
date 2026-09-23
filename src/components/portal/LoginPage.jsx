@@ -18,11 +18,34 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [pendingBonus, setPendingBonus] = useState(null);
+
   useEffect(() => {
     const hash = window.location.hash;
     const params = new URLSearchParams(window.location.search);
     if (isRecovery || (hash && hash.includes('type=recovery')) || params.get('mode') === 'update_password') {
       setMode('update_password');
+    } else if (params.get('mode') === 'register') {
+      setMode('register');
+    }
+
+    if (params.get('role')) {
+      setSelectedRole(params.get('role'));
+    }
+
+    const bonusParam = params.get('bonus');
+    if (bonusParam) {
+      setPendingBonus(bonusParam);
+    } else {
+      try {
+        const stored = localStorage.getItem('jobme_pending_bonus');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed?.id) setPendingBonus(parsed.id);
+        }
+      } catch {
+        // Ignore storage errors
+      }
     }
   }, [isRecovery]);
 
@@ -48,9 +71,27 @@ export default function LoginPage() {
         if (signUpError) {
           setError(signUpError.message);
         } else {
-          // If session is immediately created (email confirmation disabled), ensure role is updated in profiles table
+          // Persist claimed welcome bonus if selected
+          if (pendingBonus && selectedRole === 'candidate') {
+            try {
+              localStorage.setItem('jobme_claimed_bonus', JSON.stringify({
+                id: pendingBonus,
+                claimedAt: new Date().toISOString(),
+                status: 'active',
+              }));
+              localStorage.removeItem('jobme_pending_bonus');
+            } catch {
+              // Ignore storage errors
+            }
+          }
+
+          // If session is immediately created (email confirmation disabled), ensure role and bonus are updated in profiles table
           if (signUpData?.user) {
-            await supabase.from('profiles').update({ role: selectedRole }).eq('id', signUpData.user.id);
+            const updates = { role: selectedRole };
+            if (pendingBonus && selectedRole === 'candidate') {
+              updates.welcome_bonus = pendingBonus;
+            }
+            await supabase.from('profiles').update(updates).eq('id', signUpData.user.id);
             if (selectedRole === 'recruiter') {
               window.location.href = '/recruiter/dashboard';
               return;
@@ -244,6 +285,32 @@ export default function LoginPage() {
             <div className="mb-4 p-3 rounded-xl bg-[#8CC63F]/10 border border-[#8CC63F]/20 text-[#8CC63F] text-sm flex items-center gap-2">
               <span className="material-symbols-outlined text-lg">check_circle</span>
               {success}
+            </div>
+          )}
+
+          {/* Reserved Welcome Bonus Callout */}
+          {pendingBonus && mode === 'register' && selectedRole === 'candidate' && (
+            <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-[#8CC63F]/15 via-emerald-500/10 to-[#00B4B4]/15 border border-[#8CC63F]/40 flex items-start gap-3.5 shadow-lg shadow-[#8CC63F]/10">
+              <div className="w-10 h-10 rounded-xl bg-[#8CC63F] text-zinc-950 flex items-center justify-center shrink-0 font-bold shadow-md">
+                <span className="material-symbols-outlined text-xl">featured_seasonal_and_gifts</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-[#8CC63F] text-zinc-950 px-2 py-0.5 rounded-full">
+                    {currentLanguage === 'ua' ? 'Ваш бонус зарезервовано' : 'Bonus zarezerwowany'}
+                  </span>
+                </div>
+                <p className="text-sm font-black text-white">
+                  {pendingBonus === 'cash_bonus' && (currentLanguage === 'ua' ? 'Премія на старт: +500 zł нетто' : 'Premia na start: +500 zł netto')}
+                  {pendingBonus === 'housing' && (currentLanguage === 'ua' ? '1 місяць безкоштовного житла' : '1 miesiąc darmowego mieszkania')}
+                  {pendingBonus === 'welcome_pack' && (currentLanguage === 'ua' ? 'Welcome Pack: Сертифікат 200 zł' : 'Welcome Pack: Karta 200 zł (Biedronka / Lidl)')}
+                </p>
+                <p className="text-xs text-zinc-400 mt-1">
+                  {currentLanguage === 'ua'
+                    ? 'Завершіть створення акаунта, щоб закріпити цей бонус за вашим профілем кандидата.'
+                    : 'Dokończ rejestrację konta, aby przypisać ten bonus do swojego profilu kandydata.'}
+                </p>
+              </div>
             </div>
           )}
 
